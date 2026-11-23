@@ -1,0 +1,111 @@
+{
+  "id": "D01",
+  "day": 1,
+  "week": 1,
+  "title": "Make the computer talk",
+  "hook": "Write your first three programs with one word: print.",
+  "badge": "First Words",
+  "warmup": [
+    {
+      "q": "No Python yet, just a guess. A program is most like...",
+      "options": ["A magic box nobody understands", "A recipe: steps written down in order", "A very fast calculator"],
+      "answer": 1,
+      "explain": "A program is a list of steps in a text file. The computer follows them in order, like a cook follows a recipe."
+    },
+    {
+      "q": "A call sheet says 06:00 crew call, 07:00 first shot. Which happens first?",
+      "options": ["First shot", "Crew call", "Both at once"],
+      "answer": 1,
+      "explain": "Top line first. Python reads your code the same way: top to bottom, one line at a time."
+    },
+    {
+      "q": "The computer shows you a red error message. What does it mean?",
+      "options": ["You broke the computer", "You are bad at this", "It could not follow one line, and it is telling you which one"],
+      "answer": 2,
+      "explain": "An error is a note from Python: this line, this problem. Every programmer sees them all day. You read it, fix it, run again."
+    }
+  ],
+  "why": [
+    {
+      "heading": "A program is a recipe",
+      "text": "A program is a list of instructions in plain text. **Python** is the cook that reads your instructions and does them. You write, Python does. That is all coding is."
+    },
+    {
+      "heading": "print makes it talk",
+      "text": "The first instruction to learn is `print`. It shows text on the screen:\n\n`print(\"Hello\")`\n\nThe word `print`, then round brackets, then your text inside quotes. You will use it every single day, because it is how a program shows you what it is doing."
+    },
+    {
+      "heading": "Text lives inside quotes",
+      "text": "The quotes tell Python: this is text, show it exactly as it is. Without quotes, Python thinks `Hello` is the name of something and goes looking for it. Text in quotes has a name: a **string**."
+    },
+    {
+      "heading": "Top to bottom",
+      "text": "Python does line 1, then line 2, then line 3. It never skips ahead. So the order of your lines is the order things appear on screen."
+    },
+    {
+      "heading": "Errors are notes, not failures",
+      "text": "Miss a quote or a bracket and Python stops and tells you the line. That is not you failing. That is Python helping. Read the line number, look at that line, fix it, run again."
+    }
+  ],
+  "watch": {
+    "intro": "Tap Run. Three print lines, three lines on screen, same order.",
+    "code": "print(\"Lights\")\nprint(\"Camera\")\nprint(\"Action\")",
+    "explain": [
+      "Line 1 runs first and shows `Lights`.",
+      "Each `print` shows its text, then moves to a new line.",
+      "The quotes are not shown. They only mark where the text starts and ends."
+    ],
+    "break_it": "Now break it on purpose: delete the last quote on line 2 so it reads `print(\"Camera)` and tap Run. Read the error. It names line 2. Put the quote back and run again."
+  },
+  "tasks": [
+    {
+      "title": "Say hello",
+      "task": "Write one line that shows exactly: `Hello, Matthew!`",
+      "starter": "# Type your line under this one\n",
+      "solution": "print(\"Hello, Matthew!\")\n",
+      "hints": [
+        "You need the word print, then round brackets, then the text in quotes.",
+        "The shape is print(\"your text here\"). Check the comma and the exclamation mark.",
+        "Type exactly: print(\"Hello, Matthew!\")"
+      ],
+      "tests": [{"expect": "Hello, Matthew!"}]
+    },
+    {
+      "title": "Call sheet header",
+      "task": "The lines are in the wrong order and one is missing. Make it show these three lines, in this order:\n\n`CALL SHEET`\n`Shoot day 1 of 5`\n`Crew call: 06:00`",
+      "starter": "print(\"Shoot day 1 of 5\")\nprint(\"CALL SHEET\")\n",
+      "solution": "print(\"CALL SHEET\")\nprint(\"Shoot day 1 of 5\")\nprint(\"Crew call: 06:00\")\n",
+      "hints": [
+        "Python reads top to bottom, so the line you want first must be on line 1.",
+        "Swap the two lines, then add a third print line at the bottom.",
+        "The third line is print(\"Crew call: 06:00\"). Capital letters and spaces must match."
+      ],
+      "tests": [{"expect": "CALL SHEET\nShoot day 1 of 5\nCrew call: 06:00"}]
+    },
+    {
+      "title": "Fix the three bugs",
+      "task": "Each line has one mistake. Tap Run, read the error, fix that line, run again. When all three are fixed it shows:\n\n`Lights`\n`Camera`\n`Action`",
+      "starter": "print(\"Lights)\nPrint(\"Camera\")\nprint(\"Action\"\n",
+      "solution": "print(\"Lights\")\nprint(\"Camera\")\nprint(\"Action\")\n",
+      "hints": [
+        "Python stops at the first error it finds. Fix the line it names, then run again to find the next one.",
+        "Look for: a missing closing quote, a capital letter where it should be small, and a missing closing bracket.",
+        "Line 1 needs a quote after Lights. Line 2 must start with a small p. Line 3 needs a ) at the end."
+      ],
+      "tests": [{"expect": "Lights\nCamera\nAction"}]
+    }
+  ],
+  "recap": [
+    "A program is a list of steps. Python reads them top to bottom.",
+    "print(\"text\") shows text on the screen.",
+    "Text goes inside quotes. Text in quotes is called a string.",
+    "An error names the line. Read it, fix it, run again."
+  ],
+  "words": [
+    {"term": "program", "meaning": "Instructions in a text file that the computer follows."},
+    {"term": "Python", "meaning": "The language you write in, and the tool that runs it."},
+    {"term": "print", "meaning": "The instruction that shows something on screen."},
+    {"term": "string", "meaning": "Text inside quotes."},
+    {"term": "error", "meaning": "Python's note that it could not follow a line."}
+  ]
+}

@@ -1,0 +1,196 @@
+{
+  "id": "D15",
+  "day": 15,
+  "week": 3,
+  "title": "Boss: the film quiz game",
+  "hook": "Build a quiz game that asks, marks, scores and judges you.",
+  "badge": "Quiz Master",
+  "warmup": [
+    {
+      "q": "`\"clip\".upper()` gives...",
+      "options": [
+        "CLIP",
+        "Clip",
+        "clip"
+      ],
+      "answer": 0,
+      "explain": "upper makes every letter a capital."
+    },
+    {
+      "q": "`enumerate([\"a\", \"b\"], 1)` starts counting at...",
+      "options": [
+        "0",
+        "2",
+        "1"
+      ],
+      "answer": 2,
+      "explain": "The 1 you give it is the starting number. Without it, it starts at 0."
+    },
+    {
+      "q": "What does `break` do inside a loop?",
+      "options": [
+        "Ends the loop right away",
+        "Skips to the next item",
+        "Crashes the program"
+      ],
+      "answer": 0,
+      "explain": "break stops the loop and carries on with the lines after it."
+    }
+  ],
+  "why": [
+    {
+      "heading": "Boss day: a real game",
+      "text": "Today you put the whole week together into one program. Nothing new to learn. You build a quiz in three steps. After each step you can run it and see it work. By task 3 it is a game you can give to someone else."
+    },
+    {
+      "heading": "Index cards in a stack",
+      "text": "A quiz is a stack of index cards. Each card has a question on one side and an answer on the other. In Python: a **list** is the stack, and each card is a **dictionary** with the keys `q` and `a`.\n\n`{\"q\": \"Tripod legs?\", \"a\": \"3\"}`"
+    },
+    {
+      "heading": "Grab a card's side",
+      "text": "Loop through the stack: `for item in quiz:`. Each `item` is one card. Then `item[\"q\"]` is its question and `item[\"a\"]` is its answer. The question and answer data is long, so it is already typed for you in the starter."
+    },
+    {
+      "heading": "Fair marking",
+      "text": "People type `SLATE` or ` slate `. So mark the answer after tidying it: `answer.lower().strip()`. Then compare it with `==` to the stored answer. Today's tools from earlier days all meet here: loops, input, if, dictionaries, text tools."
+    },
+    {
+      "heading": "The plan",
+      "text": "Step 1: print the questions, numbered.\nStep 2: ask each question and say Correct or Nope.\nStep 3: keep a score, then show the total and a final message that depends on how well you did."
+    }
+  ],
+  "watch": {
+    "intro": "Tap Run. A one-card quiz, to see the cards in action. The input is typed for you.",
+    "code": "cards = [{\"q\": \"Colour of a stop sign?\", \"a\": \"red\"}]\nfor card in cards:\n    answer = input(f\"{card['q']} \")\n    if answer.lower() == card[\"a\"]:\n        print(\"Correct!\")\n    else:\n        print(\"Nope:\", card[\"a\"])",
+    "inputs": [
+      "RED"
+    ],
+    "explain": [
+      "`cards` is a list. Each card inside it is a dictionary with `q` and `a`.",
+      "`card['q']` is the question, used as the `input` prompt inside an f-string.",
+      "`answer.lower()` turns RED into red, so it matches.",
+      "Inside an f-string with double quotes, write the key with single quotes: `{card['q']}`. Otherwise the quotes clash."
+    ],
+    "break_it": "Break it on purpose: change `card[\"a\"]` in the if line to `card[\"x\"]` and tap Run. The error ends with `KeyError: 'x'`. The card has no key called x. Change it back."
+  },
+  "tasks": [
+    {
+      "title": "Step 1: show the questions",
+      "task": "The quiz cards are ready. Loop through them and print each question numbered from 1:\n\n`1. Cinema standard frames per second?`\n`2. How many legs does a tripod have?`\n`3. The board with the scene number?`",
+      "starter": "quiz = [\n    {\"q\": \"Cinema standard frames per second?\", \"a\": \"24\"},\n    {\"q\": \"How many legs does a tripod have?\", \"a\": \"3\"},\n    {\"q\": \"The board with the scene number?\", \"a\": \"slate\"},\n]\n# loop and print the numbered questions\n",
+      "solution": "quiz = [\n    {\"q\": \"Cinema standard frames per second?\", \"a\": \"24\"},\n    {\"q\": \"How many legs does a tripod have?\", \"a\": \"3\"},\n    {\"q\": \"The board with the scene number?\", \"a\": \"slate\"},\n]\nfor n, item in enumerate(quiz, 1):\n    print(f\"{n}. {item['q']}\")\n",
+      "hints": [
+        "Numbers and items together means enumerate(quiz, 1).",
+        "for n, item in enumerate(quiz, 1): then an indented print.",
+        "print(f\"{n}. {item['q']}\") (single quotes around q inside the f-string)"
+      ],
+      "tests": [
+        {
+          "expect": "1. Cinema standard frames per second?\n2. How many legs does a tripod have?\n3. The board with the scene number?"
+        }
+      ],
+      "code_has": [
+        "for ",
+        "enumerate"
+      ]
+    },
+    {
+      "title": "Step 2: ask and mark",
+      "task": "Ask each question with `input`, using the question and a space as the prompt. Mark it: if the answer (lower case, spaces stripped) matches the card, print `Correct!`, otherwise print `Nope:` and the right answer. Example, answering all three:\n\n`Cinema standard frames per second? 24`\n`Correct!`\n`How many legs does a tripod have? 3`\n`Correct!`\n`The board with the scene number? slate`\n`Correct!`",
+      "starter": "quiz = [\n    {\"q\": \"Cinema standard frames per second?\", \"a\": \"24\"},\n    {\"q\": \"How many legs does a tripod have?\", \"a\": \"3\"},\n    {\"q\": \"The board with the scene number?\", \"a\": \"slate\"},\n]\n# loop, ask, mark\n",
+      "solution": "quiz = [\n    {\"q\": \"Cinema standard frames per second?\", \"a\": \"24\"},\n    {\"q\": \"How many legs does a tripod have?\", \"a\": \"3\"},\n    {\"q\": \"The board with the scene number?\", \"a\": \"slate\"},\n]\nfor item in quiz:\n    answer = input(f\"{item['q']} \")\n    if answer.lower().strip() == item[\"a\"]:\n        print(\"Correct!\")\n    else:\n        print(\"Nope:\", item[\"a\"])\n",
+      "hints": [
+        "Inside the loop: answer = input(f\"{item['q']} \")",
+        "Compare with: if answer.lower().strip() == item[\"a\"]:",
+        "The else part: print(\"Nope:\", item[\"a\"])"
+      ],
+      "tests": [
+        {
+          "inputs": [
+            "24",
+            "3",
+            "slate"
+          ],
+          "expect": "Cinema standard frames per second? 24\nCorrect!\nHow many legs does a tripod have? 3\nCorrect!\nThe board with the scene number? slate\nCorrect!"
+        },
+        {
+          "inputs": [
+            "25",
+            "3",
+            "SLATE"
+          ],
+          "expect": "Cinema standard frames per second? 25\nNope: 24\nHow many legs does a tripod have? 3\nCorrect!\nThe board with the scene number? SLATE\nCorrect!"
+        }
+      ],
+      "code_has": [
+        "input(",
+        "== "
+      ]
+    },
+    {
+      "title": "Step 3: score and verdict",
+      "task": "The marking loop is done. Add a `score` that goes up by 1 for each correct answer. After the loop print `Score: 2 out of 3` (with the real numbers), then one final message: all correct prints `Perfect! Frame it.`, at least one correct prints `Good effort. Run it again.`, none correct prints `Back to film school!`",
+      "starter": "quiz = [\n    {\"q\": \"Cinema standard frames per second?\", \"a\": \"24\"},\n    {\"q\": \"How many legs does a tripod have?\", \"a\": \"3\"},\n    {\"q\": \"The board with the scene number?\", \"a\": \"slate\"},\n]\nfor item in quiz:\n    answer = input(f\"{item['q']} \")\n    if answer.lower().strip() == item[\"a\"]:\n        print(\"Correct!\")\n    else:\n        print(\"Nope:\", item[\"a\"])\n# add a score, then a final message\n",
+      "solution": "quiz = [\n    {\"q\": \"Cinema standard frames per second?\", \"a\": \"24\"},\n    {\"q\": \"How many legs does a tripod have?\", \"a\": \"3\"},\n    {\"q\": \"The board with the scene number?\", \"a\": \"slate\"},\n]\nscore = 0\nfor item in quiz:\n    answer = input(f\"{item['q']} \")\n    if answer.lower().strip() == item[\"a\"]:\n        print(\"Correct!\")\n        score += 1\n    else:\n        print(\"Nope:\", item[\"a\"])\nprint(f\"Score: {score} out of {len(quiz)}\")\nif score == len(quiz):\n    print(\"Perfect! Frame it.\")\nelif score >= 1:\n    print(\"Good effort. Run it again.\")\nelse:\n    print(\"Back to film school!\")\n",
+      "hints": [
+        "Set score = 0 before the loop, and score += 1 inside the Correct branch.",
+        "After the loop use len(quiz) for the total: print(f\"Score: {score} out of {len(quiz)}\")",
+        "Then if score == len(quiz): ... elif score >= 1: ... else: ... with a print in each."
+      ],
+      "tests": [
+        {
+          "inputs": [
+            "24",
+            "3",
+            "slate"
+          ],
+          "expect": "Cinema standard frames per second? 24\nCorrect!\nHow many legs does a tripod have? 3\nCorrect!\nThe board with the scene number? slate\nCorrect!\nScore: 3 out of 3\nPerfect! Frame it."
+        },
+        {
+          "inputs": [
+            "25",
+            "3",
+            "chair"
+          ],
+          "expect": "Cinema standard frames per second? 25\nNope: 24\nHow many legs does a tripod have? 3\nCorrect!\nThe board with the scene number? chair\nNope: slate\nScore: 1 out of 3\nGood effort. Run it again."
+        },
+        {
+          "inputs": [
+            "1",
+            "1",
+            "1"
+          ],
+          "expect": "Cinema standard frames per second? 1\nNope: 24\nHow many legs does a tripod have? 1\nNope: 3\nThe board with the scene number? 1\nNope: slate\nScore: 0 out of 3\nBack to film school!"
+        }
+      ],
+      "code_has": [
+        "score",
+        "elif"
+      ]
+    }
+  ],
+  "recap": [
+    "A list of dictionaries is a stack of index cards: loop the list, look up the keys.",
+    "Tidy the player's answer with `.lower().strip()` before you compare.",
+    "A score is a counter: start at 0, `+= 1` for each win.",
+    "You built a whole game from week 1 to 3 tools. Change the cards and it becomes any quiz you like."
+  ],
+  "words": [
+    {
+      "term": "list of dictionaries",
+      "meaning": "A list where every item is a dictionary, like a stack of cards."
+    },
+    {
+      "term": "score",
+      "meaning": "A number that goes up when you win a point."
+    },
+    {
+      "term": "compare",
+      "meaning": "Use == to check if two things are the same."
+    },
+    {
+      "term": "boss build",
+      "meaning": "A day where you combine earlier ideas into one finished thing."
+    }
+  ]
+}

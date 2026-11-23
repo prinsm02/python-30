@@ -1,0 +1,223 @@
+{
+  "id": "D30",
+  "day": 30,
+  "week": 6,
+  "title": "Boss build: the invoice tool",
+  "hook": "Build a day-rate invoice tool and ship it.",
+  "badge": "Capstone Done",
+  "warmup": [
+    {
+      "q": "Yesterday: when a program crashes with a long traceback, which line do you read first?",
+      "options": [
+        "The very first line",
+        "The last line: it says what went wrong",
+        "The middle"
+      ],
+      "answer": 1,
+      "explain": "The last line names the error. The line above it says which line of your code. The top is just the path Python took."
+    },
+    {
+      "q": "Overtime starts after 10 hours. Which test is true for 12 hours and false for 10?",
+      "options": [
+        "hours >= 10",
+        "hours > 10",
+        "hours < 10"
+      ],
+      "answer": 1,
+      "explain": "`>` means strictly more than. At exactly 10 hours the test is False, so no overtime yet."
+    },
+    {
+      "q": "Why open a CSV with `newline=\"\"`?",
+      "options": [
+        "So the csv module can handle line endings correctly",
+        "So the file is read faster",
+        "So the file is hidden"
+      ],
+      "answer": 0,
+      "explain": "It is the standard way the csv module likes files opened. It stops stray blank lines."
+    }
+  ],
+  "why": [
+    {
+      "heading": "Everything in one tool",
+      "text": "Today you build a real tool: a crew list goes in, pay is worked out, an invoice file comes out. It uses every week: input, if, loops, functions, CSV, files. Read data, apply a rule, write a report. Almost every useful script is that shape."
+    },
+    {
+      "heading": "Write the rule in words first",
+      "text": "Before any code, say the rule out loud. **The day rate covers the first 10 hours. Every hour after that is paid at 1.5 times the hourly rate, which is the day rate divided by 10.** Then VAT is 15 percent on top. If you can say it, you can code it."
+    },
+    {
+      "heading": "Build in three small steps",
+      "text": "Do not write 30 lines then run. Make one person's pay work. Run. Then wrap it in a function and loop over the crew. Run. Then add totals and the file. Run. Each step is small, so when something breaks you know exactly where."
+    },
+    {
+      "heading": "Ship it",
+      "text": "A tool on your PC helps you. A tool on GitHub with a README shows other people what you can do. At the PC you put today's tool online. Keep real client names out of it: that is what `.gitignore` is for."
+    }
+  ],
+  "watch": {
+    "intro": "A tiny version of the same shape: a crew list as dictionaries, a loop, a total. No overtime yet. This is how you start.",
+    "code": "crew = [\n    {\"name\": \"Sam\", \"days\": 3, \"rate\": 1500},\n    {\"name\": \"Thandi\", \"days\": 2, \"rate\": 1200},\n]\ntotal = 0\nfor p in crew:\n    amount = p[\"days\"] * p[\"rate\"]\n    total += amount\n    print(f\"{p['name']}: R{amount}\")\nprint(f\"Total: R{total}\")",
+    "explain": [
+      "`crew` is a list of dictionaries, one per person.",
+      "The loop works out each amount and adds it to a running `total`.",
+      "Today's version does the same, but reads a CSV and handles overtime."
+    ],
+    "break_it": "Change `p[\"rate\"]` to `p[\"rates\"]` and tap Run. You get KeyError: 'rates'. Read it: the key does not exist. Change it back."
+  },
+  "tasks": [
+    {
+      "title": "Pay for one person",
+      "task": "The day rate covers up to 10 hours. Each hour over 10 pays the day rate divided by 10, times 1.5. Finish the program. Examples:\n\nR1500 for 8 hours is `Pay: R1500.00`\nR1500 for 12 hours is `Pay: R1950.00`",
+      "starter": "day_rate = int(input(\"Day rate? \"))\nhours = int(input(\"Hours? \"))\npay = day_rate\n# if hours is over 10, add the overtime to pay\nprint(f\"Pay: R{pay:.2f}\")\n",
+      "solution": "day_rate = int(input(\"Day rate? \"))\nhours = int(input(\"Hours? \"))\npay = day_rate\nif hours > 10:\n    pay = day_rate + (hours - 10) * day_rate / 10 * 1.5\nprint(f\"Pay: R{pay:.2f}\")\n",
+      "hints": [
+        "You only need an if. The overtime hours are hours - 10.",
+        "Each overtime hour pays day_rate / 10 * 1.5. Multiply that by (hours - 10).",
+        "if hours > 10:\n    pay = day_rate + (hours - 10) * day_rate / 10 * 1.5"
+      ],
+      "tests": [
+        {
+          "inputs": [
+            "1500",
+            "8"
+          ],
+          "expect": "Day rate? 1500\nHours? 8\nPay: R1500.00"
+        },
+        {
+          "inputs": [
+            "1500",
+            "12"
+          ],
+          "expect": "Day rate? 1500\nHours? 12\nPay: R1950.00"
+        },
+        {
+          "inputs": [
+            "900",
+            "10"
+          ],
+          "expect": "Day rate? 900\nHours? 10\nPay: R900.00"
+        },
+        {
+          "inputs": [
+            "2000",
+            "11"
+          ],
+          "expect": "Day rate? 2000\nHours? 11\nPay: R2300.00"
+        }
+      ],
+      "code_has": [
+        "if "
+      ]
+    },
+    {
+      "title": "The whole crew",
+      "task": "Now the rule is a function called `pay`, and the crew is in `crew.csv` (columns name, role, rate, hours). Loop over the crew and print one line each, like:\n\n`Sam (Gaffer): R1950.00`",
+      "starter": "import csv\n\ndef pay(day_rate, hours):\n    \"\"\"Pay for one person for one day.\"\"\"\n    if hours <= 10:\n        return day_rate\n    return day_rate + (hours - 10) * day_rate / 10 * 1.5\n\nwith open(\"crew.csv\", newline=\"\") as f:\n    for row in csv.DictReader(f):\n        print(row[\"name\"])\n",
+      "solution": "import csv\n\ndef pay(day_rate, hours):\n    \"\"\"Pay for one person for one day.\"\"\"\n    if hours <= 10:\n        return day_rate\n    return day_rate + (hours - 10) * day_rate / 10 * 1.5\n\nwith open(\"crew.csv\", newline=\"\") as f:\n    for row in csv.DictReader(f):\n        amount = pay(int(row[\"rate\"]), int(row[\"hours\"]))\n        print(f\"{row['name']} ({row['role']}): R{amount:.2f}\")\n",
+      "hints": [
+        "row[\"rate\"] and row[\"hours\"] are text. Wrap each in int(...) before using them.",
+        "amount = pay(int(row[\"rate\"]), int(row[\"hours\"])) gives the money for that row.",
+        "print(f\"{row['name']} ({row['role']}): R{amount:.2f}\")"
+      ],
+      "tests": [
+        {
+          "files": {
+            "crew.csv": "name,role,rate,hours\nSam,Gaffer,1500,12\nThandi,Grip,1200,10\nLerato,Sound,1800,9\nPieter,Spark,900,13\n"
+          },
+          "expect": "Sam (Gaffer): R1950.00\nThandi (Grip): R1200.00\nLerato (Sound): R1800.00\nPieter (Spark): R1305.00"
+        },
+        {
+          "files": {
+            "crew.csv": "name,role,rate,hours\nAyanda,Director,2500,11\nKani,Runner,600,8\n"
+          },
+          "expect": "Ayanda (Director): R2875.00\nKani (Runner): R600.00"
+        }
+      ],
+      "code_has": [
+        "pay("
+      ]
+    },
+    {
+      "title": "The invoice file",
+      "task": "Finish the tool. Add up a subtotal, add VAT at 15 percent, and write everything to `invoice.txt`, then print `Saved invoice.txt`. For the first crew the file holds:\n\n`INVOICE`\n`Sam (Gaffer): R1950.00`\n`Thandi (Grip): R1200.00`\n`Lerato (Sound): R1800.00`\n`Pieter (Spark): R1305.00`\n`Subtotal: R6255.00`\n`VAT 15%: R938.25`\n`Total: R7193.25`",
+      "starter": "import csv\n\ndef pay(day_rate, hours):\n    \"\"\"Pay for one person for one day.\"\"\"\n    if hours <= 10:\n        return day_rate\n    return day_rate + (hours - 10) * day_rate / 10 * 1.5\n\nlines = [\"INVOICE\"]\nwith open(\"crew.csv\", newline=\"\") as f:\n    for row in csv.DictReader(f):\n        amount = pay(int(row[\"rate\"]), int(row[\"hours\"]))\n        lines.append(f\"{row['name']} ({row['role']}): R{amount:.2f}\")\n\n# 1. add up every amount into subtotal (do it inside the loop)\n# 2. add the lines: Subtotal, VAT 15% (subtotal * 0.15), Total\n# 3. write the lines to invoice.txt and print: Saved invoice.txt\n",
+      "solution": "import csv\n\ndef pay(day_rate, hours):\n    \"\"\"Pay for one person for one day.\"\"\"\n    if hours <= 10:\n        return day_rate\n    return day_rate + (hours - 10) * day_rate / 10 * 1.5\n\nlines = [\"INVOICE\"]\nsubtotal = 0\nwith open(\"crew.csv\", newline=\"\") as f:\n    for row in csv.DictReader(f):\n        amount = pay(int(row[\"rate\"]), int(row[\"hours\"]))\n        subtotal += amount\n        lines.append(f\"{row['name']} ({row['role']}): R{amount:.2f}\")\nvat = subtotal * 0.15\nlines.append(f\"Subtotal: R{subtotal:.2f}\")\nlines.append(f\"VAT 15%: R{vat:.2f}\")\nlines.append(f\"Total: R{subtotal + vat:.2f}\")\nwith open(\"invoice.txt\", \"w\") as f:\n    f.write(\"\\n\".join(lines) + \"\\n\")\nprint(\"Saved invoice.txt\")\n",
+      "hints": [
+        "Start with subtotal = 0 before the loop. Inside the loop add: subtotal += amount.",
+        "After the loop: vat = subtotal * 0.15, then three more lines.append(...) for Subtotal, VAT 15% and Total (subtotal + vat).",
+        "To write: with open(\"invoice.txt\", \"w\") as f: then f.write(\"\\n\".join(lines) + \"\\n\"). Then print(\"Saved invoice.txt\")."
+      ],
+      "tests": [
+        {
+          "files": {
+            "crew.csv": "name,role,rate,hours\nSam,Gaffer,1500,12\nThandi,Grip,1200,10\nLerato,Sound,1800,9\nPieter,Spark,900,13\n"
+          },
+          "expect": "Saved invoice.txt",
+          "expect_files": {
+            "invoice.txt": "INVOICE\nSam (Gaffer): R1950.00\nThandi (Grip): R1200.00\nLerato (Sound): R1800.00\nPieter (Spark): R1305.00\nSubtotal: R6255.00\nVAT 15%: R938.25\nTotal: R7193.25\n"
+          }
+        },
+        {
+          "files": {
+            "crew.csv": "name,role,rate,hours\nAyanda,Director,2500,11\nKani,Runner,600,8\n"
+          },
+          "expect": "Saved invoice.txt",
+          "expect_files": {
+            "invoice.txt": "INVOICE\nAyanda (Director): R2875.00\nKani (Runner): R600.00\nSubtotal: R3475.00\nVAT 15%: R521.25\nTotal: R3996.25\n"
+          }
+        }
+      ],
+      "code_has": [
+        "invoice.txt",
+        "pay("
+      ]
+    }
+  ],
+  "recap": [
+    "You can now write Python that asks, decides, repeats, and works with lists, dictionaries, text, CSV, JSON and files.",
+    "You can build a small tool that saves you real time, fix its bugs, and put it on GitHub.",
+    "Honest truth: this is a strong start, not a job guarantee. You are now a beginner who can finish things, and that is rare.",
+    "Next step 1: take CS50P (Harvard's free Python course) to fill gaps and go deeper. Next step 2: work through Automate the Boring Stuff (free online) for spreadsheets, files and web jobs.",
+    "Next step 3: build one small tool a week for your own work (call sheets, renaming, reports) and push each one to GitHub. That habit is how you really learn."
+  ],
+  "words": [
+    {
+      "term": "capstone",
+      "meaning": "The big final project that uses everything you learned."
+    },
+    {
+      "term": "report",
+      "meaning": "A file your program writes that summarises the results."
+    },
+    {
+      "term": "VAT",
+      "meaning": "Value Added Tax: 15 percent in South Africa."
+    },
+    {
+      "term": "overtime",
+      "meaning": "Hours worked past the normal day, paid at a higher rate."
+    },
+    {
+      "term": "ship",
+      "meaning": "Finish something and put it where other people can see it."
+    }
+  ],
+  "pc": {
+    "title": "Ship the invoice tool on GitHub",
+    "why": "A finished tool that other people can read is worth more than ten half-built ones. You put it online with a README so anyone can see what it does.",
+    "steps": [
+      "Open VS Code. Click File, Open Folder, open Python 30 Work, click New Folder, name it `invoice-tool`, then Select Folder. Click Yes to trust it. Open a terminal with Terminal, New Terminal. The line should end with `invoice-tool>`.",
+      "Make `crew.csv` (New File icon). Type exactly these lines, with made-up names, then Ctrl+S:\n\nname,role,rate,hours\nSam,Gaffer,1500,12\nThandi,Grip,1200,10\nLerato,Sound,1800,9\nPieter,Spark,900,13",
+      "Make `invoice.py` and type your finished code from task 3 (or type it from the lesson). Save with Ctrl+S.",
+      "In the terminal type `python invoice.py` and press Enter. You should see `Saved invoice.txt`. Click invoice.txt on the left and check the Total says `R7193.25`. If you see ModuleNotFoundError or a Python-not-found message, use `py invoice.py`.",
+      "Make `README.md` and write: a title line starting with `# `, one line saying what the tool does, a line that says `Run: python invoice.py`, and a line that explains the crew.csv columns. Save it.",
+      "Make `.gitignore` with two lines: `invoice.txt` and `.venv/`. Real invoices hold real names and money, so they stay off GitHub. Save it.",
+      "Type `git init`, press Enter, then `git branch -M main`, then `git add .`, then `git commit -m \"Invoice tool v1\"`. Type `git status`: it should say nothing to commit, working tree clean.",
+      "In your browser open github.com, click the plus at the top right, then New repository. Name it `invoice-tool`, pick Public, do not tick any extra boxes, click Create repository.",
+      "Copy the two lines under push an existing repository from the command line, and paste them into the terminal one at a time (`git remote add origin ...` then `git push -u origin main`). Approve the sign-in window if it opens.",
+      "Refresh GitHub. Your files are there and the README is the front page. Copy the web address of the page.",
+      "Send the link to one person you respect, with one line saying what it does. Then pick your next tool from PLAN.md and make a new folder for it. You finished the course."
+    ]
+  }
+}

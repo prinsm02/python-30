@@ -1,0 +1,203 @@
+{
+  "id": "D29",
+  "day": 29,
+  "week": 6,
+  "title": "Fix bugs like a pro",
+  "hook": "Find what is wrong calmly, and pick your capstone.",
+  "badge": "Bug Hunter",
+  "warmup": [
+    {
+      "q": "Yesterday: what is a Git commit?",
+      "options": [
+        "A save point of your folder with a message",
+        "A way to delete files",
+        "A website"
+      ],
+      "answer": 0,
+      "explain": "A commit is a snapshot of your project at one moment. You can always come back to it."
+    },
+    {
+      "q": "Why make a venv for each project?",
+      "options": [
+        "It makes Python run faster",
+        "It keeps each project's tools separate so they do not clash",
+        "It is needed to print"
+      ],
+      "answer": 1,
+      "explain": "A venv is a private toolbox. One project's modules cannot break another's."
+    },
+    {
+      "q": "`try:` ... `except ValueError:` catches which problem?",
+      "options": [
+        "A misspelt variable name",
+        "Text that cannot become a number, like int(\"seven\")",
+        "A missing file"
+      ],
+      "answer": 1,
+      "explain": "int(\"seven\") raises ValueError. The except block runs instead of crashing."
+    }
+  ],
+  "why": [
+    {
+      "heading": "Three kinds of bug",
+      "text": "A **bug** is any mistake in a program. Some stop it starting (a missing quote). Some crash it halfway with an error message. The sneakiest ones run fine and give the WRONG answer. These are **logic bugs**: no error appears, so you have to catch them yourself."
+    },
+    {
+      "heading": "Read a traceback from the bottom",
+      "text": "When a crash prints a long message, start at the LAST line. It says what went wrong. The line above says which line of your code:\n\n`File \"main.py\", line 4`\n`NameError: name 'total' is not defined`\n\nThe lines at the top are only the path Python took to get there."
+    },
+    {
+      "heading": "Print what you think you know",
+      "text": "For logic bugs, add a line like `print(\"DEBUG\", total)` just before the suspect line. Run it. If the value is not what you expected, the bug is above that print. Move the print up or down until you find the exact line. Delete the debug prints when you are done."
+    },
+    {
+      "heading": "A calm method",
+      "text": "1. Run it and read what it actually does.\n2. Say what it SHOULD do.\n3. Find the first place they differ (use prints).\n4. Change ONE thing, run again.\nIf you change five things at once you will never know which one fixed it."
+    },
+    {
+      "heading": "Pick your capstone",
+      "text": "Tomorrow is the last day. The boss build is a day-rate invoice tool: a crew list, hours, overtime, a report. It uses all five weeks. At the PC, choose which tool you will keep building after the course: the invoice tool, a call time sheet maker, or a run log summary. Write your pick in a plan file."
+    }
+  ],
+  "watch": {
+    "intro": "Print debugging in action. The program adds up hours, and a DEBUG line shows the total growing at every step.",
+    "code": "hours = [8, 10, 12, 9]\ntotal = 0\nfor h in hours:\n    total = total + h\n    print(\"DEBUG h =\", h, \"total =\", total)\nprint(\"Total hours:\", total)",
+    "explain": [
+      "The DEBUG line runs once per loop, so you see the story of the total.",
+      "If the total ever jumped by the wrong amount, you would spot the step.",
+      "When the bug is fixed, delete the DEBUG line."
+    ],
+    "break_it": "Delete the line `total = 0` and tap Run. You get NameError: name 'total' is not defined, on the line `total = total + h`. Read it bottom up: what (NameError, total), then where (the line). Put it back."
+  },
+  "tasks": [
+    {
+      "title": "The crew counter",
+      "task": "This should count the people in `crew.txt` but always says 1. It runs with no error: a logic bug. Fix it so it shows the right count, like `Crew: 4`. (Do not use `len`.)",
+      "starter": "with open(\"crew.txt\") as f:\n    crew = f.read().split()\n\ncount = 0\nfor name in crew:\n    count = 1\nprint(\"Crew:\", count)\n",
+      "solution": "with open(\"crew.txt\") as f:\n    crew = f.read().split()\n\ncount = 0\nfor name in crew:\n    count += 1\nprint(\"Crew:\", count)\n",
+      "hints": [
+        "Add a print(count) inside the loop. What happens to the number each time round?",
+        "count = 1 sets it to 1 every time. It never grows. What do you do to ADD one?",
+        "Change count = 1 to count += 1."
+      ],
+      "tests": [
+        {
+          "files": {
+            "crew.txt": "Sam Thandi Lerato Pieter"
+          },
+          "expect": "Crew: 4"
+        },
+        {
+          "files": {
+            "crew.txt": "Ayanda Kani"
+          },
+          "expect": "Crew: 2"
+        }
+      ],
+      "code_not": [
+        "len("
+      ]
+    },
+    {
+      "title": "The overtime bug",
+      "task": "A day rate is R100 per hour. The first 10 hours are normal. Each hour AFTER 10 is paid at 1.5 times. This program pays 1.5 times for ALL hours when you work more than 10. Fix it. For 12 hours the answer is `Pay: R1300.00`.",
+      "starter": "rate = 100\nhours = int(input(\"Hours? \"))\nif hours > 10:\n    pay = hours * rate * 1.5\nelse:\n    pay = hours * rate\nprint(f\"Pay: R{pay:.2f}\")\n",
+      "solution": "rate = 100\nhours = int(input(\"Hours? \"))\nif hours > 10:\n    pay = 10 * rate + (hours - 10) * rate * 1.5\nelse:\n    pay = hours * rate\nprint(f\"Pay: R{pay:.2f}\")\n",
+      "hints": [
+        "Work 12 hours by hand: 10 hours at R100, then 2 hours at R150. Does the program give that?",
+        "Only the hours over 10 get the 1.5. That is (hours - 10). The first 10 hours are 10 * rate.",
+        "pay = 10 * rate + (hours - 10) * rate * 1.5"
+      ],
+      "tests": [
+        {
+          "inputs": [
+            "8"
+          ],
+          "expect": "Hours? 8\nPay: R800.00"
+        },
+        {
+          "inputs": [
+            "10"
+          ],
+          "expect": "Hours? 10\nPay: R1000.00"
+        },
+        {
+          "inputs": [
+            "12"
+          ],
+          "expect": "Hours? 12\nPay: R1300.00"
+        },
+        {
+          "inputs": [
+            "14"
+          ],
+          "expect": "Hours? 14\nPay: R1600.00"
+        }
+      ]
+    },
+    {
+      "title": "The runner's average",
+      "task": "These are four runs in km. The average should be `10.95` and the longest `21.1`. This program has TWO bugs in the average, and runs without errors. Find both. You should see:\n\n`Average: 10.95 km`\n`Longest: 21.1`",
+      "starter": "runs = [5.2, 10.0, 7.5, 21.1]\ntotal = 0\nfor i in range(1, len(runs)):\n    total += runs[i]\navg = total // len(runs)\nprint(f\"Average: {avg:.2f} km\")\nprint(\"Longest:\", max(runs))\n",
+      "solution": "runs = [5.2, 10.0, 7.5, 21.1]\ntotal = 0\nfor i in range(0, len(runs)):\n    total += runs[i]\navg = total / len(runs)\nprint(f\"Average: {avg:.2f} km\")\nprint(\"Longest:\", max(runs))\n",
+      "hints": [
+        "Print total just after the loop. It should be 43.8. Is it?",
+        "Bug 1: range(1, ...) starts at index 1 and skips the first run. Lists start at 0. Bug 2: // throws away the decimals.",
+        "Change range(1, len(runs)) to range(0, len(runs)), and change // to /."
+      ],
+      "tests": [
+        {
+          "expect": "Average: 10.95 km\nLongest: 21.1"
+        }
+      ],
+      "code_has": [
+        "for "
+      ],
+      "code_not": [
+        "10.95"
+      ]
+    }
+  ],
+  "recap": [
+    "Three kinds of bug: will not start, crashes, or runs and gives the wrong answer.",
+    "Read a traceback from the bottom: what went wrong, then which line.",
+    "Print debugging: print the value just before the suspect line and compare with what you expected.",
+    "Change one thing at a time, and run again after each change."
+  ],
+  "words": [
+    {
+      "term": "bug",
+      "meaning": "A mistake in a program."
+    },
+    {
+      "term": "traceback",
+      "meaning": "The long error message that shows where a crash happened."
+    },
+    {
+      "term": "logic bug",
+      "meaning": "A bug with no error message: the program runs but gives a wrong answer."
+    },
+    {
+      "term": "debugging",
+      "meaning": "Finding and fixing bugs."
+    },
+    {
+      "term": "breakpoint",
+      "meaning": "A marker where the debugger pauses your program so you can look inside."
+    }
+  ],
+  "pc": {
+    "title": "Use the real debugger and plan the capstone",
+    "why": "Print debugging is quick. The VS Code debugger lets you freeze your program and look inside it. Then you choose the tool you will build next.",
+    "steps": [
+      "Open VS Code, open Python 30 Work (File, Open Recent), and open a terminal (Terminal, New Terminal). Check the line starts with `(.venv)`. If not, type `.venv\\Scripts\\Activate.ps1`.",
+      "Click the New File icon, name it `bugs.py`, and type:\n\nprices = [100, 250, \"75\", 300]\ntotal = 0\nfor p in prices:\n    total = total + p\nprint(\"Total:\", total)\n\nPress Ctrl+S.",
+      "In the terminal type `python bugs.py` and press Enter. It crashes. Read it from the BOTTOM: `TypeError: unsupported operand type(s) for +: 'int' and 'str'`. The line above that points at line 4. The problem: \"75\" is text, not a number.",
+      "Fix it: change line 4 to `total = total + int(p)`. Save and run again. You should see `Total: 725`.",
+      "Now the debugger. Click in the grey strip just left of the number 4. A red dot appears: that is a breakpoint. Press F5. If a menu appears, choose Python Debugger, then Python File. If VS Code offers to install the Python Debugger extension, click Install.",
+      "The program freezes on line 4, which turns yellow. On the left, open Variables and look at `p` and `total`. Press F10 once to step one line and watch `total` change. Press F10 a few more times.",
+      "Press Shift+F5 to stop. Click the red dot again to remove it.",
+      "Plan your capstone: click New File, name it `PLAN.md`, and write three lines: the tool you will build after the course (the day-rate invoice tool, a call time sheet maker, or a run log summary), one sentence on who will use it, and the first small step. Save with Ctrl+S."
+    ]
+  }
+}

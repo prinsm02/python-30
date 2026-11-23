@@ -1,0 +1,171 @@
+{
+  "id": "D14",
+  "day": 14,
+  "week": 3,
+  "title": "Text tools",
+  "hook": "Clean, fix, cut and join text, like tidying a messy call sheet.",
+  "badge": "Text Tidier",
+  "warmup": [
+    {
+      "q": "`d = {\"a\": 1}`. What does `d[\"a\"]` give?",
+      "options": [
+        "a",
+        "1",
+        "KeyError"
+      ],
+      "answer": 1,
+      "explain": "You look up with the key and get the value. The key is a, the value is 1."
+    },
+    {
+      "q": "`len([\"x\", \"y\", \"z\"])` gives...",
+      "options": [
+        "3",
+        "2",
+        "z"
+      ],
+      "answer": 0,
+      "explain": "len counts the items. Three items, so 3."
+    },
+    {
+      "q": "You type `7` into an `input()`. Python holds it as...",
+      "options": [
+        "The number 7",
+        "Text 7",
+        "A list"
+      ],
+      "answer": 1,
+      "explain": "input always gives text. Use int() when you need the number."
+    }
+  ],
+  "why": [
+    {
+      "heading": "Real text is messy",
+      "text": "Names arrive as `  sam dube `, in capitals, with spaces at the ends. File names are `clip_01.mov` when you want `ICL_01.mp4`. Python has small **methods** that tidy text. A method is a tool that belongs to the text, written after a dot."
+    },
+    {
+      "heading": "Tidy tools",
+      "text": "`.strip()` removes spaces from both ends.\n`.lower()` makes all small letters. `.upper()` all capitals.\n`.title()` makes Each Word Start With A Capital.\n\nThey give back a NEW text. Your original is not changed, so print it or save it: `name = name.strip()`"
+    },
+    {
+      "heading": "Replace, split, join",
+      "text": "`\"clip_01\".replace(\"clip\", \"ICL\")` swaps one piece for another.\n\n`\"Sam Dube\".split(\" \")` cuts text into a list: `['Sam', 'Dube']`.\n\n`\"-\".join(parts)` glues a list back into text, with `-` between. The text before `.join` is the glue."
+    },
+    {
+      "heading": "Ask questions about text",
+      "text": "`in` works on text too: `\"mp4\" in filename` is True or False.\n\n`len(\"hello\")` counts the characters: 5.\n\nYou can chain tools: `raw.strip().title()` strips first, then fixes the capitals."
+    },
+    {
+      "heading": "Slicing: take a piece",
+      "text": "Text counts from 0, just like a list. `name[0]` is the first letter. `name[:3]` takes everything up to (not including) spot 3, so the first three letters. Leave out the first number and it starts at the beginning."
+    }
+  ],
+  "watch": {
+    "intro": "Tap Run. One messy name and one file name, cleaned up.",
+    "code": "raw = \"  thandi DUBE \"\nname = raw.strip().title()\nprint(name)\nprint(name.upper())\nprint(len(name))\nprint(name[:3])\nparts = name.split(\" \")\nprint(parts)\nprint(\"-\".join(parts))\nprint(\"Dube\" in name)\nprint(\"clip_01.mp4\".replace(\"clip\", \"ICL\"))",
+    "explain": [
+      "`strip` removed the spaces, then `title` fixed the capitals. Two tools chained.",
+      "`len` counted 11 characters, and `[:3]` took the first three.",
+      "`split` made a list of two words, and `join` glued them with a dash.",
+      "`replace` changed `clip` into `ICL`."
+    ],
+    "break_it": "Break it on purpose: change `name.upper()` to `name.uper()` (missing p) and tap Run. The error says `AttributeError: 'str' object has no attribute 'uper'`. That means: text has no tool with that name. Check the spelling."
+  },
+  "tasks": [
+    {
+      "title": "Tidy one name",
+      "task": "The name is messy. Print it tidy, with no spaces at the ends and a capital letter on each word:\n\n`Sipho Naidoo`",
+      "starter": "name = \"  sIPHO naidoo  \"\n# print it tidy\n",
+      "solution": "name = \"  sIPHO naidoo  \"\nprint(name.strip().title())\n",
+      "hints": [
+        "Two tools: one removes the spaces at the ends, one fixes the capitals.",
+        "They chain: name.strip().title()",
+        "Type: print(name.strip().title())"
+      ],
+      "tests": [
+        {
+          "expect": "Sipho Naidoo"
+        }
+      ],
+      "code_has": [
+        ".title()"
+      ]
+    },
+    {
+      "title": "Rename the clips",
+      "task": "The clips are named `clip_01.mov`. Loop through the list and print each name with `clip` swapped for `ICL`:\n\n`ICL_01.mov`\n`ICL_02.mov`\n`ICL_03.mov`",
+      "starter": "files = [\"clip_01.mov\", \"clip_02.mov\", \"clip_03.mov\"]\n# loop and print the new names\n",
+      "solution": "files = [\"clip_01.mov\", \"clip_02.mov\", \"clip_03.mov\"]\nfor f in files:\n    print(f.replace(\"clip\", \"ICL\"))\n",
+      "hints": [
+        "You need a for loop over files, and .replace inside it.",
+        "for f in files: then an indented print.",
+        "print(f.replace(\"clip\", \"ICL\"))"
+      ],
+      "tests": [
+        {
+          "expect": "ICL_01.mov\nICL_02.mov\nICL_03.mov"
+        }
+      ],
+      "code_has": [
+        "for ",
+        "replace"
+      ]
+    },
+    {
+      "title": "Name and initials",
+      "task": "Ask `Full name? ` (two words, any capitals). Print the name tidy in title case, then the initials like `T.D.`. Example with `thandi dube`:\n\n`Full name? thandi dube`\n`Thandi Dube`\n`T.D.`",
+      "starter": "name = input(\"Full name? \")\n# tidy it, print it, then print the initials\n",
+      "solution": "name = input(\"Full name? \")\nname = name.strip().title()\nprint(name)\nparts = name.split(\" \")\nprint(f\"{parts[0][0]}.{parts[1][0]}.\")\n",
+      "hints": [
+        "First fix the name with .title(). Then .split(\" \") gives you a list of the two words.",
+        "The first letter of a word is word[0]. So parts[0][0] is the first letter of the first word.",
+        "print(f\"{parts[0][0]}.{parts[1][0]}.\")"
+      ],
+      "tests": [
+        {
+          "inputs": [
+            "thandi dube"
+          ],
+          "expect": "Full name? thandi dube\nThandi Dube\nT.D."
+        },
+        {
+          "inputs": [
+            "lebo MOKOENA"
+          ],
+          "expect": "Full name? lebo MOKOENA\nLebo Mokoena\nL.M."
+        }
+      ],
+      "code_has": [
+        "split",
+        "title"
+      ]
+    }
+  ],
+  "recap": [
+    "`.strip()`, `.lower()`, `.upper()`, `.title()` tidy text.",
+    "`.replace(a, b)` swaps pieces. `.split(\" \")` makes a list, `\" \".join(list)` makes text.",
+    "`in` and `len` work on text. `text[:3]` takes the first three characters.",
+    "Text tools give back new text. Save it or print it."
+  ],
+  "words": [
+    {
+      "term": "method",
+      "meaning": "A tool that belongs to a thing, written after a dot, like name.upper()."
+    },
+    {
+      "term": "strip",
+      "meaning": "Remove spaces from the start and end of text."
+    },
+    {
+      "term": "split",
+      "meaning": "Cut text into a list at a chosen spot."
+    },
+    {
+      "term": "join",
+      "meaning": "Glue a list of text together with a separator."
+    },
+    {
+      "term": "slice",
+      "meaning": "A piece of text or a list, like name[:3]."
+    }
+  ]
+}

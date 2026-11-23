@@ -1,0 +1,197 @@
+{
+  "id": "D24",
+  "day": 24,
+  "week": 5,
+  "title": "JSON: data that travels",
+  "hook": "Read and write the format every app and website uses.",
+  "badge": "JSON Reader",
+  "warmup": [
+    {
+      "q": "`csv.DictReader` gives you each cell as...",
+      "options": [
+        "A number",
+        "A list",
+        "Text"
+      ],
+      "answer": 2,
+      "explain": "Every CSV cell is text, even a number. Convert it with `int()` or `float()` before adding."
+    },
+    {
+      "q": "What does opening a file with mode `\"a\"` do?",
+      "options": [
+        "Adds to the end and keeps what was there",
+        "Erases the file first",
+        "Only reads it"
+      ],
+      "answer": 0,
+      "explain": "`\"a\"` is append. `\"w\"` is the one that erases."
+    },
+    {
+      "q": "`crew = {\"gaffer\": \"Sam\"}`. What does `crew[\"grip\"]` do?",
+      "options": [
+        "Gives None",
+        "Raises a KeyError",
+        "Gives an empty string"
+      ],
+      "answer": 1,
+      "explain": "Square brackets crash on a missing key. `.get` is the safe way."
+    }
+  ],
+  "why": [
+    {
+      "heading": "The language apps speak",
+      "text": "Apps, websites and tools swap data as **JSON**. It looks almost like a Python dictionary and list: `{\"shot\": \"1A\", \"mins\": 20}`. Learn it once and you can read data from almost anything, including the web tools next week."
+    },
+    {
+      "heading": "Text in, data out",
+      "text": "JSON is only text until you load it. `json.loads(text)` turns the text into real Python dicts and lists. `json.dumps(data)` goes the other way, data to text. The `s` stands for string."
+    },
+    {
+      "heading": "Straight to files",
+      "text": "`json.load(f)` with no `s` reads straight from an open file. `json.dump(data, f)` writes to one. Add `indent=2` to dump or dumps and the text comes out neat, one key per line, easy for you to read."
+    },
+    {
+      "heading": "Data inside data",
+      "text": "JSON nests: a list of dictionaries, a dictionary holding a list. Dig in one step at a time. `shots[0][\"mins\"]` is the first shot, then its minutes. If you get lost, print each step."
+    },
+    {
+      "heading": "Small differences",
+      "text": "JSON writes `true`, `false` and `null`. Python calls them `True`, `False` and `None`. The conversion is automatic. JSON also insists on double quotes, never single quotes."
+    }
+  ],
+  "watch": {
+    "intro": "Tap Run. It loads a slate from a JSON file, bumps the take number, shows it neatly and saves a new file.",
+    "code": "import json\nwith open(\"slate.json\") as f:\n    slate = json.load(f)\nprint(slate[\"scene\"])\nslate[\"take\"] += 1\nprint(json.dumps(slate, indent=2))\nwith open(\"slate_new.json\", \"w\") as f:\n    json.dump(slate, f, indent=2)",
+    "files": {
+      "slate.json": "{\"scene\": 12, \"take\": 3, \"good\": true}"
+    },
+    "explain": [
+      "`json.load(f)` read the file and gave back a normal Python dictionary.",
+      "We changed the take with `+= 1`, exactly like any dictionary.",
+      "`json.dumps(..., indent=2)` made text with one key per line. Notice `true` is lower case.",
+      "`json.dump(slate, f, indent=2)` wrote the same neat text into slate_new.json."
+    ],
+    "break_it": "Change `json.load(f)` on line 3 to `json.loads(f)` (add an s) and tap Run. You get a `TypeError`, because `loads` wants text, not an open file. Take the s off again."
+  },
+  "tasks": [
+    {
+      "title": "Read a call time",
+      "task": "`call.json` holds one small dictionary. Read the whole file as text with `f.read()`, turn it into data with `json.loads`, then show the unit and the call time:\n\n`Imvana call: 06:00`",
+      "starter": "import json\nwith open(\"call.json\") as f:\n    text = f.read()\ndata = json.loads(text)\nprint(data)\n",
+      "solution": "import json\nwith open(\"call.json\") as f:\n    text = f.read()\ndata = json.loads(text)\nprint(data[\"unit\"], \"call:\", data[\"call\"])\n",
+      "hints": [
+        "`data` is now a dictionary. Printing it shows curly brackets and quotes.",
+        "Look up the two keys: `data[\"unit\"]` and `data[\"call\"]`.",
+        "print(data[\"unit\"], \"call:\", data[\"call\"])"
+      ],
+      "tests": [
+        {
+          "files": {
+            "call.json": "{\"unit\": \"Imvana\", \"call\": \"06:00\"}"
+          },
+          "expect": "Imvana call: 06:00"
+        },
+        {
+          "files": {
+            "call.json": "{\"unit\": \"Pickups\", \"call\": \"08:30\"}"
+          },
+          "expect": "Pickups call: 08:30"
+        }
+      ],
+      "code_has": [
+        "json.loads"
+      ]
+    },
+    {
+      "title": "Total the shots",
+      "task": "`shots.json` is a list of dictionaries. Show each shot and its minutes, then the total minutes:\n\n`1A 20`\n`1B 30`\n`2A 15`\n`Total: 65`",
+      "starter": "import json\nwith open(\"shots.json\") as f:\n    shots = json.load(f)\ntotal = 0\nfor s in shots:\n    print(s[\"shot\"])\nprint(\"Total:\", total)\n",
+      "solution": "import json\nwith open(\"shots.json\") as f:\n    shots = json.load(f)\ntotal = 0\nfor s in shots:\n    print(s[\"shot\"], s[\"mins\"])\n    total += s[\"mins\"]\nprint(\"Total:\", total)\n",
+      "hints": [
+        "Each `s` is a dictionary with the keys `shot` and `mins`. Print both on one line.",
+        "Also add the minutes to `total`. In JSON a number is already a number, so no int() needed.",
+        "Inside the loop: print(s[\"shot\"], s[\"mins\"]) and then total += s[\"mins\"]"
+      ],
+      "tests": [
+        {
+          "files": {
+            "shots.json": "[{\"shot\": \"1A\", \"mins\": 20}, {\"shot\": \"1B\", \"mins\": 30}, {\"shot\": \"2A\", \"mins\": 15}]"
+          },
+          "expect": "1A 20\n1B 30\n2A 15\nTotal: 65"
+        },
+        {
+          "files": {
+            "shots.json": "[{\"shot\": \"3A\", \"mins\": 45}, {\"shot\": \"3B\", \"mins\": 10}]"
+          },
+          "expect": "3A 45\n3B 10\nTotal: 55"
+        }
+      ],
+      "code_has": [
+        "json.load"
+      ]
+    },
+    {
+      "title": "Add a crew member and save",
+      "task": "`crew.json` is a list of people. Add `{\"name\": \"Kay\", \"role\": \"Boom\"}` to the end, save the list back into `crew.json` with `indent=2`, and show how many people there are now, like:\n\n`Crew now: 3`",
+      "starter": "import json\nwith open(\"crew.json\") as f:\n    crew = json.load(f)\ncrew.append({\"name\": \"Kay\", \"role\": \"Boom\"})\nprint(\"Crew now:\", len(crew))\n# save it back here\n",
+      "solution": "import json\nwith open(\"crew.json\") as f:\n    crew = json.load(f)\ncrew.append({\"name\": \"Kay\", \"role\": \"Boom\"})\nprint(\"Crew now:\", len(crew))\nwith open(\"crew.json\", \"w\") as f:\n    json.dump(crew, f, indent=2)\n",
+      "hints": [
+        "Saving means opening the file again, this time to write.",
+        "Open with mode \"w\", then use json.dump(crew, f, indent=2).",
+        "with open(\"crew.json\", \"w\") as f:  then  json.dump(crew, f, indent=2)"
+      ],
+      "tests": [
+        {
+          "files": {
+            "crew.json": "[{\"name\": \"Sam\", \"role\": \"Gaffer\"}, {\"name\": \"Lerato\", \"role\": \"Grip\"}]"
+          },
+          "expect": "Crew now: 3",
+          "expect_files": {
+            "crew.json": "[\n  {\n    \"name\": \"Sam\",\n    \"role\": \"Gaffer\"\n  },\n  {\n    \"name\": \"Lerato\",\n    \"role\": \"Grip\"\n  },\n  {\n    \"name\": \"Kay\",\n    \"role\": \"Boom\"\n  }\n]"
+          }
+        },
+        {
+          "files": {
+            "crew.json": "[{\"name\": \"Jo\", \"role\": \"Sound\"}]"
+          },
+          "expect": "Crew now: 2",
+          "expect_files": {
+            "crew.json": "[\n  {\n    \"name\": \"Jo\",\n    \"role\": \"Sound\"\n  },\n  {\n    \"name\": \"Kay\",\n    \"role\": \"Boom\"\n  }\n]"
+          }
+        }
+      ],
+      "code_has": [
+        "json.dump(",
+        "indent=2"
+      ]
+    }
+  ],
+  "recap": [
+    "JSON is the text format apps use. It looks like Python dictionaries and lists.",
+    "`json.loads(text)` and `json.dumps(data)` convert between text and data.",
+    "`json.load(f)` and `json.dump(data, f)` do the same straight with a file. `indent=2` makes it neat.",
+    "Dig into nested data one step at a time: `shots[0][\"mins\"]`."
+  ],
+  "words": [
+    {
+      "term": "JSON",
+      "meaning": "A text format for data that every language and web tool understands."
+    },
+    {
+      "term": "loads",
+      "meaning": "JSON text in, Python data out. The s means string."
+    },
+    {
+      "term": "dumps",
+      "meaning": "Python data in, JSON text out."
+    },
+    {
+      "term": "indent",
+      "meaning": "How many spaces to push each level in, so the text is neat."
+    },
+    {
+      "term": "nested",
+      "meaning": "Data inside data, like a list of dictionaries."
+    }
+  ]
+}

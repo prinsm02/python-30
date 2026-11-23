@@ -1,0 +1,170 @@
+{
+  "id": "D13",
+  "day": 13,
+  "week": 3,
+  "title": "Dictionaries: a contact sheet",
+  "hook": "Look things up by name, like a contact sheet: name in, phone number out.",
+  "badge": "Look-up Pro",
+  "warmup": [
+    {
+      "q": "`sum([2, 3, 5])` gives...",
+      "options": [
+        "10",
+        "235",
+        "An error"
+      ],
+      "answer": 0,
+      "explain": "sum adds the numbers in the list: 2 + 3 + 5 = 10."
+    },
+    {
+      "q": "`for item in names:` the name `item` holds...",
+      "options": [
+        "The whole list each time",
+        "One item at a time, in turn",
+        "Always the first item"
+      ],
+      "answer": 1,
+      "explain": "Each time around the loop, item is the next item in the list."
+    },
+    {
+      "q": "`int(\"12\") + 1` gives...",
+      "options": [
+        "121",
+        "An error",
+        "13"
+      ],
+      "answer": 2,
+      "explain": "int turns the text 12 into the number 12. Then plus 1 is 13."
+    }
+  ],
+  "why": [
+    {
+      "heading": "Lists find by position",
+      "text": "With a list you ask for spot 0, spot 1, spot 2. But on set you never say 'give me spot 4'. You say 'give me Thandi's number'. You want to look things up by **name**, not by position."
+    },
+    {
+      "heading": "A contact sheet in code",
+      "text": "A **dictionary** pairs a name with a thing. The name is the **key**. The thing is the **value**.\n\n`phones = {\"Sam\": \"0821\", \"Thandi\": \"0832\"}`\n\nCurly brackets. Key, a colon, value. Commas between pairs."
+    },
+    {
+      "heading": "Look up, add, change",
+      "text": "Look up with the key in square brackets: `phones[\"Sam\"]` gives `0821`.\n\nAdd or change with the same shape on the left of an equals sign:\n\n`phones[\"Lebo\"] = \"0843\"`\n\nIf Lebo is new, he is added. If the key exists, its value is replaced."
+    },
+    {
+      "heading": "KeyError and .get",
+      "text": "Ask for a key that is not there and Python says **KeyError**. It means: no such name on the sheet. The safe way is `.get`:\n\n`phones.get(\"Zed\", \"unknown\")`\n\nIt gives back your fallback (`unknown`) instead of an error."
+    },
+    {
+      "heading": "Loop through the pairs",
+      "text": "To go through the whole sheet, use `.items()`:\n\n`for name, num in phones.items():`\n\nEach turn you get one key and its value together, like `enumerate` gave you a number and an item."
+    }
+  ],
+  "watch": {
+    "intro": "Tap Run. Crew day rates by job, looked up, changed and looped.",
+    "code": "rates = {\"gaffer\": 1800, \"grip\": 1200, \"sound\": 1500}\nprint(rates[\"gaffer\"])\nrates[\"grip\"] = 1300\nrates[\"editor\"] = 1400\nprint(rates.get(\"drone pilot\", \"not listed\"))\nfor job, pay in rates.items():\n    print(f\"{job}: R{pay}\")",
+    "explain": [
+      "`rates[\"gaffer\"]` looks up the key and gives its value, 1800.",
+      "`rates[\"grip\"] = 1300` changes an existing key. `rates[\"editor\"] = 1400` adds a new one.",
+      "`.get` with a fallback is safe when the key might be missing.",
+      "`.items()` gives each key and value in turn, in the order they were added."
+    ],
+    "break_it": "Break it on purpose: add the line `print(rates[\"drone pilot\"])` at the bottom and tap Run. The error ends with `KeyError: 'drone pilot'`. That key is not on the sheet. Change it to `.get` and it stops being an error."
+  },
+  "tasks": [
+    {
+      "title": "Look up two rates",
+      "task": "The rate sheet is ready. Print the sound rate, then the gaffer rate:\n\n`1500`\n`1800`",
+      "starter": "rates = {\"gaffer\": 1800, \"grip\": 1200, \"sound\": 1500}\n# look up and print the two rates\n",
+      "solution": "rates = {\"gaffer\": 1800, \"grip\": 1200, \"sound\": 1500}\nprint(rates[\"sound\"])\nprint(rates[\"gaffer\"])\n",
+      "hints": [
+        "Use the key in square brackets: rates[\"sound\"]",
+        "Wrap it in print(...), then do the same for gaffer.",
+        "print(rates[\"sound\"]) and then print(rates[\"gaffer\"])"
+      ],
+      "tests": [
+        {
+          "expect": "1500\n1800"
+        }
+      ],
+      "code_has": [
+        "rates["
+      ]
+    },
+    {
+      "title": "Update the contact sheet",
+      "task": "Change Sam's number to `0999`. Add a new contact, Lebo, with number `0843`. Then print Sam's number and Lebo's number:\n\n`0999`\n`0843`",
+      "starter": "phones = {\"Sam\": \"0821\", \"Thandi\": \"0832\"}\n# change Sam, add Lebo, print both\n",
+      "solution": "phones = {\"Sam\": \"0821\", \"Thandi\": \"0832\"}\nphones[\"Sam\"] = \"0999\"\nphones[\"Lebo\"] = \"0843\"\nprint(phones[\"Sam\"])\nprint(phones[\"Lebo\"])\n",
+      "hints": [
+        "Changing and adding look the same: phones[\"Sam\"] = ...",
+        "phones[\"Sam\"] = \"0999\" changes Sam. phones[\"Lebo\"] = \"0843\" adds Lebo.",
+        "After both lines, print(phones[\"Sam\"]) and print(phones[\"Lebo\"])."
+      ],
+      "tests": [
+        {
+          "expect": "0999\n0843"
+        }
+      ],
+      "code_has": [
+        "phones["
+      ]
+    },
+    {
+      "title": "Find a contact, then list all",
+      "task": "Ask `Who? `. Print that person's number, or `No such contact` if they are not on the sheet. Then print everyone as `Name: number`, one per line. Example with `Thandi`:\n\n`Who? Thandi`\n`0832`\n`Sam: 0821`\n`Thandi: 0832`\n`Lebo: 0843`",
+      "starter": "phones = {\"Sam\": \"0821\", \"Thandi\": \"0832\", \"Lebo\": \"0843\"}\nname = input(\"Who? \")\n# print the number (or No such contact), then list everyone\n",
+      "solution": "phones = {\"Sam\": \"0821\", \"Thandi\": \"0832\", \"Lebo\": \"0843\"}\nname = input(\"Who? \")\nprint(phones.get(name, \"No such contact\"))\nfor n, num in phones.items():\n    print(f\"{n}: {num}\")\n",
+      "hints": [
+        "Use phones.get(name, \"No such contact\") so a missing name does not crash.",
+        "For the full list use: for n, num in phones.items():",
+        "Inside the loop: print(f\"{n}: {num}\"). Do the .get line before the loop."
+      ],
+      "tests": [
+        {
+          "inputs": [
+            "Thandi"
+          ],
+          "expect": "Who? Thandi\n0832\nSam: 0821\nThandi: 0832\nLebo: 0843"
+        },
+        {
+          "inputs": [
+            "Zed"
+          ],
+          "expect": "Who? Zed\nNo such contact\nSam: 0821\nThandi: 0832\nLebo: 0843"
+        }
+      ],
+      "code_has": [
+        ".get(",
+        ".items()"
+      ]
+    }
+  ],
+  "recap": [
+    "A dictionary pairs keys with values: `{\"Sam\": \"0821\"}`.",
+    "`d[key]` looks up. `d[key] = value` adds or changes.",
+    "`d.get(key, fallback)` is safe when the key may be missing. A missing key with `[ ]` gives KeyError.",
+    "`for k, v in d.items():` loops through every pair."
+  ],
+  "words": [
+    {
+      "term": "dictionary",
+      "meaning": "Pairs of names and things, looked up by name."
+    },
+    {
+      "term": "key",
+      "meaning": "The name you look up by."
+    },
+    {
+      "term": "value",
+      "meaning": "The thing stored under a key."
+    },
+    {
+      "term": ".get",
+      "meaning": "Look up a key and give a fallback if it is missing."
+    },
+    {
+      "term": "KeyError",
+      "meaning": "You asked for a key that is not in the dictionary."
+    }
+  ]
+}

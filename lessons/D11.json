@@ -1,0 +1,169 @@
+{
+  "id": "D11",
+  "day": 11,
+  "week": 3,
+  "title": "Lists: a shot list in code",
+  "hook": "Keep a whole crew or shot list in one variable and grab any item.",
+  "badge": "List Keeper",
+  "warmup": [
+    {
+      "q": "Yesterday you used `random.randint(1, 10)`. Which numbers can it give?",
+      "options": [
+        "Only 2 to 9",
+        "Any whole number from 1 to 10, both ends included",
+        "A decimal like 3.5"
+      ],
+      "answer": 1,
+      "explain": "randint picks a whole number, and both the low and the high number can come up."
+    },
+    {
+      "q": "How many times does the body of `for i in range(3):` run?",
+      "options": [
+        "2",
+        "4",
+        "3"
+      ],
+      "answer": 2,
+      "explain": "range(3) gives 0, 1, 2. That is three turns of the loop."
+    },
+    {
+      "q": "What does `5 != 5` give?",
+      "options": [
+        "False",
+        "True",
+        "An error"
+      ],
+      "answer": 0,
+      "explain": "!= means not equal. Five is equal to five, so the question 'are they different?' is False."
+    }
+  ],
+  "why": [
+    {
+      "heading": "One name, many things",
+      "text": "So far a variable held one thing. But a shot list holds many shots, and a crew list holds many people. A **list** is one variable that holds many things, in order. You keep the order, you can add to it, and you can ask for any item."
+    },
+    {
+      "heading": "Square brackets, commas",
+      "text": "Put the items in square brackets with commas between them:\n\n`shots = [\"wide\", \"close\", \"drone\"]`\n\nText items need quotes. Numbers do not: `rates = [850, 1200, 950]`."
+    },
+    {
+      "heading": "Count from zero",
+      "text": "To grab one item, give its position in square brackets. Python counts from **0**, not 1. So `shots[0]` is `wide`, `shots[1]` is `close`. The first item is number zero. It feels odd, and then it becomes normal.\n\nA minus number counts from the end: `shots[-1]` is the last item."
+    },
+    {
+      "heading": "Four handy tools",
+      "text": "`len(shots)` tells you how many items.\n\n`shots.append(\"insert\")` adds one to the end.\n\n`\"drone\" in shots` answers True or False.\n\n`shots[1] = \"medium\"` swaps item 1 for something new."
+    },
+    {
+      "heading": "The IndexError",
+      "text": "Ask for a spot that is not there, like `shots[9]` in a list of 3, and Python says **IndexError: list index out of range**. It means: there is no item at that number. Check your count, remembering it starts at 0 and the last spot is one less than `len`."
+    }
+  ],
+  "watch": {
+    "intro": "Tap Run. One list, grabbed and changed in a few ways.",
+    "code": "shots = [\"wide\", \"close\", \"drone\"]\nprint(shots[0])\nprint(shots[-1])\nshots.append(\"insert\")\nprint(len(shots))\nprint(\"drone\" in shots)\nshots[1] = \"medium\"\nprint(shots)",
+    "explain": [
+      "`shots[0]` is the first item and `shots[-1]` is the last.",
+      "`append` put `insert` on the end, so `len` now says 4.",
+      "`\"drone\" in shots` is True because drone is in the list.",
+      "Printing a whole list shows the square brackets and single quotes. That is normal, Python is just showing it as a list."
+    ],
+    "break_it": "Break it on purpose: add the line `print(shots[9])` at the bottom and tap Run. The error ends with `IndexError: list index out of range`. The list only has 4 items, so spot 9 does not exist. Delete the line again."
+  },
+  "tasks": [
+    {
+      "title": "First and last",
+      "task": "The crew list is ready. Print the first name, then the last name, each on its own line:\n\n`Sam`\n`Ayanda`",
+      "starter": "crew = [\"Sam\", \"Thandi\", \"Lebo\", \"Ayanda\"]\n# Print the first and the last crew member\n",
+      "solution": "crew = [\"Sam\", \"Thandi\", \"Lebo\", \"Ayanda\"]\nprint(crew[0])\nprint(crew[-1])\n",
+      "hints": [
+        "The first item is at spot 0, because Python counts from zero.",
+        "For the last item you can use spot -1.",
+        "Type: print(crew[0]) and then print(crew[-1])"
+      ],
+      "tests": [
+        {
+          "expect": "Sam\nAyanda"
+        }
+      ],
+      "code_has": [
+        "crew["
+      ]
+    },
+    {
+      "title": "Grow the shot list",
+      "task": "Start with two shots. Add `drone`, then `insert` to the end. Change the first shot to `establishing`. Then print the list, then print how many shots it holds:\n\n`['establishing', 'close', 'drone', 'insert']`\n`4`",
+      "starter": "shots = [\"wide\", \"close\"]\n# add two shots, change the first, then print\n",
+      "solution": "shots = [\"wide\", \"close\"]\nshots.append(\"drone\")\nshots.append(\"insert\")\nshots[0] = \"establishing\"\nprint(shots)\nprint(len(shots))\n",
+      "hints": [
+        "Use shots.append(\"drone\") to add to the end. Do it twice, once per shot.",
+        "To change the first item: shots[0] = \"establishing\"",
+        "Finish with print(shots) and then print(len(shots))."
+      ],
+      "tests": [
+        {
+          "expect": "['establishing', 'close', 'drone', 'insert']\n4"
+        }
+      ],
+      "code_has": [
+        "append"
+      ]
+    },
+    {
+      "title": "Is it packed?",
+      "task": "The gear list is ready. Ask `Item? `. Print `Packed` if the item is in the list, otherwise print `Missing`. Example with `gimbal`:\n\n`Item? gimbal`\n`Packed`",
+      "starter": "gear = [\"camera\", \"tripod\", \"gimbal\", \"mic\", \"slate\"]\nitem = input(\"Item? \")\n# print Packed or Missing\n",
+      "solution": "gear = [\"camera\", \"tripod\", \"gimbal\", \"mic\", \"slate\"]\nitem = input(\"Item? \")\nif item in gear:\n    print(\"Packed\")\nelse:\n    print(\"Missing\")\n",
+      "hints": [
+        "You need an if and an else. The question is: is item in gear?",
+        "The test line is: if item in gear:",
+        "if item in gear: then print(\"Packed\"), else: then print(\"Missing\"). Indent each print by 4 spaces."
+      ],
+      "tests": [
+        {
+          "inputs": [
+            "gimbal"
+          ],
+          "expect": "Item? gimbal\nPacked"
+        },
+        {
+          "inputs": [
+            "drone"
+          ],
+          "expect": "Item? drone\nMissing"
+        }
+      ],
+      "code_has": [
+        "in gear"
+      ]
+    }
+  ],
+  "recap": [
+    "A list holds many things in order: `[\"a\", \"b\", \"c\"]`.",
+    "Spots count from 0. `-1` is the last item.",
+    "`len`, `append` and `in` count, add and check.",
+    "`mylist[1] = x` changes an item. A spot that does not exist gives IndexError."
+  ],
+  "words": [
+    {
+      "term": "list",
+      "meaning": "One variable that holds many items in order."
+    },
+    {
+      "term": "item",
+      "meaning": "One thing inside a list."
+    },
+    {
+      "term": "index",
+      "meaning": "An item's position in the list. The first is 0."
+    },
+    {
+      "term": "append",
+      "meaning": "Add an item to the end of a list."
+    },
+    {
+      "term": "IndexError",
+      "meaning": "You asked for a spot the list does not have."
+    }
+  ]
+}

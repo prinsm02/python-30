@@ -1,0 +1,220 @@
+{
+  "id": "D25",
+  "day": 25,
+  "week": 5,
+  "title": "Boss: shot report and renamer",
+  "hook": "Build a tool that reads a shot list, prints a report and renames the clips.",
+  "badge": "Batch Boss",
+  "warmup": [
+    {
+      "q": "Which one writes data straight into an open file as JSON?",
+      "options": [
+        "json.dumps",
+        "json.dump",
+        "json.loads"
+      ],
+      "answer": 1,
+      "explain": "`dump` (no s) writes to a file. `dumps` makes a string."
+    },
+    {
+      "q": "Why practise `p.rename(...)` on copies of your files?",
+      "options": [
+        "Renaming is real and has no undo",
+        "Python only works on copies",
+        "Copies run faster"
+      ],
+      "answer": 0,
+      "explain": "A rename changes the real file on disk. Work on a copy so a slip costs nothing."
+    },
+    {
+      "q": "`range(1, 4)` gives which numbers?",
+      "options": [
+        "0, 1, 2, 3",
+        "1, 2, 3, 4",
+        "1, 2, 3"
+      ],
+      "answer": 2,
+      "explain": "range stops just before the last number, so range(1, 4) is 1, 2, 3."
+    }
+  ],
+  "why": [
+    {
+      "heading": "Today you build a real tool",
+      "text": "Everything this week comes together. You will read a shot list (CSV), print a tidy report with totals, and rename a folder of clips to match. This is the kind of job that eats an hour of an assistant editor's evening, and it will run in a second."
+    },
+    {
+      "heading": "Three small steps",
+      "text": "Do not build it in one go. Step 1: read the CSV and print each take. Step 2: add the report, a count and a total. Step 3: add the renaming. After each step run it and check the output. Small steps are how pros build."
+    },
+    {
+      "heading": "Names that sort",
+      "text": "`ICL_S01_T01.mp4` has the scene and take in the name, with zero padded numbers so `S02` sorts after `S01` and before `S10`. An editor can sort the folder and see the shoot order. Your CSV already has `S01` and `T01` written that way."
+    },
+    {
+      "heading": "Check before you rename",
+      "text": "A rename has no undo. A safe tool checks first: if the old clip is missing, print `Missing:` and move on instead of crashing half way. `old.exists()` is the question to ask."
+    },
+    {
+      "heading": "Copies first",
+      "text": "Never point a new renamer at the only copy of real footage. Make a test folder of fake clips, run it, check the result, run it again to see it cope with already renamed files. Only then think about real folders, and even then on a copy."
+    }
+  ],
+  "watch": {
+    "intro": "Tap Run. The shot list has three takes and the clips folder has three clips. Python reports, then renames every clip to its ICL name.",
+    "code": "import csv\nfrom pathlib import Path\ndef code(row):\n    return row[\"scene\"] + \"_\" + row[\"take\"]\ntotal = 0\ncount = 0\nprint(\"SHOT REPORT\")\nwith open(\"shots.csv\", newline=\"\") as f:\n    for row in csv.DictReader(f):\n        print(code(row) + \": \" + row[\"mins\"] + \" min\")\n        total += int(row[\"mins\"])\n        count += 1\n        old = Path(\"clips\") / (row[\"clip\"] + \".mp4\")\n        if old.exists():\n            old.rename(Path(\"clips\") / (\"ICL_\" + code(row) + \".mp4\"))\n        else:\n            print(\"Missing:\", row[\"clip\"])\nprint(\"Takes:\", count)\nprint(\"Total:\", total, \"min\")\nfor p in sorted(Path(\"clips\").iterdir()):\n    print(p.name)",
+    "files": {
+      "shots.csv": "scene,take,clip,mins\nS01,T01,A001_C001,10\nS01,T02,A001_C002,15\nS02,T01,A001_C003,20\n",
+      "clips/A001_C001.mp4": "a",
+      "clips/A001_C002.mp4": "b",
+      "clips/A001_C003.mp4": "c"
+    },
+    "explain": [
+      "`code(row)` is a small function that builds `S01_T01` from the scene and take cells.",
+      "For every row we print a report line and add to the totals.",
+      "We build the old address from the clip column and check `exists()` before renaming.",
+      "The last loop lists the folder so you can see the new names."
+    ],
+    "break_it": "Change `\"clips\"` in the first `Path(\"clips\")` to `\"clipz\"`, a folder that does not exist, and tap Run. Every row prints `Missing:` instead of crashing, because you check first. Put it back."
+  },
+  "tasks": [
+    {
+      "title": "Read the shot list",
+      "task": "`shots.csv` has `scene,take,clip,mins`. Show one line for each take, like:\n\n`S01_T01: 10 min`\n`S01_T02: 15 min`\n`S02_T01: 20 min`",
+      "starter": "import csv\nwith open(\"shots.csv\", newline=\"\") as f:\n    for row in csv.DictReader(f):\n        print(row[\"scene\"])\n",
+      "solution": "import csv\nwith open(\"shots.csv\", newline=\"\") as f:\n    for row in csv.DictReader(f):\n        print(row[\"scene\"] + \"_\" + row[\"take\"] + \": \" + row[\"mins\"] + \" min\")\n",
+      "hints": [
+        "Join several cells with + and underscores and text, all inside one print.",
+        "The pieces are: the scene, an underscore, the take, a colon and space, the mins, then \" min\".",
+        "print(row[\"scene\"] + \"_\" + row[\"take\"] + \": \" + row[\"mins\"] + \" min\")"
+      ],
+      "tests": [
+        {
+          "files": {
+            "shots.csv": "scene,take,clip,mins\nS01,T01,A001_C001,10\nS01,T02,A001_C002,15\nS02,T01,A001_C003,20\n"
+          },
+          "expect": "S01_T01: 10 min\nS01_T02: 15 min\nS02_T01: 20 min"
+        },
+        {
+          "files": {
+            "shots.csv": "scene,take,clip,mins\nS03,T01,B001_C001,8\n"
+          },
+          "expect": "S03_T01: 8 min"
+        }
+      ],
+      "code_has": [
+        "DictReader"
+      ]
+    },
+    {
+      "title": "Add the report",
+      "task": "Make a tidy report. Start with `SHOT REPORT`, then one line per take, then the number of takes and the total minutes:\n\n`SHOT REPORT`\n`S01_T01: 10 min`\n`S01_T02: 15 min`\n`S02_T01: 20 min`\n`Takes: 3`\n`Total: 45 min`\n\nThe function `code(row)` is done for you.",
+      "starter": "import csv\ndef code(row):\n    return row[\"scene\"] + \"_\" + row[\"take\"]\ntotal = 0\ncount = 0\nprint(\"SHOT REPORT\")\n# read shots.csv, print each take, keep the totals\nprint(\"Takes:\", count)\nprint(\"Total:\", total, \"min\")\n",
+      "solution": "import csv\ndef code(row):\n    return row[\"scene\"] + \"_\" + row[\"take\"]\ntotal = 0\ncount = 0\nprint(\"SHOT REPORT\")\nwith open(\"shots.csv\", newline=\"\") as f:\n    for row in csv.DictReader(f):\n        print(code(row) + \": \" + row[\"mins\"] + \" min\")\n        total += int(row[\"mins\"])\n        count += 1\nprint(\"Takes:\", count)\nprint(\"Total:\", total, \"min\")\n",
+      "hints": [
+        "Open shots.csv like the last task and loop with DictReader. Start the loop under the `print(\"SHOT REPORT\")` line.",
+        "In the loop: print the line using code(row), add int(row[\"mins\"]) to total, and add 1 to count.",
+        "print(code(row) + \": \" + row[\"mins\"] + \" min\")  then  total += int(row[\"mins\"])  then  count += 1"
+      ],
+      "tests": [
+        {
+          "files": {
+            "shots.csv": "scene,take,clip,mins\nS01,T01,A001_C001,10\nS01,T02,A001_C002,15\nS02,T01,A001_C003,20\n"
+          },
+          "expect": "SHOT REPORT\nS01_T01: 10 min\nS01_T02: 15 min\nS02_T01: 20 min\nTakes: 3\nTotal: 45 min"
+        },
+        {
+          "files": {
+            "shots.csv": "scene,take,clip,mins\nS01,T01,A001_C001,10\nS01,T02,A001_C009,5\n"
+          },
+          "expect": "SHOT REPORT\nS01_T01: 10 min\nS01_T02: 5 min\nTakes: 2\nTotal: 15 min"
+        }
+      ],
+      "code_has": [
+        "def code",
+        "int("
+      ]
+    },
+    {
+      "title": "Rename the clips",
+      "task": "The finished tool. Keep the report, and for each take also rename the clip `clips/<clip>.mp4` to `clips/ICL_<scene>_<take>.mp4`, for example `A001_C001.mp4` becomes `ICL_S01_T01.mp4`. If the old clip is not there, show `Missing: <clip>` right after that take's report line and carry on.",
+      "starter": "import csv\ndef code(row):\n    return row[\"scene\"] + \"_\" + row[\"take\"]\ntotal = 0\ncount = 0\nprint(\"SHOT REPORT\")\nwith open(\"shots.csv\", newline=\"\") as f:\n    for row in csv.DictReader(f):\n        print(code(row) + \": \" + row[\"mins\"] + \" min\")\n        total += int(row[\"mins\"])\n        count += 1\n        # rename the clip here\nprint(\"Takes:\", count)\nprint(\"Total:\", total, \"min\")\n",
+      "solution": "import csv\nfrom pathlib import Path\ndef code(row):\n    return row[\"scene\"] + \"_\" + row[\"take\"]\ntotal = 0\ncount = 0\nprint(\"SHOT REPORT\")\nwith open(\"shots.csv\", newline=\"\") as f:\n    for row in csv.DictReader(f):\n        print(code(row) + \": \" + row[\"mins\"] + \" min\")\n        total += int(row[\"mins\"])\n        count += 1\n        old = Path(\"clips\") / (row[\"clip\"] + \".mp4\")\n        if old.exists():\n            old.rename(Path(\"clips\") / (\"ICL_\" + code(row) + \".mp4\"))\n        else:\n            print(\"Missing:\", row[\"clip\"])\nprint(\"Takes:\", count)\nprint(\"Total:\", total, \"min\")\n",
+      "hints": [
+        "You need `from pathlib import Path` at the top. Then build the old address: Path(\"clips\") / (row[\"clip\"] + \".mp4\").",
+        "Ask old.exists(). If True, old.rename(...) to Path(\"clips\") / (\"ICL_\" + code(row) + \".mp4\"). Else print the Missing line.",
+        "if old.exists(): old.rename(Path(\"clips\") / (\"ICL_\" + code(row) + \".mp4\"))   else: print(\"Missing:\", row[\"clip\"])"
+      ],
+      "tests": [
+        {
+          "files": {
+            "shots.csv": "scene,take,clip,mins\nS01,T01,A001_C001,10\nS01,T02,A001_C002,15\nS02,T01,A001_C003,20\n",
+            "clips/A001_C001.mp4": "a",
+            "clips/A001_C002.mp4": "b",
+            "clips/A001_C003.mp4": "c"
+          },
+          "expect": "SHOT REPORT\nS01_T01: 10 min\nS01_T02: 15 min\nS02_T01: 20 min\nTakes: 3\nTotal: 45 min",
+          "expect_files": {
+            "clips/ICL_S01_T01.mp4": "a",
+            "clips/ICL_S01_T02.mp4": "b",
+            "clips/ICL_S02_T01.mp4": "c"
+          }
+        },
+        {
+          "files": {
+            "shots.csv": "scene,take,clip,mins\nS01,T01,A001_C001,10\nS01,T02,A001_C009,5\n",
+            "clips/A001_C001.mp4": "a"
+          },
+          "expect": "SHOT REPORT\nS01_T01: 10 min\nS01_T02: 5 min\nMissing: A001_C009\nTakes: 2\nTotal: 15 min",
+          "expect_files": {
+            "clips/ICL_S01_T01.mp4": "a"
+          }
+        }
+      ],
+      "code_has": [
+        ".rename(",
+        ".exists()"
+      ]
+    }
+  ],
+  "recap": [
+    "Reading a CSV, reporting and renaming files is one small pipeline: read, report, rename.",
+    "Build in steps and run after each one.",
+    "Check `exists()` before a rename so one missing clip does not crash the job.",
+    "Names like `ICL_S01_T01.mp4` sort in shoot order.",
+    "Always try a new renamer on copies, never on the only copy."
+  ],
+  "words": [
+    {
+      "term": "pipeline",
+      "meaning": "Steps in a row: the output of one is the input of the next."
+    },
+    {
+      "term": "batch",
+      "meaning": "Doing the same job to many files in one go."
+    },
+    {
+      "term": "zero padded",
+      "meaning": "Numbers written with a leading zero, like 01, so they sort correctly."
+    },
+    {
+      "term": "dry run",
+      "meaning": "Trying a tool on copies or fake data first to see what it would do."
+    }
+  ],
+  "pc": {
+    "title": "Run the renamer on a test folder",
+    "why": "Now do it for real on your laptop, but only on fake clips. A rename cannot be undone, so you practise on copies in a test folder. Never run this on your real footage. If you ever want to try real clips, copy them first and run it on the copies.",
+    "steps": [
+      "Open VS Code. Click File, then Open Folder, and choose `Documents\\Python 30 Work`. If the folder is not there, make it in File Explorer first.",
+      "Open the terminal in VS Code: press Ctrl and the backtick key (the one under Esc). Check it says `Python 30 Work` at the start of the line.",
+      "Make a test folder: type `mkdir clips` and press Enter.",
+      "Make three fake clips (tiny empty files, not real footage). Type: `ni clips\\A001_C001.mp4, clips\\A001_C002.mp4, clips\\A001_C003.mp4` and press Enter.",
+      "In VS Code click New File, name it `shots.csv`, and paste this in: the header `scene,take,clip,mins` then the three lines `S01,T01,A001_C001,10`, `S01,T02,A001_C002,15`, `S02,T01,A001_C003,20`. Press Ctrl+S.",
+      "Make another new file named `renamer.py`. Paste your finished task 3 code into it and press Ctrl+S.",
+      "Run it: type `python renamer.py` and press Enter. You should see the report and no errors.",
+      "Open the `clips` folder in the VS Code side bar. The three files should now be called `ICL_S01_T01.mp4`, `ICL_S01_T02.mp4` and `ICL_S02_T01.mp4`.",
+      "Run `python renamer.py` a second time. Each line should say `Missing:`, because the old names are gone. That is your safety check working, not a bug.",
+      "Rule for life: before you ever try this on real footage, copy the whole folder first and run it on the copy. Tick this box when you promise."
+    ]
+  }
+}

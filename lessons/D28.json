@@ -1,0 +1,216 @@
+{
+  "id": "D28",
+  "day": 28,
+  "week": 6,
+  "title": "Save points with Git",
+  "hook": "Keep every version of your work and put it online.",
+  "badge": "Git Starter",
+  "warmup": [
+    {
+      "q": "Yesterday: a response comes back with status 404. What does that mean?",
+      "options": [
+        "All good",
+        "That address was not found",
+        "The server broke"
+      ],
+      "answer": 1,
+      "explain": "404 means not found. 200 is all good and 500 means the other computer broke."
+    },
+    {
+      "q": "`open(\"log.txt\", \"a\")` does what?",
+      "options": [
+        "Adds to the end of the file and keeps what is already there",
+        "Wipes the file and starts again",
+        "Reads the file"
+      ],
+      "answer": 0,
+      "explain": "\"a\" is append: new text goes on the end. \"w\" wipes first, and \"r\" only reads."
+    },
+    {
+      "q": "`for i in range(1, 4):` runs the loop with i equal to...",
+      "options": [
+        "1, 2, 3",
+        "1, 2, 3, 4",
+        "0, 1, 2, 3"
+      ],
+      "answer": 0,
+      "explain": "range stops BEFORE the end number. `range(1, 4)` gives 1, 2 and 3."
+    }
+  ],
+  "why": [
+    {
+      "heading": "The final_v2_REAL_final problem",
+      "text": "You know the mess: `edit_final.prproj`, `edit_final2.prproj`, `edit_REAL_final.prproj`. Code is the same. **Git** solves it. It remembers every version of your project, so you can go back to any of them and nothing is ever lost."
+    },
+    {
+      "heading": "A commit is a save point",
+      "text": "A **commit** is a snapshot of your whole folder with a short message, like `Add crew list`. Think of a game save. Three words to know:\n\n`git add` picks what goes in the snapshot\n`git commit` takes it\n`git push` sends it online"
+    },
+    {
+      "heading": "GitHub is the online home",
+      "text": "**GitHub** is a website that stores your Git history. It is a backup if your laptop dies, and it is how you show your work to other people, like a showreel for code. A project folder tracked by Git is called a **repository**, or repo."
+    },
+    {
+      "heading": ".gitignore and README",
+      "text": "A file called `.gitignore` lists what Git must skip: huge videos, passwords, the `.venv` folder. A file called `README.md` is the front page of your repo: what it is and how to run it. Both are plain text files. You can already write them."
+    },
+    {
+      "heading": "Today",
+      "text": "In the browser you build small tools that do what Git does: write a README, and filter a file list the way `.gitignore` does. At the PC you do the real thing: your first commit and push."
+    }
+  ],
+  "watch": {
+    "intro": "This is a tiny pretend `git log`: a list of save points. A commit adds a new one to the end and never changes the old ones.",
+    "code": "log = [{\"id\": \"a1f\", \"msg\": \"First call sheet\"}]\nprint(\"Before:\")\nfor c in log:\n    print(c[\"id\"], c[\"msg\"])\n\nlog.append({\"id\": \"b2c\", \"msg\": \"Add crew list\"})\nprint(\"After one commit:\")\nfor c in log:\n    print(c[\"id\"], c[\"msg\"])",
+    "explain": [
+      "Each save point is a dictionary with an id and a message.",
+      "`append` adds the new one at the end. The first one is still there.",
+      "Real Git does the same, but it saves the whole folder each time."
+    ],
+    "break_it": "Change `c[\"msg\"]` in the first loop to `c[\"message\"]` and tap Run. You get KeyError: 'message'. Change it back."
+  },
+  "tasks": [
+    {
+      "title": "Write a README",
+      "task": "Ask for the project name. Then write a file called `README.md` with three lines: `# ` and the name, an empty line, then `Made with Python.` For the name `Call Sheet Maker` the file holds:\n\n`# Call Sheet Maker`\n``\n`Made with Python.`",
+      "starter": "name = input(\"Project name? \")\nwith open(\"README.md\", \"w\") as f:\n    f.write(\"Hello\\n\")\n",
+      "solution": "name = input(\"Project name? \")\nwith open(\"README.md\", \"w\") as f:\n    f.write(f\"# {name}\\n\\nMade with Python.\\n\")\n",
+      "hints": [
+        "Change what goes inside f.write(...). It must be an f-string so the name can go in.",
+        "Use \\n for a new line. Two \\n in a row make the empty line.",
+        "f.write(f\"# {name}\\n\\nMade with Python.\\n\")"
+      ],
+      "tests": [
+        {
+          "inputs": [
+            "Call Sheet Maker"
+          ],
+          "expect_files": {
+            "README.md": "# Call Sheet Maker\n\nMade with Python.\n"
+          }
+        },
+        {
+          "inputs": [
+            "Invoice Tool"
+          ],
+          "expect_files": {
+            "README.md": "# Invoice Tool\n\nMade with Python.\n"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Like .gitignore",
+      "task": "`.gitignore` is a file of names Git must skip. `all_files.txt` lists the files in a project. Print every file that is NOT ignored, one per line, in the original order.",
+      "starter": "with open(\".gitignore\") as f:\n    ignored = f.read().split()\nwith open(\"all_files.txt\") as f:\n    names = f.read().split()\n# print each name that is NOT in ignored\n",
+      "solution": "with open(\".gitignore\") as f:\n    ignored = f.read().split()\nwith open(\"all_files.txt\") as f:\n    names = f.read().split()\nfor name in names:\n    if name not in ignored:\n        print(name)\n",
+      "hints": [
+        "Loop over names. For each one, check whether it is in the ignored list.",
+        "`if name not in ignored:` is the check. Print the name inside it.",
+        "for name in names:\n    if name not in ignored:\n        print(name)"
+      ],
+      "tests": [
+        {
+          "files": {
+            ".gitignore": "secrets.txt\nnotes_private.txt\n",
+            "all_files.txt": "main.py README.md secrets.txt notes.txt notes_private.txt\n"
+          },
+          "expect": "main.py\nREADME.md\nnotes.txt"
+        },
+        {
+          "files": {
+            ".gitignore": "passwords.txt\n",
+            "all_files.txt": "a.py passwords.txt b.py\n"
+          },
+          "expect": "a.py\nb.py"
+        }
+      ],
+      "code_has": [
+        "for "
+      ]
+    },
+    {
+      "title": "Star rules",
+      "task": "Real `.gitignore` files also have rules like `*.mp4`, which means every file ending in `.mp4`. A file is ignored if its name is listed, OR if `*` plus its suffix is listed (`Path(name).suffix` gives `.mp4`). Print each kept file as `Tracked: name`, then how many were ignored. Example:\n\n`Tracked: main.py`\n`Tracked: README.md`\n`Tracked: notes.txt`\n`Ignored: 3`",
+      "starter": "from pathlib import Path\n\nwith open(\".gitignore\") as f:\n    ignored = f.read().split()\nwith open(\"all_files.txt\") as f:\n    names = f.read().split()\n\nskipped = 0\nfor name in names:\n    # ignored if the name is listed, or \"*\" + suffix is listed\n    print(\"Tracked:\", name)\nprint(\"Ignored:\", skipped)\n",
+      "solution": "from pathlib import Path\n\nwith open(\".gitignore\") as f:\n    ignored = f.read().split()\nwith open(\"all_files.txt\") as f:\n    names = f.read().split()\n\nskipped = 0\nfor name in names:\n    star = \"*\" + Path(name).suffix\n    if name in ignored or star in ignored:\n        skipped += 1\n    else:\n        print(\"Tracked:\", name)\nprint(\"Ignored:\", skipped)\n",
+      "hints": [
+        "Make star = \"*\" + Path(name).suffix inside the loop. For clip1.mp4 that gives *.mp4.",
+        "If name in ignored or star in ignored: add 1 to skipped. Otherwise print the Tracked line.",
+        "Only the else branch prints. The if branch just does skipped += 1."
+      ],
+      "tests": [
+        {
+          "files": {
+            ".gitignore": "*.mp4\n*.mov\nsecrets.txt\n.venv/\n",
+            "all_files.txt": "main.py clip1.mp4 README.md secrets.txt b-roll.mov notes.txt\n"
+          },
+          "expect": "Tracked: main.py\nTracked: README.md\nTracked: notes.txt\nIgnored: 3"
+        },
+        {
+          "files": {
+            ".gitignore": "*.log\nbuild.txt\n",
+            "all_files.txt": "app.py app.log build.txt data.csv\n"
+          },
+          "expect": "Tracked: app.py\nTracked: data.csv\nIgnored: 2"
+        }
+      ],
+      "code_has": [
+        "Path(",
+        "for "
+      ]
+    }
+  ],
+  "recap": [
+    "Git remembers every version of your project. A commit is a save point with a message.",
+    "add picks the files, commit takes the snapshot, push sends it to GitHub.",
+    "`.gitignore` lists what Git skips: videos, passwords, the .venv folder.",
+    "A README is the front page of your repo. You can write one with a program."
+  ],
+  "words": [
+    {
+      "term": "Git",
+      "meaning": "A tool that remembers every version of your project."
+    },
+    {
+      "term": "commit",
+      "meaning": "A save point of your whole folder, with a short message."
+    },
+    {
+      "term": "repository",
+      "meaning": "A project folder that Git is tracking. Also called a repo."
+    },
+    {
+      "term": "GitHub",
+      "meaning": "A website that stores your repos online."
+    },
+    {
+      "term": "push",
+      "meaning": "Send your new commits up to GitHub."
+    },
+    {
+      "term": "README",
+      "meaning": "The front page file of a repo."
+    }
+  ],
+  "pc": {
+    "title": "First commit and push",
+    "why": "Your work is only safe and shareable once it is in Git and on GitHub. You make a tiny repo today so the steps are familiar before the capstone.",
+    "steps": [
+      "Open VS Code, then Terminal, New Terminal. Type `git --version` and press Enter. You should see `git version 2` and numbers. If it says not recognised, close VS Code completely and open it again, then retry.",
+      "Tell Git who you are, once only. Type `git config --global user.name \"Your Name\"` and press Enter. Then `git config --global user.email \"you@example.com\"` using the email on your GitHub account. Nothing is printed when it works.",
+      "Make a project folder: click File, Open Folder, open Python 30 Work, click New Folder in the window, name it `hello-git`, then click Select Folder. Click Yes if it asks you to trust it.",
+      "Open a new terminal (Terminal, New Terminal). The last line should end with `hello-git>`. If not, close the terminal with the bin icon and open another.",
+      "Make three files with the New File icon in the left panel. Name them `README.md` (type `# Hello Git` inside), `hello.py` (type `print(\"Hello from Git\")`) and `.gitignore` (type `.venv/` on line one and `secrets.txt` on line two). Press Ctrl+S in each.",
+      "Type `git init` and press Enter. It says `Initialized empty Git repository`. Then type `git branch -M main` and press Enter (nothing is printed).",
+      "Type `git status` and press Enter. Your three files show in red under Untracked. Red means Git sees them but is not saving them yet.",
+      "Type `git add .` and press Enter (the dot means everything). A line-endings warning may appear: ignore it. Type `git status` again: the files are now green.",
+      "Type `git commit -m \"First commit\"` and press Enter. It says `3 files changed`. If it says Please tell me who you are, redo step 2.",
+      "Open github.com in your browser and sign in. Click the plus at the top right, then New repository. Name it `hello-git`, pick Public, do NOT tick any boxes to add a README or .gitignore, then click Create repository.",
+      "GitHub shows a page with commands. Find the box that says push an existing repository from the command line. Copy its two lines (`git remote add origin ...` and `git push -u origin main`) and paste them into the VS Code terminal, one at a time, pressing Enter after each.",
+      "A window may pop up asking you to sign in to GitHub. Click Sign in with your browser and approve. The push ends with `branch 'main' set up to track 'origin/main'`.",
+      "Refresh the GitHub page. Your three files are there and the README is shown as the front page.",
+      "Make a second save point: change the text in hello.py, press Ctrl+S, then type `git add .`, `git commit -m \"Change greeting\"`, `git push`. Refresh GitHub and click the Commits link to see both save points."
+    ]
+  }
+}

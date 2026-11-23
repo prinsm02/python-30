@@ -1,0 +1,164 @@
+{
+  "id": "D16",
+  "day": 16,
+  "week": 4,
+  "title": "Make your own tool",
+  "hook": "Give a set of steps one name, then use it as often as you like.",
+  "badge": "Tool Maker",
+  "warmup": [
+    {
+      "q": "A quiz is `quiz = [{\"q\": \"2+2\", \"a\": \"4\"}]`. Which line gets the answer \"4\"?",
+      "options": [
+        "quiz[\"a\"][0]",
+        "quiz[0][\"a\"]",
+        "quiz[a][0]"
+      ],
+      "answer": 1,
+      "explain": "Pick the item in the list first with [0], then pick the key in that dictionary with [\"a\"]. List first, then dictionary."
+    },
+    {
+      "q": "What does `print(sum([10, 20, 30]))` show?",
+      "options": [
+        "102030",
+        "3",
+        "60"
+      ],
+      "answer": 2,
+      "explain": "sum adds the numbers in the list: 10 + 20 + 30 is 60."
+    },
+    {
+      "q": "What does `print(17 % 5)` show?",
+      "options": [
+        "2",
+        "3",
+        "3.4"
+      ],
+      "answer": 0,
+      "explain": "% gives the remainder. 5 goes into 17 three times (15), and 2 is left over."
+    }
+  ],
+  "why": [
+    {
+      "heading": "The same steps, again and again",
+      "text": "On set you do the same routine at every setup: slate, roll, sound speeds, action. Nobody rewrites the routine each time. The 1st AD just says \"slate it\". Code has the same problem: the same five lines needed in ten places, and if one changes you must fix all ten. A **function** fixes that. It gives a set of steps one name."
+    },
+    {
+      "heading": "def teaches Python a new word",
+      "text": "Here is a function with one step:\n\n`def cheer():`\n`    print(\"Action!\")`\n\nThe word `def`, a name you choose, brackets, a colon. The indented line (4 spaces) belongs to the function, just like the lines under an `if` or a loop."
+    },
+    {
+      "heading": "Defining is not running",
+      "text": "Writing the `def` only writes the recipe card. Nothing is cooked yet. To run the steps you **call** the function by its name with brackets:\n\n`cheer()`\n\nCall it three times and it runs three times. If you define it but never call it, nothing shows on screen."
+    },
+    {
+      "heading": "Parameters are blanks to fill",
+      "text": "A function gets more useful when it can change a little each time:\n\n`def hello(name):`\n`    print(\"Hi\", name)`\n\n`name` is a **parameter**, a blank. When you call `hello(\"Sam\")`, \"Sam\" fills the blank (it is called the **argument**). With two blanks, the first value fills the first blank, the second fills the second."
+    },
+    {
+      "heading": "A one-line note for humans",
+      "text": "Under the `def` line you can add a **docstring**: one line in triple quotes saying what the function does.\n\n`\"\"\"Show one call line.\"\"\"`\n\nPython ignores it when running. It is a note for the human who reads the code later, and that human is often you in three months."
+    }
+  ],
+  "watch": {
+    "intro": "One function, called three times with different crew. Tap Run.",
+    "code": "def call_line(name, clock):\n    \"\"\"Show one crew call line.\"\"\"\n    print(f\"{name}: call at {clock}\")\n\ncall_line(\"Camera\", \"06:00\")\ncall_line(\"Sound\", \"06:30\")\ncall_line(\"Makeup\", \"05:30\")",
+    "explain": [
+      "`def call_line(name, clock):` makes the tool. It has two blanks.",
+      "The docstring in triple quotes is only a note. Nothing shows for it.",
+      "Each call below fills the blanks with new values, so the same steps give three different lines.",
+      "Defining the function printed nothing. Only the three calls made output."
+    ],
+    "break_it": "Now break it: change the last line to `call_line(\"Makeup\")` so one value is missing, and tap Run. The error says `TypeError: call_line() missing 1 required positional argument: 'clock'`. That means: the function has two blanks, you filled one. Put the second value back."
+  },
+  "tasks": [
+    {
+      "title": "Call it three times",
+      "task": "The function `cheer` is already written. Under the comment, call it three times so the screen shows:\n\n`Action!`\n`Action!`\n`Action!`",
+      "starter": "def cheer():\n    print(\"Action!\")\n\n# call cheer three times under this line\n",
+      "solution": "def cheer():\n    print(\"Action!\")\n\ncheer()\ncheer()\ncheer()\n",
+      "hints": [
+        "To call a function, write its name and brackets: cheer()",
+        "Write cheer() on its own line, and do that three times.",
+        "Type cheer() three times, one per line, with no spaces before them."
+      ],
+      "tests": [
+        {
+          "expect": "Action!\nAction!\nAction!"
+        }
+      ]
+    },
+    {
+      "title": "Fix the slate",
+      "task": "The function `slate` prints the wrong thing. Fix the line inside it, then call it for scene 4 take 2, and scene 4 take 3. The screen must show:\n\n`Scene 4, Take 2`\n`Scene 4, Take 3`",
+      "starter": "def slate(scene, take):\n    print(\"Scene\", take)\n\n# call slate twice under this line\n",
+      "solution": "def slate(scene, take):\n    print(f\"Scene {scene}, Take {take}\")\n\nslate(4, 2)\nslate(4, 3)\n",
+      "hints": [
+        "Inside the brackets you need both blanks, scene and take. An f-string can hold both.",
+        "Try print(f\"Scene {scene}, Take {take}\") and then call slate(4, 2).",
+        "The two calls are slate(4, 2) and slate(4, 3), on separate lines."
+      ],
+      "code_has": [
+        "slate(4, 2)",
+        "slate(4, 3)"
+      ],
+      "tests": [
+        {
+          "expect": "Scene 4, Take 2\nScene 4, Take 3"
+        }
+      ]
+    },
+    {
+      "title": "Gear list tool",
+      "task": "Write a function `gear_line(item, qty)` with a one-line docstring. It prints a line like `2 x C-stand`. Then loop over the `gear` dictionary and call your function for each item. The screen must show:\n\n`2 x C-stand`\n`6 x Sandbag`\n`4 x Flag`",
+      "starter": "gear = {\"C-stand\": 2, \"Sandbag\": 6, \"Flag\": 4}\n\n# write gear_line here, with a one-line docstring\n\n# loop over gear and call gear_line for each item\n",
+      "solution": "gear = {\"C-stand\": 2, \"Sandbag\": 6, \"Flag\": 4}\n\ndef gear_line(item, qty):\n    \"\"\"Print one gear line.\"\"\"\n    print(f\"{qty} x {item}\")\n\nfor item, qty in gear.items():\n    gear_line(item, qty)\n",
+      "hints": [
+        "Two parts. First the def with two blanks. Then a loop with .items() that calls it.",
+        "Inside the function: print(f\"{qty} x {item}\"). The loop is: for item, qty in gear.items():",
+        "Under the for line, indent and write gear_line(item, qty). The docstring is a line of triple quotes right under the def."
+      ],
+      "code_has": [
+        "def gear_line",
+        "\"\"\"",
+        "gear_line(item, qty)"
+      ],
+      "tests": [
+        {
+          "expect": "2 x C-stand\n6 x Sandbag\n4 x Flag"
+        }
+      ]
+    }
+  ],
+  "recap": [
+    "`def name(blanks):` makes a function. Indented lines belong to it.",
+    "Defining does not run it. Calling `name()` does.",
+    "Parameters are blanks. Arguments are the values you fill them with.",
+    "A one-line docstring in triple quotes says what the function does."
+  ],
+  "words": [
+    {
+      "term": "function",
+      "meaning": "A named set of steps you can run again and again."
+    },
+    {
+      "term": "def",
+      "meaning": "The word that starts making a function."
+    },
+    {
+      "term": "call",
+      "meaning": "Running a function by writing its name and brackets."
+    },
+    {
+      "term": "parameter",
+      "meaning": "A blank in the def line that gets filled when you call."
+    },
+    {
+      "term": "argument",
+      "meaning": "The actual value you put in the brackets when you call."
+    },
+    {
+      "term": "docstring",
+      "meaning": "A one-line note in triple quotes saying what a function does."
+    }
+  ]
+}

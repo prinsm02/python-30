@@ -1,0 +1,170 @@
+{
+  "id": "D09",
+  "day": 9,
+  "week": 2,
+  "title": "Count with for",
+  "hook": "Repeat exactly as many times as you want and add things up as you go.",
+  "badge": "For Loops",
+  "warmup": [
+    {
+      "q": "What does `n += 1` do?",
+      "options": [
+        "Makes n equal to 1",
+        "Adds 1 to whatever n is now",
+        "Checks if n is 1"
+      ],
+      "answer": 1,
+      "explain": "It is short for n = n + 1. The loop counter uses it to move forward each time round."
+    },
+    {
+      "q": "`if x != 3:` runs its lines when...",
+      "options": [
+        "x is exactly 3",
+        "x is more than 3",
+        "x is anything except 3"
+      ],
+      "answer": 2,
+      "explain": "!= means not equal. It is True for every value except 3."
+    },
+    {
+      "q": "`print(10 % 3)` shows...",
+      "options": [
+        "1",
+        "3",
+        "0"
+      ],
+      "answer": 0,
+      "explain": "% gives the leftover after dividing. 3 goes into 10 three times (9), and 1 is left."
+    }
+  ],
+  "why": [
+    {
+      "heading": "while counts by hand, for counts for you",
+      "text": "Yesterday's loop had three jobs: set a counter, check it, add 1. Forget one and it breaks. When you know how many times, there is a tidier loop. **for** does the counting for you, so you cannot forget."
+    },
+    {
+      "heading": "for with range",
+      "text": "`for i in range(5):`\n`    print(i)`\n\n`range(5)` makes the numbers 0, 1, 2, 3, 4. That is five numbers, starting at 0. `i` is just a name you choose. Each time round it holds the next number. Same colon, same 4 spaces as before."
+    },
+    {
+      "heading": "Start, stop and step",
+      "text": "`range(1, 6)` starts at 1 and stops BEFORE 6: 1, 2, 3, 4, 5. The stop number is never included.\n\n`range(0, 10, 2)` adds a step: 0, 2, 4, 6, 8. It jumps by 2.\n\nWant days 1 to 5? Write `range(1, 6)`. Always one more than the last."
+    },
+    {
+      "heading": "Running totals",
+      "text": "Add things up as you loop. Make the total BEFORE the loop, then grow it inside:\n\n`total = 0`\n`for day in range(1, 6):`\n`    total += 1500`\n\nThe `total = 0` must sit outside the loop. Inside, it would reset to 0 every time round."
+    },
+    {
+      "heading": "Which loop?",
+      "text": "Know the count? Use `for` and `range`. Day 1 to 5, ten laps, every scene. Do not know when it ends? Use `while`: keep asking until someone types done, keep guessing until it is right. Both are fine. Pick the one that reads easiest."
+    }
+  ],
+  "watch": {
+    "intro": "Tap Run. A five day shoot at R1500 a day, with a running total.",
+    "code": "total = 0\nfor day in range(1, 6):\n    total += 1500\n    print(f\"Day {day}: R{total}\")\nprint(f\"Week total: R{total}\")",
+    "explain": [
+      "`range(1, 6)` gives 1, 2, 3, 4, 5. Each time round, `day` holds the next one.",
+      "`total += 1500` grows the total by one day rate every time round.",
+      "The last print is not pushed in, so it runs once, after the loop is finished."
+    ],
+    "break_it": "Break it on purpose: change `range(1, 6)` to `range(\"5\")` and run. You get `TypeError: 'str' object cannot be interpreted as an integer`. range wants a real number, not text. Put it back. Extra, no error: change it to `range(1, 5)` and see only 4 days. The stop number is never included."
+  },
+  "tasks": [
+    {
+      "title": "Five claps",
+      "task": "This shows `Clap` three times. Change one number so it shows `Clap` five times.",
+      "starter": "for i in range(3):\n    print(\"Clap\")\n",
+      "solution": "for i in range(5):\n    print(\"Clap\")\n",
+      "hints": [
+        "range(3) means 3 times. How many times do you want?",
+        "Change the number inside range( ).",
+        "Type: for i in range(5):"
+      ],
+      "tests": [
+        {
+          "expect": "Clap\nClap\nClap\nClap\nClap"
+        }
+      ],
+      "code_has": [
+        "range("
+      ]
+    },
+    {
+      "title": "Shoot day total",
+      "task": "A crew member earns R1500 a day. Ask how many shoot days, show `Day 1`, `Day 2` and so on, then the total. Example with 2:\n\n`How many shoot days? 2`\n`Day 1`\n`Day 2`\n`Total: R3000`",
+      "starter": "days = int(input(\"How many shoot days? \"))\ntotal = 0\n# add your for loop here\nprint(f\"Total: R{total}\")\n",
+      "solution": "days = int(input(\"How many shoot days? \"))\ntotal = 0\nfor day in range(1, days + 1):\n    print(f\"Day {day}\")\n    total += 1500\nprint(f\"Total: R{total}\")\n",
+      "hints": [
+        "You want day 1 up to day days. The stop number is never included, so what must the stop be?",
+        "Use range(1, days + 1). Inside the loop: print the day, and add 1500 to total.",
+        "for day in range(1, days + 1):\n    print(f\"Day {day}\")\n    total += 1500"
+      ],
+      "tests": [
+        {
+          "inputs": [
+            "3"
+          ],
+          "expect": "How many shoot days? 3\nDay 1\nDay 2\nDay 3\nTotal: R4500"
+        },
+        {
+          "inputs": [
+            "5"
+          ],
+          "expect": "How many shoot days? 5\nDay 1\nDay 2\nDay 3\nDay 4\nDay 5\nTotal: R7500"
+        }
+      ],
+      "code_has": [
+        "for ",
+        "range("
+      ]
+    },
+    {
+      "title": "Training plan",
+      "task": "A runner starts at 2 km in week 1 and adds 2 km each week, for 5 weeks. Use a loop (week times 2 gives the km). Show every week, then the total:\n\n`Week 1: 2 km`\n`Week 2: 4 km`\n`Week 3: 6 km`\n`Week 4: 8 km`\n`Week 5: 10 km`\n`Total: 30 km`",
+      "starter": "total = 0\n# add your for loop here\nprint(f\"Total: {total} km\")\n",
+      "solution": "total = 0\nfor week in range(1, 6):\n    km = week * 2\n    total += km\n    print(f\"Week {week}: {km} km\")\nprint(f\"Total: {total} km\")\n",
+      "hints": [
+        "Loop over the weeks with range(1, 6). Inside, work out km from week.",
+        "km = week * 2, then add km to total, then print the line with an f-string.",
+        "for week in range(1, 6):\n    km = week * 2\n    total += km\n    print(f\"Week {week}: {km} km\")"
+      ],
+      "tests": [
+        {
+          "expect": "Week 1: 2 km\nWeek 2: 4 km\nWeek 3: 6 km\nWeek 4: 8 km\nWeek 5: 10 km\nTotal: 30 km"
+        }
+      ],
+      "code_has": [
+        "for ",
+        "range("
+      ],
+      "code_not": [
+        "Total: 30"
+      ]
+    }
+  ],
+  "recap": [
+    "`for i in range(5):` repeats 5 times, with i = 0, 1, 2, 3, 4.",
+    "`range(1, 6)` gives 1 to 5. The stop number is never included.",
+    "`range(0, 10, 2)` adds a step: 0, 2, 4, 6, 8.",
+    "Running total: set it to 0 before the loop, then `total += value` inside.",
+    "Know the count? for. Do not know when it ends? while."
+  ],
+  "words": [
+    {
+      "term": "for",
+      "meaning": "A loop that takes each value from a set of values, one at a time."
+    },
+    {
+      "term": "range",
+      "meaning": "Makes a run of numbers: range(1, 6) is 1 to 5."
+    },
+    {
+      "term": "step",
+      "meaning": "How far range jumps each time. range(0, 10, 2) steps by 2."
+    },
+    {
+      "term": "running total",
+      "meaning": "A number that grows each time round the loop."
+    }
+  ]
+}

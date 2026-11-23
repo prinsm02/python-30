@@ -1,0 +1,199 @@
+{
+  "id": "D21",
+  "day": 21,
+  "week": 5,
+  "title": "Files: read and write",
+  "hook": "Make Python read a crew list and write a log file that is still there tomorrow.",
+  "badge": "File Handler",
+  "warmup": [
+    {
+      "q": "You wrote a function that works out pace once. Why bother with a function?",
+      "options": [
+        "Python will not run without one",
+        "You can reuse it for every run without retyping",
+        "It makes the answer more accurate"
+      ],
+      "answer": 1,
+      "explain": "A function names a set of steps. Write it once, call it as many times as you like."
+    },
+    {
+      "q": "`int(\"seven\")` would crash with a ValueError. What does `try` / `except ValueError` do?",
+      "options": [
+        "Turns seven into 7",
+        "Hides the program",
+        "Runs the except block instead of crashing"
+      ],
+      "answer": 2,
+      "explain": "The try block is tried. If that error happens, Python jumps to the except block and carries on."
+    },
+    {
+      "q": "`crew = {\"gaffer\": \"Sam\"}`. What does `crew.get(\"grip\", \"nobody\")` give?",
+      "options": [
+        "nobody",
+        "KeyError",
+        "None"
+      ],
+      "answer": 0,
+      "explain": "`.get` does not crash on a missing key. It hands back the default you gave it, here `nobody`."
+    }
+  ],
+  "why": [
+    {
+      "heading": "Programs forget",
+      "text": "When a program ends, every variable is gone. A crew list stored in a variable is lost the moment you close it. A **file** lives on the disk, so it is still there tomorrow. Files are how a program remembers."
+    },
+    {
+      "heading": "Open, use, close",
+      "text": "`with open(\"crew.txt\") as f:` opens the file and calls it `f`. Everything indented under it can use `f`. When the indent ends, Python closes the file for you. Always use `with`, so you never forget to close."
+    },
+    {
+      "heading": "Reading",
+      "text": "`f.read()` gives the whole file as one big string. Or loop with `for line in f:` to get one line at a time. Each line still has its **newline** (the invisible line break) on the end, so use `line.strip()` to clean it."
+    },
+    {
+      "heading": "Writing",
+      "text": "Add a mode after the name. `\"w\"` is write: it makes the file and **erases anything already in it**. `\"a\"` is append: it adds to the end and keeps what was there. Then `f.write(\"text\\n\")`. Write adds no line break, so you add `\\n` yourself."
+    },
+    {
+      "heading": "A file that is not there",
+      "text": "Open a missing file and Python raises `FileNotFoundError`. You know how to deal with errors: wrap it in `try` / `except FileNotFoundError`. A program that checks first beats a program that crashes on set."
+    }
+  ],
+  "watch": {
+    "intro": "Tap Run. It reads three names from crew.txt, writes a log file, then reads the log back.",
+    "code": "with open(\"crew.txt\") as f:\n    for line in f:\n        print(\"Crew:\", line.strip())\nwith open(\"log.txt\", \"w\") as f:\n    f.write(\"Crew checked\\n\")\nwith open(\"log.txt\") as f:\n    print(f.read())",
+    "files": {
+      "crew.txt": "Sam\nLerato\nJo\n"
+    },
+    "explain": [
+      "The first `with` reads crew.txt one line at a time. `strip()` removes the hidden line break.",
+      "The second `with` uses mode `\"w\"`. log.txt did not exist, so Python made it.",
+      "`f.write` puts text in the file. The `\\n` ends the line.",
+      "The third `with` reads log.txt back with `read()` to prove it was saved."
+    ],
+    "break_it": "Change `\"crew.txt\"` on line 1 to `\"crews.txt\"` and tap Run. Python raises `FileNotFoundError` and says there is no such file. A wrong name is the most common file mistake. Put it back."
+  },
+  "tasks": [
+    {
+      "title": "Read a note",
+      "task": "The file `note.txt` is already there. Read it and show everything in it. The result is:\n\n`Bring the ND filter.`\n`Charge all batteries.`",
+      "starter": "with open(\"note.txt\") as f:\n    text = f.read()\n# now print text\n",
+      "solution": "with open(\"note.txt\") as f:\n    text = f.read()\nprint(text)\n",
+      "hints": [
+        "The text is already in the variable `text`. You only need to show it.",
+        "Add one line at the bottom: print the variable `text`.",
+        "Type exactly: print(text)"
+      ],
+      "tests": [
+        {
+          "files": {
+            "note.txt": "Bring the ND filter.\nCharge all batteries.\n"
+          },
+          "expect": "Bring the ND filter.\nCharge all batteries."
+        },
+        {
+          "files": {
+            "note.txt": "Wrap at 18:00.\n"
+          },
+          "expect": "Wrap at 18:00."
+        }
+      ],
+      "code_has": [
+        "open(",
+        "read()"
+      ]
+    },
+    {
+      "title": "Write a call list",
+      "task": "`names.txt` has one name per line. Make a new file `callsheet.txt` with one line per name, like this:\n\n`Call: Sam`\n`Call: Lerato`\n`Call: Jo`",
+      "starter": "with open(\"names.txt\") as f:\n    names = f.readlines()\nwith open(\"callsheet.txt\", \"w\") as out:\n    for n in names:\n        # write one line here\n        pass\n",
+      "solution": "with open(\"names.txt\") as f:\n    names = f.readlines()\nwith open(\"callsheet.txt\", \"w\") as out:\n    for n in names:\n        out.write(\"Call: \" + n.strip() + \"\\n\")\n",
+      "hints": [
+        "`readlines()` gives a list of lines. Each still ends with a hidden line break, so clean it with `n.strip()`.",
+        "Inside the loop use `out.write(...)`. Build the text as \"Call: \" plus the clean name plus \"\\n\".",
+        "Type: out.write(\"Call: \" + n.strip() + \"\\n\")"
+      ],
+      "tests": [
+        {
+          "files": {
+            "names.txt": "Sam\nLerato\nJo\n"
+          },
+          "expect_files": {
+            "callsheet.txt": "Call: Sam\nCall: Lerato\nCall: Jo\n"
+          }
+        },
+        {
+          "files": {
+            "names.txt": "Kay\nBo\n"
+          },
+          "expect_files": {
+            "callsheet.txt": "Call: Kay\nCall: Bo\n"
+          }
+        }
+      ],
+      "code_has": [
+        "write("
+      ]
+    },
+    {
+      "title": "Count, then add a line",
+      "task": "Open `shots.txt`. If it is there, show `Shots so far: N` (N is the number of lines in it). If it is missing, show `No shots yet`. Either way, then add the line `Slate 9` to the end of `shots.txt`.",
+      "starter": "try:\n    with open(\"shots.txt\") as f:\n        n = len(f.readlines())\n    print(\"Shots so far:\", n)\n# add the except, then the append\n",
+      "solution": "try:\n    with open(\"shots.txt\") as f:\n        n = len(f.readlines())\n    print(\"Shots so far:\", n)\nexcept FileNotFoundError:\n    print(\"No shots yet\")\nwith open(\"shots.txt\", \"a\") as f:\n    f.write(\"Slate 9\\n\")\n",
+      "hints": [
+        "A `try` must be followed by an `except`. Which error do you catch for a missing file?",
+        "After the try / except, start a new `with open(\"shots.txt\", ...)` with no indent. Which mode adds to the end?",
+        "Use mode \"a\" and f.write(\"Slate 9\\n\"). The except line is: except FileNotFoundError:"
+      ],
+      "tests": [
+        {
+          "expect": "No shots yet",
+          "expect_files": {
+            "shots.txt": "Slate 9\n"
+          }
+        },
+        {
+          "files": {
+            "shots.txt": "Slate 7\nSlate 8\n"
+          },
+          "expect": "Shots so far: 2",
+          "expect_files": {
+            "shots.txt": "Slate 7\nSlate 8\nSlate 9\n"
+          }
+        }
+      ],
+      "code_has": [
+        "FileNotFoundError",
+        "\"a\""
+      ]
+    }
+  ],
+  "recap": [
+    "`with open(name) as f:` opens a file and closes it for you.",
+    "`f.read()` is the whole file. `for line in f:` is one line at a time. `strip()` cleans each line.",
+    "Mode `\"w\"` erases and writes. Mode `\"a\"` adds to the end.",
+    "`FileNotFoundError` means the name or place is wrong. Catch it with try / except."
+  ],
+  "words": [
+    {
+      "term": "file",
+      "meaning": "Information saved on the disk with a name, so it survives after the program ends."
+    },
+    {
+      "term": "with",
+      "meaning": "Opens something, lets you use it in the indented block, then closes it for you."
+    },
+    {
+      "term": "mode",
+      "meaning": "The letter after the file name: \"r\" read (the default), \"w\" write, \"a\" append."
+    },
+    {
+      "term": "newline",
+      "meaning": "The hidden line break at the end of each line, written \\n."
+    },
+    {
+      "term": "append",
+      "meaning": "Add to the end of a file and keep what was already there."
+    }
+  ]
+}

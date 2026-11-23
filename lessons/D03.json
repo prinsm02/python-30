@@ -1,0 +1,162 @@
+{
+  "id": "D03",
+  "day": 3,
+  "week": 1,
+  "title": "Python as a calculator",
+  "hook": "Work out totals, pace and groups with numbers.",
+  "badge": "Number Cruncher",
+  "warmup": [
+    {
+      "q": "`take = \"1\"` then `take = \"2\"`. What does `print(take)` show?",
+      "options": [
+        "1",
+        "2",
+        "12"
+      ],
+      "answer": 1,
+      "explain": "Storing again replaces the old value. The newest one wins."
+    },
+    {
+      "q": "`role = \"Gaffer\"`. What does `print(f\"Job: {role}\")` show?",
+      "options": [
+        "Job: role",
+        "Job: {role}",
+        "Job: Gaffer"
+      ],
+      "answer": 2,
+      "explain": "Inside an f-string, `{role}` is swapped for the stored value."
+    },
+    {
+      "q": "What do we call text inside quotes?",
+      "options": [
+        "A string",
+        "A comment",
+        "A bracket"
+      ],
+      "answer": 0,
+      "explain": "A string is text inside quotes. You met it on day 1."
+    }
+  ],
+  "why": [
+    {
+      "heading": "Two kinds of number",
+      "text": "Python has two kinds. An **int** is a whole number: `12`, `-3`. A **float** is a number with a decimal point: `2.5`.\n\nNumbers never have quotes. You will use them for hours, rand, kilometres and pace."
+    },
+    {
+      "heading": "A calculator that remembers",
+      "text": "Use `+`, `-`, `*` for times, and `/` for divide. Brackets work as in school maths:\n\n`(2500 + 500) * 3`\n\ngives 9000. Store the answer in a variable and use it later. Note that `/` always gives a float: `10 / 2` is `5.0`."
+    },
+    {
+      "heading": "Groups: // and %",
+      "text": "`//` divides and throws away the leftover: `23 // 4` is 5. `%` gives only the leftover: `23 % 4` is 3.\n\nTogether they answer: 23 crew, 4 per van. How many full vans, and how many people are left over? Any time you pack things into groups, use these two."
+    },
+    {
+      "heading": "Tidy decimals",
+      "text": "Decimals can get messy. `round(x, 2)` keeps 2 decimals.\n\nIn an f-string, `{x:.2f}` shows exactly 2 decimals, so 5.6 shows as `5.60`. Use it for money and pace, where the look matters."
+    },
+    {
+      "heading": "5 is not \"5\"",
+      "text": "`5` is a number. `\"5\"` in quotes is text that only looks like a number.\n\n`5 + 5` gives 10. But `\"5\" + \"5\"` glues the text and gives `55`. Mixing them, like `\"5\" + 5`, is an error. Remember this: tomorrow it matters a lot."
+    }
+  ],
+  "watch": {
+    "intro": "Tap Run. Seven lines of output. Guess each one before you look.",
+    "code": "print(5 + 5)\nprint(\"5\" + \"5\")\nprint(10 / 4)\nprint(23 // 4)\nprint(23 % 4)\nprint(round(3.14159, 2))\npace = 28 / 5\nprint(f\"{pace:.2f}\")",
+    "explain": [
+      "`5 + 5` is a sum (10). `\"5\" + \"5\"` is text glued together (55).",
+      "`10 / 4` is 2.5. `23 // 4` is 5 whole groups, `23 % 4` is 3 left over.",
+      "`round(3.14159, 2)` keeps two decimals.",
+      "`{pace:.2f}` turned 5.6 into 5.60."
+    ],
+    "break_it": "Break it on purpose: add a last line `print(\"5\" + 5)` and tap Run. The error says `TypeError: can only concatenate str (not \"int\") to str`. Python cannot add text to a number. Delete the line again."
+  },
+  "tasks": [
+    {
+      "title": "Add the hours",
+      "task": "A shoot day is 8 hours plus 4 hours of overtime. Print the total so the screen shows exactly: `12`\n\nUse the two variables, do not type 12.",
+      "starter": "hours = 8\nextra = 4\n# print the two added together\n",
+      "solution": "hours = 8\nextra = 4\nprint(hours + extra)\n",
+      "hints": [
+        "Use + between the two variable names inside print.",
+        "print( hours ... extra )",
+        "print(hours + extra)"
+      ],
+      "tests": [
+        {
+          "expect": "12"
+        }
+      ],
+      "code_has": [
+        "hours + extra"
+      ]
+    },
+    {
+      "title": "Your pace",
+      "task": "You ran 5 km in 28 minutes. Work out the pace (minutes divided by distance) and print it with 2 decimals so it shows exactly:\n\n`Pace: 5.60 min/km`",
+      "starter": "distance = 5\nminutes = 28\n# work out the pace, then print it\n",
+      "solution": "distance = 5\nminutes = 28\npace = minutes / distance\nprint(f\"Pace: {pace:.2f} min/km\")\n",
+      "hints": [
+        "Store minutes divided by distance in a new variable called pace.",
+        "Use an f-string and put :.2f after pace inside the curly brackets.",
+        "print(f\"Pace: {pace:.2f} min/km\")"
+      ],
+      "tests": [
+        {
+          "expect": "Pace: 5.60 min/km"
+        }
+      ],
+      "code_has": [
+        ":.2f"
+      ]
+    },
+    {
+      "title": "How many vans?",
+      "task": "23 crew, 4 seats per van. Print two lines with the numbers worked out by Python:\n\n`Full vans: 5`\n`Left over: 3`",
+      "starter": "crew = 23\nper_van = 4\n# print Full vans and Left over\n",
+      "solution": "crew = 23\nper_van = 4\nprint(f\"Full vans: {crew // per_van}\")\nprint(f\"Left over: {crew % per_van}\")\n",
+      "hints": [
+        "Full vans uses //, left over uses %.",
+        "You can put a sum straight inside the curly brackets of an f-string.",
+        "print(f\"Full vans: {crew // per_van}\") and the same with % for the second line."
+      ],
+      "tests": [
+        {
+          "expect": "Full vans: 5\nLeft over: 3"
+        }
+      ],
+      "code_has": [
+        "//",
+        "%"
+      ]
+    }
+  ],
+  "recap": [
+    "An int is a whole number, a float has a decimal point. No quotes.",
+    "`+ - * /` and brackets work like a calculator. `/` always gives a float.",
+    "`//` is whole groups, `%` is the leftover.",
+    "`{x:.2f}` in an f-string shows exactly 2 decimals.",
+    "`\"5\"` is text, `5` is a number. Mixing them gives a TypeError."
+  ],
+  "words": [
+    {
+      "term": "int",
+      "meaning": "A whole number like 12."
+    },
+    {
+      "term": "float",
+      "meaning": "A number with a decimal point like 2.5."
+    },
+    {
+      "term": "//",
+      "meaning": "Divide and keep only the whole part."
+    },
+    {
+      "term": "%",
+      "meaning": "The leftover after dividing."
+    },
+    {
+      "term": "TypeError",
+      "meaning": "You mixed kinds of value that do not go together."
+    }
+  ]
+}

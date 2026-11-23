@@ -1,0 +1,176 @@
+{
+  "id": "D26",
+  "day": 26,
+  "week": 6,
+  "title": "Use other people's code",
+  "hook": "Read a manual and use a tool you have never seen.",
+  "badge": "Docs Reader",
+  "warmup": [
+    {
+      "q": "Yesterday you renamed clips. Which Path part gives the file name WITHOUT the extension?",
+      "options": [
+        ".suffix",
+        ".stem",
+        ".name"
+      ],
+      "answer": 1,
+      "explain": "`.stem` is the name without the ending, `.suffix` is just the ending (like `.mp4`) and `.name` is both together."
+    },
+    {
+      "q": "`csv.DictReader` gives you each row as a...",
+      "options": [
+        "Dictionary, with the header names as keys",
+        "Plain text line",
+        "Single number"
+      ],
+      "answer": 0,
+      "explain": "DictReader reads the header row first, then hands you each row as a dictionary so you can write `row[\"name\"]`."
+    },
+    {
+      "q": "What does `return` do inside a function?",
+      "options": [
+        "Prints the answer on screen",
+        "Hands the answer back to the code that called the function",
+        "Ends the whole program"
+      ],
+      "answer": 1,
+      "explain": "`return` sends a value back. `print` only shows it. A function that returns can be used inside other code."
+    }
+  ],
+  "why": [
+    {
+      "heading": "Nobody builds from zero",
+      "text": "Real programmers do not write everything themselves. Python comes with hundreds of ready-made tools called **modules**. You already met `math`, `random` and `csv`. Thousands more are written by other people and shared for free."
+    },
+    {
+      "heading": "pip is the app store",
+      "text": "**pip** downloads other people's modules onto your PC. In the terminal you type:\n\n`pip install requests`\n\nand a few seconds later `import requests` works in your code. pip is typed in the terminal, never inside a Python file."
+    },
+    {
+      "heading": "venv is a private toolbox",
+      "text": "If every project shares one pile of tools, they start to clash. A **venv** (virtual environment) is a private folder of tools for one project only. You make one per project, switch it on, and pip installs into it. Delete the folder and it is gone."
+    },
+    {
+      "heading": "Reading docs is the real skill",
+      "text": "Nobody remembers every tool. Pros open the **documentation** (the manual) and look for three things: what it does, the exact name, and an example. You do not read all of it. You hunt for the one line you need."
+    },
+    {
+      "heading": "Practice with two new modules",
+      "text": "Today in the browser you use `statistics` and `textwrap`. You have never seen them. Each task gives you the doc line, and you turn it into working code. The PC part makes a real venv and installs `requests`."
+    }
+  ],
+  "watch": {
+    "intro": "Here is a doc line, as you would find it online: `statistics.mode(data)` returns the single most common value. Tap Run and see it used.",
+    "code": "import statistics\n\nclips = [3, 5, 3, 8, 3, 5]\nprint(\"Most common take:\", statistics.mode(clips))\nprint(\"Biggest take:\", max(clips))",
+    "explain": [
+      "`import statistics` loads the module, the same way `import math` did.",
+      "You write the module name, a dot, then the tool name from the docs.",
+      "`mode` gave `3` because 3 appears three times, more than any other number."
+    ],
+    "break_it": "Change `mode` to `average` and tap Run. You get AttributeError: the module has no attribute `average`. The name must match the docs exactly. Change it back."
+  },
+  "tasks": [
+    {
+      "title": "Average pace",
+      "task": "The docs say: `statistics.mean(data)` returns the average of a list of numbers. Use it on `runs` and show exactly:\n\n`Average: 5.5`",
+      "starter": "import statistics\n\nruns = [5.5, 6.0, 5.0, 5.5]\n# print the average, like: Average: 5.5\n",
+      "solution": "import statistics\n\nruns = [5.5, 6.0, 5.0, 5.5]\nprint(\"Average:\", statistics.mean(runs))\n",
+      "hints": [
+        "Write statistics.mean(runs). That one call does the whole sum and divide.",
+        "Put it inside print, after the word Average: and a comma.",
+        "print(\"Average:\", statistics.mean(runs))"
+      ],
+      "tests": [
+        {
+          "expect": "Average: 5.5"
+        }
+      ],
+      "code_has": [
+        "statistics.mean"
+      ]
+    },
+    {
+      "title": "Fair day rate",
+      "task": "Five crew quoted day rates. The docs say `statistics.median(data)` gives the middle value. Show the median and the mean, exactly:\n\n`Median: R1500`\n`Mean: R1520`",
+      "starter": "import statistics\n\nrates = [1200, 1500, 900, 1500, 2500]\n# print both lines, using an f-string\n",
+      "solution": "import statistics\n\nrates = [1200, 1500, 900, 1500, 2500]\nprint(f\"Median: R{statistics.median(rates)}\")\nprint(f\"Mean: R{statistics.mean(rates)}\")\n",
+      "hints": [
+        "Two print lines. Each one has an f-string with a call to statistics inside the curly brackets.",
+        "print(f\"Median: R{statistics.median(rates)}\") is the first line.",
+        "The second line is the same but with mean and the word Mean."
+      ],
+      "tests": [
+        {
+          "expect": "Median: R1500\nMean: R1520"
+        }
+      ],
+      "code_has": [
+        "statistics.median",
+        "statistics.mean"
+      ]
+    },
+    {
+      "title": "Wrap a call sheet note",
+      "task": "From the docs: `textwrap.fill(text, width=70)` adds line breaks so no line is longer than `width`. `textwrap.shorten(text, width=70, placeholder=\" [...]\")` cuts the text to fit and ends with the placeholder.\n\nPrint `note` wrapped at width 28, then print it shortened to width 30 with the placeholder `...`. You should see:\n\n`Crew call is 06:00 at the`\n`farm gate. Bring water,`\n`sunscreen and your own`\n`lunch.`\n`Crew call is 06:00 at the...`",
+      "starter": "import textwrap\n\nnote = \"Crew call is 06:00 at the farm gate. Bring water, sunscreen and your own lunch.\"\n# print the wrapped note, then the shortened note\n",
+      "solution": "import textwrap\n\nnote = \"Crew call is 06:00 at the farm gate. Bring water, sunscreen and your own lunch.\"\nprint(textwrap.fill(note, width=28))\nprint(textwrap.shorten(note, width=30, placeholder=\"...\"))\n",
+      "hints": [
+        "Two calls: textwrap.fill for the first print, textwrap.shorten for the second.",
+        "Both take note first, then width=. shorten also takes placeholder=\"...\".",
+        "print(textwrap.fill(note, width=28))\nprint(textwrap.shorten(note, width=30, placeholder=\"...\"))"
+      ],
+      "tests": [
+        {
+          "expect": "Crew call is 06:00 at the\nfarm gate. Bring water,\nsunscreen and your own\nlunch.\nCrew call is 06:00 at the..."
+        }
+      ],
+      "code_has": [
+        "textwrap.fill",
+        "textwrap.shorten"
+      ]
+    }
+  ],
+  "recap": [
+    "A module is a ready-made toolbox. Import it and use `module.tool(...)`.",
+    "pip downloads other people's modules. A venv keeps each project's tools separate.",
+    "Read docs for three things: what it does, the exact name, an example.",
+    "You used `statistics` and `textwrap` without ever having seen them. That is the pro move."
+  ],
+  "words": [
+    {
+      "term": "module",
+      "meaning": "A file of ready-made Python tools you can import."
+    },
+    {
+      "term": "pip",
+      "meaning": "The tool that downloads other people's modules."
+    },
+    {
+      "term": "venv",
+      "meaning": "A private folder of tools for one project."
+    },
+    {
+      "term": "documentation",
+      "meaning": "The manual that explains what a tool does and how to call it."
+    },
+    {
+      "term": "terminal",
+      "meaning": "A window where you type commands to the computer."
+    }
+  ],
+  "pc": {
+    "title": "Make a venv and install requests",
+    "why": "This is how every real Python project starts: a private toolbox, then the tools it needs. You do it once per project and it takes two minutes.",
+    "steps": [
+      "Open File Explorer, open Documents, and check there is a folder called Python 30 Work. If not, right click, New, Folder, and name it exactly that.",
+      "Open Visual Studio Code (Start menu, type Visual Studio Code, press Enter). Click File, then Open Folder, pick Python 30 Work, and click Select Folder. If it asks Do you trust the authors, click Yes.",
+      "Open the terminal: click Terminal in the top menu, then New Terminal. A panel opens at the bottom. The last line should end with Python 30 Work followed by a > sign. If it shows a different folder, close VS Code and redo step 2.",
+      "Type `python --version` and press Enter. You should see `Python 3.12` and some numbers. If it says Python was not found, type `py --version`. If that works, type `py` instead of `python` for the rest of today.",
+      "Make the venv: type `python -m venv .venv` and press Enter. Wait about 10 seconds. It prints nothing when it works. A new folder called .venv appears on the left. VS Code may pop up a box about the new environment: click Yes.",
+      "Switch it on: type `.venv\\Scripts\\Activate.ps1` and press Enter. You should now see `(.venv)` at the start of the line. If you get red text saying running scripts is disabled, do not worry: skip this step and type `.venv\\Scripts\\python.exe` wherever the next steps say `python`.",
+      "Install your first outside module: type `pip install requests` and press Enter. Lines scroll past. The last line says `Successfully installed` followed by names. If you skipped step 6, type `.venv\\Scripts\\python.exe -m pip install requests` instead.",
+      "Check it worked: type `python -c \"import requests; print(requests.__version__)\"` and press Enter. A version number like 2.32.3 appears. If you see ModuleNotFoundError, the venv is not switched on: go back to step 6.",
+      "Bonus: open docs.python.org in your browser, search for statistics, and find the line for `median`. Notice it matches what you used today."
+    ]
+  }
+}

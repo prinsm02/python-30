@@ -1,0 +1,191 @@
+{
+  "id": "D20",
+  "day": 20,
+  "week": 4,
+  "title": "Boss: Race morning planner",
+  "hook": "Build a call time adder and a run pace calculator, then join them into one tool.",
+  "badge": "Tool Boss",
+  "warmup": [
+    {
+      "q": "What does `math.ceil(2.1)` give?",
+      "options": [
+        "2",
+        "3",
+        "2.1"
+      ],
+      "answer": 1,
+      "explain": "ceil always rounds UP to a whole number, so 2.1 becomes 3."
+    },
+    {
+      "q": "You want to use a function's answer in later maths. What should the function do?",
+      "options": [
+        "return the answer",
+        "print the answer",
+        "either one works the same"
+      ],
+      "answer": 0,
+      "explain": "print only shows the answer. return hands it back so you can add to it or store it."
+    },
+    {
+      "q": "What does `\"05:30\".split(\":\")` give?",
+      "options": [
+        "05 30",
+        "A list: [\"05\", \"30\"]",
+        "The number 530"
+      ],
+      "answer": 1,
+      "explain": "split cuts the text at every colon and gives a list of the pieces."
+    }
+  ],
+  "why": [
+    {
+      "heading": "Today you build two real tools",
+      "text": "Big boss day, no new ideas. You already know everything. Tool 1 takes a call time like `05:30` and adds minutes to it. Tool 2 takes a distance and a time and works out your pace per km. Task 3 joins them into a race morning planner. Your job is to put old pieces together."
+    },
+    {
+      "heading": "Why this is how real code is built",
+      "text": "You will make small functions that each do one job and **return** their answer. A function that returns can be tested alone, reused, and combined. The finished program just calls them. If a tool breaks, you know which small piece to open."
+    },
+    {
+      "heading": "Times are text, until they are not",
+      "text": "`\"05:30\"` is text. To add minutes you turn it into a time with `strptime`, add a `timedelta`, then turn it back with `strftime`. Pace is the same trick, using minutes and seconds `%M:%S`. Pace per km is total seconds divided by km: 55 minutes over 10 km is 330 seconds per km, which is `05:30`."
+    },
+    {
+      "heading": "Crash proof at the end",
+      "text": "In task 3 real people type things, so you wrap the input part in `try`. A word where a number should be is a `ValueError`. A distance of 0 is a `ZeroDivisionError`. You met both earlier this week, so you know what to do."
+    }
+  ],
+  "watch": {
+    "intro": "A tiny version of tool 1. Tap Run and look at the two lines.",
+    "code": "from datetime import datetime, timedelta\n\ndef add_minutes(clock, mins):\n    \"\"\"Add minutes to an HH:MM time.\"\"\"\n    start = datetime.strptime(clock, \"%H:%M\")\n    end = start + timedelta(minutes=mins)\n    return end.strftime(\"%H:%M\")\n\nprint(add_minutes(\"06:00\", 30))\nprint(add_minutes(\"22:45\", 30))",
+    "explain": [
+      "`strptime` reads the text `06:00` as a time.",
+      "`timedelta(minutes=mins)` is the length to add, and `+` moves the time forward.",
+      "`strftime` turns the new time back into text, and `return` hands that text back.",
+      "The second call crosses midnight and still works: `23:15`."
+    ],
+    "break_it": "Now break it: change `\"%H:%M\"` in the strptime line to `\"%H-%M\"` and tap Run. The error is a `ValueError` saying the time data `06:00` does not match format `%H-%M`. That means: the pattern must describe the text exactly. Put the colon back."
+  },
+  "tasks": [
+    {
+      "title": "Call time adder",
+      "task": "The function `add_minutes` is nearly finished. Replace the `???` so it **returns** the new time as text. Then it must show:\n\n`07:00`\n`00:15`",
+      "starter": "from datetime import datetime, timedelta\n\ndef add_minutes(clock, mins):\n    \"\"\"Add minutes to an HH:MM time and give back HH:MM.\"\"\"\n    start = datetime.strptime(clock, \"%H:%M\")\n    end = start + timedelta(minutes=mins)\n    return ???\n\nprint(add_minutes(\"05:30\", 90))\nprint(add_minutes(\"23:30\", 45))\n",
+      "solution": "from datetime import datetime, timedelta\n\ndef add_minutes(clock, mins):\n    \"\"\"Add minutes to an HH:MM time and give back HH:MM.\"\"\"\n    start = datetime.strptime(clock, \"%H:%M\")\n    end = start + timedelta(minutes=mins)\n    return end.strftime(\"%H:%M\")\n\nprint(add_minutes(\"05:30\", 90))\nprint(add_minutes(\"23:30\", 45))\n",
+      "hints": [
+        "end is a time. You need to turn it back into text in the shape HH:MM.",
+        "The tool for turning a time into text is strftime.",
+        "Replace ??? with end.strftime(\"%H:%M\")"
+      ],
+      "code_has": [
+        "return end.strftime"
+      ],
+      "tests": [
+        {
+          "expect": "07:00\n00:15"
+        }
+      ]
+    },
+    {
+      "title": "Run pace tool",
+      "task": "Pace per km as `MM:SS`. The line that works out `secs` is a placeholder. Replace `0` with total seconds divided by km, rounded: minutes times 60, divided by km, inside `round(...)`. It must show:\n\n`05:30`\n`05:36`",
+      "starter": "from datetime import datetime, timedelta\n\ndef pace(km, minutes):\n    \"\"\"Give back the pace per km as MM:SS.\"\"\"\n    secs = 0\n    start = datetime.strptime(\"00:00\", \"%M:%S\")\n    end = start + timedelta(seconds=secs)\n    return end.strftime(\"%M:%S\")\n\nprint(pace(10, 55))\nprint(pace(5, 28))\n",
+      "solution": "from datetime import datetime, timedelta\n\ndef pace(km, minutes):\n    \"\"\"Give back the pace per km as MM:SS.\"\"\"\n    secs = round(minutes * 60 / km)\n    start = datetime.strptime(\"00:00\", \"%M:%S\")\n    end = start + timedelta(seconds=secs)\n    return end.strftime(\"%M:%S\")\n\nprint(pace(10, 55))\nprint(pace(5, 28))\n",
+      "hints": [
+        "Change only the line that says secs = 0.",
+        "Seconds per km is minutes times 60, divided by km. Wrap it in round( ).",
+        "secs = round(minutes * 60 / km). Check: 55 x 60 is 3300, divided by 10 is 330 seconds, which is 05:30."
+      ],
+      "code_has": [
+        "round("
+      ],
+      "tests": [
+        {
+          "expect": "05:30\n05:36"
+        }
+      ]
+    },
+    {
+      "title": "Race morning planner",
+      "task": "Both tools are given. Under the comment, ask `Start time? `, then `Km? ` and `Minutes? `. Show `Pace: ` with the pace and ` /km`, then `Back at: ` with the start time plus the run minutes. Wrap it in `try`: a ValueError shows `Try again`, a ZeroDivisionError shows `Km cannot be 0`. Example: 05:30, 10 km, 55 minutes shows:\n\n`Pace: 05:30 /km`\n`Back at: 06:25`",
+      "starter": "from datetime import datetime, timedelta\n\ndef add_minutes(clock, mins):\n    \"\"\"Add minutes to an HH:MM time and give back HH:MM.\"\"\"\n    start = datetime.strptime(clock, \"%H:%M\")\n    end = start + timedelta(minutes=mins)\n    return end.strftime(\"%H:%M\")\n\ndef pace(km, minutes):\n    \"\"\"Give back the pace per km as MM:SS.\"\"\"\n    secs = round(minutes * 60 / km)\n    start = datetime.strptime(\"00:00\", \"%M:%S\")\n    end = start + timedelta(seconds=secs)\n    return end.strftime(\"%M:%S\")\n\n# write the planner here, using try and except\n",
+      "solution": "from datetime import datetime, timedelta\n\ndef add_minutes(clock, mins):\n    \"\"\"Add minutes to an HH:MM time and give back HH:MM.\"\"\"\n    start = datetime.strptime(clock, \"%H:%M\")\n    end = start + timedelta(minutes=mins)\n    return end.strftime(\"%H:%M\")\n\ndef pace(km, minutes):\n    \"\"\"Give back the pace per km as MM:SS.\"\"\"\n    secs = round(minutes * 60 / km)\n    start = datetime.strptime(\"00:00\", \"%M:%S\")\n    end = start + timedelta(seconds=secs)\n    return end.strftime(\"%M:%S\")\n\ntry:\n    clock = input(\"Start time? \")\n    km = int(input(\"Km? \"))\n    minutes = int(input(\"Minutes? \"))\n    print(\"Pace:\", pace(km, minutes), \"/km\")\n    print(\"Back at:\", add_minutes(clock, minutes))\nexcept ValueError:\n    print(\"Try again\")\nexcept ZeroDivisionError:\n    print(\"Km cannot be 0\")\n",
+      "hints": [
+        "Start with try:. Inside it, three input lines, then two print lines that call your tools.",
+        "Km and minutes need int( ) around input( ). The start time stays as text. Then two except blocks lined up with try.",
+        "print(\"Pace:\", pace(km, minutes), \"/km\") and print(\"Back at:\", add_minutes(clock, minutes)). Then except ValueError: print(\"Try again\") and except ZeroDivisionError: print(\"Km cannot be 0\")."
+      ],
+      "code_has": [
+        "try:",
+        "except ValueError",
+        "except ZeroDivisionError",
+        "pace(",
+        "add_minutes("
+      ],
+      "tests": [
+        {
+          "inputs": [
+            "05:30",
+            "10",
+            "55"
+          ],
+          "expect": "Start time? 05:30\nKm? 10\nMinutes? 55\nPace: 05:30 /km\nBack at: 06:25"
+        },
+        {
+          "inputs": [
+            "05:30",
+            "0",
+            "55"
+          ],
+          "expect": "Start time? 05:30\nKm? 0\nMinutes? 55\nKm cannot be 0"
+        },
+        {
+          "inputs": [
+            "05:30",
+            "ten",
+            "55"
+          ],
+          "expect": "Start time? 05:30\nKm? ten\nTry again"
+        }
+      ]
+    }
+  ],
+  "recap": [
+    "Small functions that each return one answer are easy to test and combine.",
+    "`strptime`, `timedelta` and `strftime` together move a time forward.",
+    "Pace per km is total seconds divided by km, shown as MM:SS.",
+    "`try` with `except ValueError` and `except ZeroDivisionError` keeps a tool from crashing."
+  ],
+  "words": [
+    {
+      "term": "pace",
+      "meaning": "How long one km takes, like 05:30 per km."
+    },
+    {
+      "term": "return",
+      "meaning": "Hands a function's answer back to the caller."
+    },
+    {
+      "term": "strftime",
+      "meaning": "Turns a time into text in the shape you choose."
+    },
+    {
+      "term": "except",
+      "meaning": "What runs when the named error happens in the try."
+    }
+  ],
+  "pc": {
+    "title": "Save the tool as a real file and run it",
+    "why": "A tool you built on your phone is cool. A tool saved as a file on your PC is real: you can open it any day, change it, and run it again. Today you save the boss build as `pace_tool.py` and run it in the terminal with real typing.",
+    "steps": [
+      "Press the Windows key, type `Visual Studio Code`, and press Enter. It should open your folder PYTHON 30 WORK from last time. If the left panel is empty or different, click **File**, then **Open Folder**, choose Documents, then Python 30 Work, then **Select Folder**.",
+      "Hover over the words PYTHON 30 WORK in the left panel, click the first small icon (a page with a plus), type `pace_tool.py` and press Enter. A blank file opens in the editor.",
+      "Put your finished task 3 program into the file. The easy way: on this lesson page on your PC, select all your code with the mouse, press Ctrl+C, click inside the VS Code editor, and press Ctrl+V. You can also type it again. The file needs both functions and the bottom part.",
+      "Press Ctrl+S to save. The white dot on the tab disappears when it is saved.",
+      "Open the terminal if it is not showing: click **Terminal** in the top menu, then **New Terminal**. Type `python pace_tool.py` and press Enter. (If `python` is not recognized, use `py pace_tool.py`.)",
+      "The terminal asks `Start time? `. Type `05:30` and press Enter. Then it asks `Km? `: type `10` and press Enter. Then `Minutes? `: type `55` and press Enter. You should see `Pace: 05:30 /km` and `Back at: 06:25`.",
+      "Test the crash proofing. Press the Up arrow in the terminal, then Enter, to run it again. This time type `ten` for the km. You should see `Try again` and no red error. Run it once more with `0` for km. You should see `Km cannot be 0`.",
+      "Make it yours: change the words `Start time?` in the file to `Call time?`, press Ctrl+S, and run it again with the Up arrow and Enter. Whenever the output looks old, check that you saved. Next time you open VS Code, use **File**, then **Open Recent**, to find Python 30 Work."
+    ]
+  }
+}

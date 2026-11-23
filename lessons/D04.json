@@ -1,0 +1,189 @@
+{
+  "id": "D04",
+  "day": 4,
+  "week": 1,
+  "title": "Ask the person a question",
+  "hook": "Make programs that ask, then work with the answer.",
+  "badge": "Question Asker",
+  "warmup": [
+    {
+      "q": "What does `17 % 5` give?",
+      "options": [
+        "2",
+        "3",
+        "3.4"
+      ],
+      "answer": 0,
+      "explain": "17 divided by 5 is 3 whole times with 2 left over. `%` gives the leftover."
+    },
+    {
+      "q": "Which of these is a good variable name?",
+      "options": [
+        "crew call",
+        "2nd_ad",
+        "crew_call"
+      ],
+      "answer": 2,
+      "explain": "No spaces and never start with a number. Underscores are fine."
+    },
+    {
+      "q": "Which of these is text, not a number?",
+      "options": [
+        "\"8\"",
+        "8",
+        "8.5"
+      ],
+      "answer": 0,
+      "explain": "Anything inside quotes is text, even if it looks like a number."
+    }
+  ],
+  "why": [
+    {
+      "heading": "Programs that ask",
+      "text": "Until now you typed every value into the code. `input` makes the program pause, show a question, and wait for someone to type:\n\n`name = input(\"Name? \")`\n\nWhatever they type is stored in `name`. Put a space at the end of the question so the answer does not touch it."
+    },
+    {
+      "heading": "Why it matters",
+      "text": "With `input`, one program works for anyone. Any crew member's hours, any runner's distance. You write it once and the answers change each run.\n\nThat is the difference between a note and a tool."
+    },
+    {
+      "heading": "input is always text",
+      "text": "Even when someone types 6, `input` gives you the text `\"6\"`. Yesterday you saw that text is not a number: `\"6\" * 2` gives `66`, not 12.\n\nSo before doing sums with an answer, you must convert it."
+    },
+    {
+      "heading": "Convert it",
+      "text": "`int(\"6\")` turns text into a whole number. `float(\"5.5\")` turns it into a decimal. `str(6)` turns a number back into text.\n\nYou can ask and convert in one line:\n\n`hours = int(input(\"Hours? \"))`"
+    },
+    {
+      "heading": "When it cannot convert",
+      "text": "`int(\"seven\")` fails, because seven is not digits. Python shows a **ValueError**. That is not a bug in your lines: the person typed something the program could not turn into a number. Later in the course you will learn to handle that politely."
+    }
+  ],
+  "watch": {
+    "intro": "Tap Run. The answers (Thabo and 6) are typed for you, like a real session.",
+    "code": "name = input(\"Name? \")\nhours = int(input(\"Hours? \"))\nprint(f\"{name} worked {hours} hours\")\nprint(f\"Double time: {hours * 2}\")",
+    "inputs": [
+      "Thabo",
+      "6"
+    ],
+    "explain": [
+      "Line 1 asks, waits, and stores the text typed.",
+      "Line 2 asks and converts to a whole number in one go.",
+      "Because `hours` is now an int, `hours * 2` is a real sum (12)."
+    ],
+    "break_it": "Break it on purpose: change line 2 to `hours = int(\"seven\")` and tap Run. The error says `ValueError: invalid literal for int() with base 10: 'seven'`. That is what you will see whenever text cannot become a number. Put line 2 back."
+  },
+  "tasks": [
+    {
+      "title": "Greet the crew",
+      "task": "Ask for a name, then greet them. For the answer `Sam` the screen shows:\n\n`Name? Sam`\n`Hello, Sam`",
+      "starter": "name = input(\"Name? \")\n# print Hello, then the name\n",
+      "solution": "name = input(\"Name? \")\nprint(f\"Hello, {name}\")\n",
+      "hints": [
+        "The answer is already stored in name. Now print it.",
+        "Use an f-string with {name} inside.",
+        "print(f\"Hello, {name}\")"
+      ],
+      "tests": [
+        {
+          "inputs": [
+            "Sam"
+          ],
+          "expect": "Name? Sam\nHello, Sam"
+        },
+        {
+          "inputs": [
+            "Zola"
+          ],
+          "expect": "Name? Zola\nHello, Zola"
+        }
+      ]
+    },
+    {
+      "title": "Day rate total",
+      "task": "The day rate is R2500. Ask how many days were worked, convert the answer to a whole number, and print the total. For `3` days:\n\n`Days? 3`\n`Total: R7500`",
+      "starter": "days = input(\"Days? \")\nrate = 2500\n# convert days to an int, then print the total\n",
+      "solution": "days = input(\"Days? \")\nrate = 2500\ndays = int(days)\nprint(f\"Total: R{days * rate}\")\n",
+      "hints": [
+        "days is text. Turn it into a number first: days = int(days)",
+        "Then multiply days by rate inside an f-string.",
+        "print(f\"Total: R{days * rate}\")"
+      ],
+      "tests": [
+        {
+          "inputs": [
+            "3"
+          ],
+          "expect": "Days? 3\nTotal: R7500"
+        },
+        {
+          "inputs": [
+            "5"
+          ],
+          "expect": "Days? 5\nTotal: R12500"
+        }
+      ],
+      "code_has": [
+        "int("
+      ]
+    },
+    {
+      "title": "Pace from your run",
+      "task": "Ask for kilometres, then minutes (both can have decimals, so use float). Print the pace with 2 decimals. For 5 and 28:\n\n`Km? 5`\n`Minutes? 28`\n`Pace: 5.60 min/km`",
+      "starter": "km = input(\"Km? \")\nmins = input(\"Minutes? \")\n# convert both to float, then print the pace\n",
+      "solution": "km = float(input(\"Km? \"))\nmins = float(input(\"Minutes? \"))\nprint(f\"Pace: {mins / km:.2f} min/km\")\n",
+      "hints": [
+        "Wrap each input in float(...) so you can do maths with it.",
+        "Pace is minutes divided by km. Use :.2f for two decimals.",
+        "print(f\"Pace: {mins / km:.2f} min/km\")"
+      ],
+      "tests": [
+        {
+          "inputs": [
+            "5",
+            "28"
+          ],
+          "expect": "Km? 5\nMinutes? 28\nPace: 5.60 min/km"
+        },
+        {
+          "inputs": [
+            "10",
+            "52.5"
+          ],
+          "expect": "Km? 10\nMinutes? 52.5\nPace: 5.25 min/km"
+        }
+      ],
+      "code_has": [
+        "float("
+      ]
+    }
+  ],
+  "recap": [
+    "`input(\"question \")` pauses, asks, and gives back what was typed.",
+    "`input` always gives text, even for digits.",
+    "`int()` and `float()` turn text into numbers. `str()` turns a number into text.",
+    "`int(\"seven\")` gives a ValueError: it is not a number."
+  ],
+  "words": [
+    {
+      "term": "input",
+      "meaning": "Asks the person a question and returns their answer as text."
+    },
+    {
+      "term": "convert",
+      "meaning": "Turn one kind of value into another."
+    },
+    {
+      "term": "int()",
+      "meaning": "Turns text into a whole number."
+    },
+    {
+      "term": "float()",
+      "meaning": "Turns text into a decimal number."
+    },
+    {
+      "term": "ValueError",
+      "meaning": "The value could not be turned into what you asked for."
+    }
+  ]
+}

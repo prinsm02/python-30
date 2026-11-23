@@ -1,0 +1,194 @@
+{
+  "id": "D19",
+  "day": 19,
+  "week": 4,
+  "title": "Borrow other people's tools",
+  "hook": "Import maths, dice and dates, and move a time forward by 90 minutes.",
+  "badge": "Toolbox",
+  "warmup": [
+    {
+      "q": "In a loop with `try:` and `break`, when does `break` run?",
+      "options": [
+        "Only when the line before it worked",
+        "Every time, before the try",
+        "Only when an error happens"
+      ],
+      "answer": 0,
+      "explain": "If the conversion fails, Python jumps to except and never reaches break. If it works, break is reached and the loop ends."
+    },
+    {
+      "q": "You write `def hi():` with one `print(\"Hi\")` line under it, and nothing else. What shows when you run it?",
+      "options": [
+        "Hi",
+        "Nothing",
+        "An error"
+      ],
+      "answer": 1,
+      "explain": "Defining only writes the recipe. You must call it with hi() to make it run."
+    },
+    {
+      "q": "With `crew = [\"A\", \"B\", \"C\"]`, what does `crew[-1]` give?",
+      "options": [
+        "A",
+        "B",
+        "C"
+      ],
+      "answer": 2,
+      "explain": "Negative indexes count from the end. -1 is the last item."
+    }
+  ],
+  "why": [
+    {
+      "heading": "Do not build it, borrow it",
+      "text": "On a shoot you hire a light. You do not build one. Python works the same way. It comes with a toolbox of ready-made code called **modules**. You bring one in with `import`:\n\n`import math`\n\nThen you use its tools with the module name, a dot, and the tool name, like `math.sqrt(16)`. Put your imports at the very top of the file."
+    },
+    {
+      "heading": "math: round up",
+      "text": "`math.ceil(x)` always rounds UP to a whole number. `math.floor(x)` always rounds DOWN. Say 9 crew need vans with 4 seats. 9 / 4 is 2.25 and `round` would give 2 vans. Two vans would leave one person standing. `math.ceil(9 / 4)` gives 3, which is right."
+    },
+    {
+      "heading": "random: choose and shuffle",
+      "text": "`random.choice(items)` picks one item from a list. `random.shuffle(items)` mixes the list itself, in place. Careful: shuffle hands back None, so never write `crew = random.shuffle(crew)`. Just write `random.shuffle(crew)` on its own line. Good for lunch queues, draws and picking a winner."
+    },
+    {
+      "heading": "datetime: text to time and back",
+      "text": "Times are tricky, so Python has a module for them. `strptime` turns text into a time Python understands. `strftime` turns a time back into text you choose. A pattern says what is where: `%H:%M` is hour and minute, `%Y-%m-%d` is year, month, day.\n\n`from datetime import datetime, timedelta`\n\nThat line takes just those two tools."
+    },
+    {
+      "heading": "timedelta moves a time",
+      "text": "A **timedelta** is a length of time, like `timedelta(minutes=45)` or `timedelta(days=4)`. Add it to a time to move forward:\n\n`later = start + timedelta(minutes=45)`\n\nThat is call time maths: crew call plus 90 minutes, shoot start plus 4 days. In this course we always type fixed times, so the answers never change."
+    }
+  ],
+  "watch": {
+    "intro": "Three modules in one program. Tap Run and read the three lines.",
+    "code": "import math\nimport random\nfrom datetime import datetime, timedelta\n\nprint(math.ceil(7 / 4))\n\ncrew = [\"Sipho\", \"Lerato\", \"Thabo\"]\npick = random.choice(crew)\nprint(pick in crew)\n\nshoot = datetime.strptime(\"2026-11-30\", \"%Y-%m-%d\")\nwrap = shoot + timedelta(days=4)\nprint(wrap.strftime(\"%d %B %Y\"))",
+    "explain": [
+      "`math.ceil(7 / 4)` is 1.75 rounded up, so 2.",
+      "`random.choice` picked someone different each time you run. We only print whether the pick is in the list, which is always True.",
+      "`strptime` read the text as a date. Adding `timedelta(days=4)` moved it forward.",
+      "`strftime` turned it back into text: `%d` day, `%B` month name, `%Y` year."
+    ],
+    "break_it": "Now break it: delete the line `import math` and tap Run. The error says `NameError: name 'math' is not defined`. That means: you used a tool from a module you never brought in. Put the import back."
+  },
+  "tasks": [
+    {
+      "title": "How many vans",
+      "task": "9 crew and 4 seats per van. Show how many vans are needed, rounding UP. It must show:\n\n`3`",
+      "starter": "import math\n\ncrew = 9\nseats = 4\n# show how many vans we need (round UP)\n",
+      "solution": "import math\n\ncrew = 9\nseats = 4\nprint(math.ceil(crew / seats))\n",
+      "hints": [
+        "You need a tool that rounds up. It lives in the math module you already imported.",
+        "The tool is math.ceil(...). Put crew divided by seats inside the brackets, and print the result.",
+        "print(math.ceil(crew / seats))"
+      ],
+      "code_has": [
+        "math.ceil"
+      ],
+      "tests": [
+        {
+          "expect": "3"
+        }
+      ]
+    },
+    {
+      "title": "Ready at",
+      "task": "Crew call is 05:30. Ask `Minutes? ` and add that many minutes. Show the time as hours and minutes, like `Ready at 07:00` when 90 is typed.",
+      "starter": "from datetime import datetime, timedelta\n\ncall = datetime.strptime(\"05:30\", \"%H:%M\")\nmins = int(input(\"Minutes? \"))\n# add mins to call, then show: Ready at HH:MM\n",
+      "solution": "from datetime import datetime, timedelta\n\ncall = datetime.strptime(\"05:30\", \"%H:%M\")\nmins = int(input(\"Minutes? \"))\nready = call + timedelta(minutes=mins)\nprint(\"Ready at\", ready.strftime(\"%H:%M\"))\n",
+      "hints": [
+        "Make a new time by adding timedelta(minutes=mins) to call.",
+        "ready = call + timedelta(minutes=mins). Then turn it back into text with ready.strftime(\"%H:%M\").",
+        "print(\"Ready at\", ready.strftime(\"%H:%M\"))"
+      ],
+      "code_has": [
+        "timedelta(minutes=",
+        "strftime"
+      ],
+      "tests": [
+        {
+          "inputs": [
+            "90"
+          ],
+          "expect": "Minutes? 90\nReady at 07:00"
+        },
+        {
+          "inputs": [
+            "45"
+          ],
+          "expect": "Minutes? 45\nReady at 06:15"
+        }
+      ]
+    },
+    {
+      "title": "Lunch queue",
+      "task": "Shuffle the crew list, then show the order on one line, like `Lunch queue: Thabo, Sipho, Naledi, Lerato`. The order will be different with different shuffles, so the lesson fixes the dice for you.",
+      "starter": "import random\n\ncrew = [\"Sipho\", \"Lerato\", \"Thabo\", \"Naledi\"]\n# shuffle the crew, then show: Lunch queue: A, B, C, D\n",
+      "solution": "import random\n\ncrew = [\"Sipho\", \"Lerato\", \"Thabo\", \"Naledi\"]\nrandom.shuffle(crew)\nprint(\"Lunch queue:\", \", \".join(crew))\n",
+      "hints": [
+        "random.shuffle mixes the list itself. Write it on its own line, with no equals sign.",
+        "After random.shuffle(crew), join the names with \", \".join(crew).",
+        "print(\"Lunch queue:\", \", \".join(crew))"
+      ],
+      "code_has": [
+        "random.shuffle(crew)"
+      ],
+      "code_not": [
+        "= random.shuffle"
+      ],
+      "tests": [
+        {
+          "seed": 5,
+          "expect": "Lunch queue: Sipho, Lerato, Naledi, Thabo"
+        },
+        {
+          "seed": 11,
+          "expect": "Lunch queue: Sipho, Lerato, Thabo, Naledi"
+        }
+      ]
+    }
+  ],
+  "recap": [
+    "`import module` brings in ready-made tools. Use them as `module.tool(...)`.",
+    "`math.ceil` rounds up, `math.floor` rounds down.",
+    "`random.choice` picks one. `random.shuffle(list)` mixes the list in place.",
+    "`strptime` turns text into a time, `timedelta` moves it, `strftime` turns it back into text."
+  ],
+  "words": [
+    {
+      "term": "module",
+      "meaning": "A toolbox of ready-made code that comes with Python."
+    },
+    {
+      "term": "import",
+      "meaning": "Brings a module into your program."
+    },
+    {
+      "term": "strptime",
+      "meaning": "Turns text like \"05:30\" into a time Python can add to."
+    },
+    {
+      "term": "strftime",
+      "meaning": "Turns a time back into text in the shape you choose."
+    },
+    {
+      "term": "timedelta",
+      "meaning": "A length of time, like 45 minutes or 4 days."
+    }
+  ],
+  "pc": {
+    "title": "Get your PC ready and run your first file",
+    "why": "Until now you typed code into this lesson page. Real programmers keep code in files on their own computer and run it there. Today you check that Python is installed, open VS Code, make one file and run it. It is only a few clicks. If anything looks different, do not panic: read the note under the step.",
+    "steps": [
+      "Press the Windows key on your keyboard, type `powershell`, and press Enter. A blue or black window opens with a blinking cursor. This window is called the terminal.",
+      "In that window type `python --version` and press Enter. You should see `Python 3.12.` followed by a number. If it says Python was not found, type `py --version` instead and use `py` instead of `python` for the rest of the steps. Close the window with the X.",
+      "Make a folder for your files. Press Windows key + E to open File Explorer. In the list on the left click **Documents**. Right-click on empty white space, choose **New**, then **Folder**. Type `Python 30 Work` and press Enter.",
+      "Press the Windows key, type `Visual Studio Code`, and press Enter. VS Code opens. If a Welcome tab shows, ignore it. If a box asks about trust, click **Yes, I trust the authors**.",
+      "In VS Code click **File** at the top left, then **Open Folder**. Click **Documents**, click the **Python 30 Work** folder, then click **Select Folder**. If it asks about trust again, click **Yes, I trust the authors**. The left panel now shows PYTHON 30 WORK. It is empty. That is correct.",
+      "Move your mouse over the words PYTHON 30 WORK in the left panel. A few tiny icons appear. Click the first one (a page with a plus), type `hello.py` and press Enter. A blank file opens in the big middle area. This middle area is the editor.",
+      "Click inside the editor and type: `print(\"Hello from my PC\")`. Press Ctrl+S to save. While a file is unsaved, the tab at the top shows a white dot. After saving the dot goes away. If a box pops up at the bottom right offering the Python extension, click **Install**. It is safe and adds a Run button.",
+      "Open the terminal inside VS Code: click **Terminal** in the top menu, then **New Terminal**. A panel opens at the bottom. The last line ends with `Python 30 Work>` and a blinking cursor.",
+      "Type `python hello.py` and press Enter. Below it you should see `Hello from my PC`. That is your program, running from a real file. If it says python is not recognized, type `py hello.py` instead.",
+      "Try a module. Replace the line in hello.py with two lines: `import math` and then `print(math.sqrt(144))`. Press Ctrl+S, click in the terminal, press the Up arrow key to bring back the last command, and press Enter. You should see `12.0`. If you still see the old text, you forgot Ctrl+S."
+    ]
+  }
+}

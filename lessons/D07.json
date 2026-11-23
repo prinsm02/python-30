@@ -1,0 +1,219 @@
+{
+  "id": "D07",
+  "day": 7,
+  "week": 2,
+  "title": "More than two roads",
+  "hook": "Pick from many options and check ranges with elif, and, or, not.",
+  "badge": "Many Roads",
+  "warmup": [
+    {
+      "q": "What does `if x == 5:` ask?",
+      "options": [
+        "Is x equal to 5?",
+        "Make x equal to 5",
+        "Is x bigger than 5?"
+      ],
+      "answer": 0,
+      "explain": "Two equals signs ask the question. One equals sign stores a value. Mix them up and Python shows a SyntaxError."
+    },
+    {
+      "q": "`age = input(\"Age? \")`. What kind of thing is age?",
+      "options": [
+        "A whole number",
+        "Text, even if you type digits",
+        "A decimal number"
+      ],
+      "answer": 1,
+      "explain": "input() always gives text. Wrap it in int() or float() when you need to do maths or compare numbers."
+    },
+    {
+      "q": "Which line is written correctly?",
+      "options": [
+        "if hours > 10",
+        "if hours > 10:",
+        "if hours > 10;"
+      ],
+      "answer": 1,
+      "explain": "An if line ends with a colon. The lines that belong to it are pushed in by 4 spaces."
+    }
+  ],
+  "why": [
+    {
+      "heading": "Two roads are not enough",
+      "text": "A shift can be a short day, a normal day, overtime or double time. A run can be easy, steady or fast. `if` and `else` give only two roads. Real life has more, so Python has `elif`: short for **else if**."
+    },
+    {
+      "heading": "elif: first True wins",
+      "text": "`if hours > 12:` ... `elif hours > 10:` ... `else:`\n\nPython reads from the top. The first condition that is True runs its lines, and ALL the rest are skipped. So order matters: put the biggest limit first. If 11 hours is checked against `> 10` first, it never reaches a bigger rule."
+    },
+    {
+      "heading": "and, or, not",
+      "text": "Join questions together:\n\n`and`: both must be True\n`or`: at least one is True\n`not`: flips True to False\n\n`day == \"Sat\" or day == \"Sun\"` is True on a weekend. `hour >= 6 and hour < 18` is True only in daylight."
+    },
+    {
+      "heading": "Checking a range",
+      "text": "To ask if something sits between two numbers, use `and`:\n\n`if pace >= 4 and pace <= 5:`\n\nThat reads: pace is at least 4 AND at most 5. Two small questions, joined. Each side of an `and` must be a whole question."
+    },
+    {
+      "heading": "A classic trap with or",
+      "text": "This looks right but is not: `if day == \"Sat\" or \"Sun\":`. Python reads `\"Sun\"` alone as always True, so the if always runs. Write the full question on BOTH sides: `day == \"Sat\" or day == \"Sun\"`."
+    }
+  ],
+  "watch": {
+    "intro": "Tap Run. One shift, four possible labels, and a weekend check. Try hours = 13, then 9, then 5.",
+    "code": "hours = 11\nday = \"Sat\"\nif hours > 12:\n    print(\"Double time\")\nelif hours > 10:\n    print(\"Overtime\")\nelif hours >= 8:\n    print(\"Full day\")\nelse:\n    print(\"Short day\")\nif day == \"Sat\" or day == \"Sun\":\n    print(\"Weekend rate\")",
+    "explain": [
+      "11 is not above 12, so the first road is skipped. It is above 10, so `Overtime` runs and the other roads are skipped.",
+      "The last `if` starts a fresh question. It is not part of the chain above, so it runs on its own.",
+      "`or` is True here because day is `Sat`."
+    ],
+    "break_it": "Break it on purpose: change `elif hours > 10:` to `else if hours > 10:` and run. You get `SyntaxError: expected ':'`. Python has no `else if`, it has `elif`. Put it back. Bonus: swap the order of the two `elif` blocks and run. No error, but 11 now says `Full day`. A wrong order is a bug Python cannot see."
+  },
+  "tasks": [
+    {
+      "title": "Add the middle road",
+      "task": "It is 22 degrees. The program should show `Warm` but shows `Cold`. Add an `elif` between the if and the else: when temp is above 15, show `Warm`.",
+      "starter": "temp = 22\nif temp > 30:\n    print(\"Hot\")\n# add your elif here\nelse:\n    print(\"Cold\")\n",
+      "solution": "temp = 22\nif temp > 30:\n    print(\"Hot\")\nelif temp > 15:\n    print(\"Warm\")\nelse:\n    print(\"Cold\")\n",
+      "hints": [
+        "The new part goes between the if block and the else line.",
+        "elif works like if: a condition, a colon, then a pushed-in print.",
+        "elif temp > 15:\n    print(\"Warm\")"
+      ],
+      "tests": [
+        {
+          "expect": "Warm"
+        }
+      ],
+      "code_has": [
+        "elif"
+      ]
+    },
+    {
+      "title": "Day rate label",
+      "task": "Ask for hours worked. Show `Double time` if above 12, `Overtime` if above 10 (11 or 12), otherwise `Normal day`. Example:\n\n`Hours? 11`\n`Overtime`",
+      "starter": "hours = int(input(\"Hours? \"))\nif hours > 12:\n    print(\"Double time\")\n# add the middle road and the else\n",
+      "solution": "hours = int(input(\"Hours? \"))\nif hours > 12:\n    print(\"Double time\")\nelif hours > 10:\n    print(\"Overtime\")\nelse:\n    print(\"Normal day\")\n",
+      "hints": [
+        "You need one elif and one else under the if that is already there.",
+        "The elif condition is hours > 10. It is only reached when hours is NOT above 12.",
+        "elif hours > 10:\n    print(\"Overtime\")\nelse:\n    print(\"Normal day\")"
+      ],
+      "tests": [
+        {
+          "inputs": [
+            "13"
+          ],
+          "expect": "Hours? 13\nDouble time"
+        },
+        {
+          "inputs": [
+            "12"
+          ],
+          "expect": "Hours? 12\nOvertime"
+        },
+        {
+          "inputs": [
+            "11"
+          ],
+          "expect": "Hours? 11\nOvertime"
+        },
+        {
+          "inputs": [
+            "10"
+          ],
+          "expect": "Hours? 10\nNormal day"
+        },
+        {
+          "inputs": [
+            "8"
+          ],
+          "expect": "Hours? 8\nNormal day"
+        }
+      ],
+      "code_has": [
+        "elif",
+        "else:"
+      ]
+    },
+    {
+      "title": "Can we film now?",
+      "task": "Ask for the hour (0 to 23), then ask if it is raining (`yes` or `no`). Show `Go shoot` only when the hour is 6 or later AND before 18 AND it is not raining. Otherwise show `Wait`.",
+      "starter": "hour = int(input(\"Hour (0-23)? \"))\nrain = input(\"Raining (yes/no)? \")\n# add your if and else here\n",
+      "solution": "hour = int(input(\"Hour (0-23)? \"))\nrain = input(\"Raining (yes/no)? \")\nif hour >= 6 and hour < 18 and rain != \"yes\":\n    print(\"Go shoot\")\nelse:\n    print(\"Wait\")\n",
+      "hints": [
+        "Three questions must all be True, so join them with and.",
+        "The three questions: hour >= 6, hour < 18, and rain is not yes (use !=).",
+        "if hour >= 6 and hour < 18 and rain != \"yes\":\n    print(\"Go shoot\")\nelse:\n    print(\"Wait\")"
+      ],
+      "tests": [
+        {
+          "inputs": [
+            "10",
+            "no"
+          ],
+          "expect": "Hour (0-23)? 10\nRaining (yes/no)? no\nGo shoot"
+        },
+        {
+          "inputs": [
+            "10",
+            "yes"
+          ],
+          "expect": "Hour (0-23)? 10\nRaining (yes/no)? yes\nWait"
+        },
+        {
+          "inputs": [
+            "20",
+            "no"
+          ],
+          "expect": "Hour (0-23)? 20\nRaining (yes/no)? no\nWait"
+        },
+        {
+          "inputs": [
+            "6",
+            "no"
+          ],
+          "expect": "Hour (0-23)? 6\nRaining (yes/no)? no\nGo shoot"
+        },
+        {
+          "inputs": [
+            "18",
+            "no"
+          ],
+          "expect": "Hour (0-23)? 18\nRaining (yes/no)? no\nWait"
+        }
+      ],
+      "code_has": [
+        "and "
+      ]
+    }
+  ],
+  "recap": [
+    "`elif` is else if. Python takes the first road that is True and skips the rest.",
+    "Order matters: check the biggest limit first.",
+    "`and` needs both True. `or` needs one. `not` flips the answer.",
+    "To check a range, join two comparisons with `and`."
+  ],
+  "words": [
+    {
+      "term": "elif",
+      "meaning": "Else if: another question, asked only if the ones above were False."
+    },
+    {
+      "term": "and",
+      "meaning": "True only when both sides are True."
+    },
+    {
+      "term": "or",
+      "meaning": "True when at least one side is True."
+    },
+    {
+      "term": "not",
+      "meaning": "Flips True to False and False to True."
+    },
+    {
+      "term": "range check",
+      "meaning": "Asking if a number sits between two limits."
+    }
+  ]
+}

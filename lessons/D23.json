@@ -1,0 +1,197 @@
+{
+  "id": "D23",
+  "day": 23,
+  "week": 5,
+  "title": "Spreadsheets with CSV",
+  "hook": "Read a rate sheet, add up a column and write a bill file.",
+  "badge": "CSV Cruncher",
+  "warmup": [
+    {
+      "q": "`p = Path(\"clips/A001_C003.mp4\")`. What is `p.stem`?",
+      "options": [
+        "A001_C003.mp4",
+        ".mp4",
+        "A001_C003"
+      ],
+      "answer": 2,
+      "explain": "The stem is the name without the file type."
+    },
+    {
+      "q": "What does `return` do that `print` does not?",
+      "options": [
+        "Hands the answer back so you can store or use it",
+        "Shows text bigger",
+        "Stops Python"
+      ],
+      "answer": 0,
+      "explain": "`print` only shows. `return` gives the value back to the code that called the function."
+    },
+    {
+      "q": "What is `sum([2, 3, 5])`?",
+      "options": [
+        "235",
+        "10",
+        "3"
+      ],
+      "answer": 1,
+      "explain": "`sum` adds the numbers in the list: 2 + 3 + 5 = 10."
+    }
+  ],
+  "why": [
+    {
+      "heading": "Spreadsheets as text",
+      "text": "A shot list from Excel or Google Sheets can be saved as **CSV**: comma separated values. It is plain text, one row per line, cells split by commas. Python can read it, so a 200 row list needs no copy and paste."
+    },
+    {
+      "heading": "csv.reader",
+      "text": "`import csv`, then `csv.reader(f)` gives each row as a list, like `[\"Sam\", \"Gaffer\"]`. Open the file with `newline=\"\"`, which is what the csv module wants. The header row comes through as a normal first row."
+    },
+    {
+      "heading": "DictReader",
+      "text": "`csv.DictReader(f)` uses the header row as names. Each row is a dictionary, so `row[\"role\"]` works, just like the dictionaries you know. It reads far better than `row[1]` and survives a column moving."
+    },
+    {
+      "heading": "Everything is text",
+      "text": "Every cell arrives as text, even numbers. `row[\"mins\"]` is `\"10\"`, not 10. Wrap it in `int(...)` or `float(...)` before adding, or `\"10\" + \"15\"` glues into `\"1015\"` and your total is wrong."
+    },
+    {
+      "heading": "csv.writer",
+      "text": "Open a file with `\"w\"` and `newline=\"\"`, then `w = csv.writer(f)`. Each `w.writerow([\"item\", \"cost\"])` writes one row from a list. Python adds the commas for you and quotes any cell that has a comma inside it."
+    }
+  ],
+  "watch": {
+    "intro": "Tap Run. day.csv is a tiny shot list. Python reads each row and adds up the hours.",
+    "code": "import csv\ntotal = 0\nwith open(\"day.csv\", newline=\"\") as f:\n    for row in csv.DictReader(f):\n        print(\"Scene\", row[\"scene\"], \"has\", row[\"shots\"], \"shots\")\n        total += float(row[\"hours\"])\nprint(\"Hours:\", total)",
+    "files": {
+      "day.csv": "scene,shots,hours\n1,4,2.5\n2,6,3\n3,2,1.5\n"
+    },
+    "explain": [
+      "The first line of the file (scene,shots,hours) becomes the names for every row.",
+      "Each `row` is a dictionary, so `row[\"scene\"]` is the scene cell.",
+      "`float(row[\"hours\"])` turns the text into a number so `total` can add it.",
+      "Without `float`, `total += row[\"hours\"]` would crash: you cannot add text to a number."
+    ],
+    "break_it": "Delete `float(` and its closing bracket so the line reads `total += row[\"hours\"]` and tap Run. You get a `TypeError`: you cannot add text to a number. Put `float(...)` back."
+  },
+  "tasks": [
+    {
+      "title": "First column",
+      "task": "`crew.csv` has a name and a role on each line. Show only the first cell of every row (the header row counts as a row too):\n\n`name`\n`Sam`\n`Lerato`\n`Jo`",
+      "starter": "import csv\nwith open(\"crew.csv\", newline=\"\") as f:\n    for row in csv.reader(f):\n        print(row)\n",
+      "solution": "import csv\nwith open(\"crew.csv\", newline=\"\") as f:\n    for row in csv.reader(f):\n        print(row[0])\n",
+      "hints": [
+        "Each `row` is a list. Printing the whole list shows the brackets.",
+        "You want only the first item of the list. Lists count from 0.",
+        "Change print(row) to print(row[0])"
+      ],
+      "tests": [
+        {
+          "files": {
+            "crew.csv": "name,role\nSam,Gaffer\nLerato,Grip\nJo,Sound\n"
+          },
+          "expect": "name\nSam\nLerato\nJo"
+        },
+        {
+          "files": {
+            "crew.csv": "name,role\nKay,Boom\nBo,DOP\n"
+          },
+          "expect": "name\nKay\nBo"
+        }
+      ],
+      "code_has": [
+        "csv.reader",
+        "row[0]"
+      ]
+    },
+    {
+      "title": "Add up the day rates",
+      "task": "`rates.csv` has a name and a day rate in rand. Add up the rates and show the total, like:\n\n`Total: R2950`\n\n(Remember: cells are text.)",
+      "starter": "import csv\ntotal = 0\nwith open(\"rates.csv\", newline=\"\") as f:\n    for row in csv.DictReader(f):\n        pass\nprint(f\"Total: R{total}\")\n",
+      "solution": "import csv\ntotal = 0\nwith open(\"rates.csv\", newline=\"\") as f:\n    for row in csv.DictReader(f):\n        total += int(row[\"rate\"])\nprint(f\"Total: R{total}\")\n",
+      "hints": [
+        "Inside the loop, add this row's rate to `total`. The column is called `rate`.",
+        "The cell is text, so wrap it in int(...) before adding.",
+        "Replace pass with: total += int(row[\"rate\"])"
+      ],
+      "tests": [
+        {
+          "files": {
+            "rates.csv": "name,rate\nSam,1200\nLerato,950\nJo,800\n"
+          },
+          "expect": "Total: R2950"
+        },
+        {
+          "files": {
+            "rates.csv": "name,rate\nKay,1000\nBo,500\n"
+          },
+          "expect": "Total: R1500"
+        }
+      ],
+      "code_has": [
+        "DictReader",
+        "int("
+      ]
+    },
+    {
+      "title": "Write a bill file",
+      "task": "`gear.csv` has `item,days,rate`. Make a new file `bill.csv` with the header `item,cost` and one row per item, where cost is days times rate. For the first test it must be:\n\n`item,cost`\n`Light,2400`\n`Stand,300`\n`Flag,250`",
+      "starter": "import csv\nwith open(\"gear.csv\", newline=\"\") as f:\n    with open(\"bill.csv\", \"w\", newline=\"\") as g:\n        w = csv.writer(g)\n        w.writerow([\"item\", \"cost\"])\n        # one row per item here\n",
+      "solution": "import csv\nwith open(\"gear.csv\", newline=\"\") as f:\n    with open(\"bill.csv\", \"w\", newline=\"\") as g:\n        w = csv.writer(g)\n        w.writerow([\"item\", \"cost\"])\n        for row in csv.DictReader(f):\n            w.writerow([row[\"item\"], int(row[\"days\"]) * int(row[\"rate\"])])\n",
+      "hints": [
+        "Loop over `csv.DictReader(f)` inside the inner block, at the same indent as `w.writerow`.",
+        "Each row needs a list: the item, then days times rate. Days and rate are text, so use int().",
+        "for row in csv.DictReader(f):  then  w.writerow([row[\"item\"], int(row[\"days\"]) * int(row[\"rate\"])])"
+      ],
+      "tests": [
+        {
+          "files": {
+            "gear.csv": "item,days,rate\nLight,2,1200\nStand,3,100\nFlag,1,250\n"
+          },
+          "expect_files": {
+            "bill.csv": "item,cost\nLight,2400\nStand,300\nFlag,250\n"
+          }
+        },
+        {
+          "files": {
+            "gear.csv": "item,days,rate\nTrack,4,500\nCrane,1,3000\n"
+          },
+          "expect_files": {
+            "bill.csv": "item,cost\nTrack,2000\nCrane,3000\n"
+          }
+        }
+      ],
+      "code_has": [
+        "csv.writer",
+        "writerow"
+      ]
+    }
+  ],
+  "recap": [
+    "CSV is a spreadsheet saved as plain text. Open it with `newline=\"\"`.",
+    "`csv.reader(f)` gives each row as a list. `csv.DictReader(f)` gives each row as a dictionary using the header.",
+    "Every cell is text. Use `int()` or `float()` before adding.",
+    "`csv.writer(f)` and `w.writerow([...])` write a row."
+  ],
+  "words": [
+    {
+      "term": "CSV",
+      "meaning": "Comma separated values: a spreadsheet saved as plain text."
+    },
+    {
+      "term": "row",
+      "meaning": "One line of a spreadsheet."
+    },
+    {
+      "term": "header",
+      "meaning": "The first row, which names the columns."
+    },
+    {
+      "term": "DictReader",
+      "meaning": "Reads each row as a dictionary, using the header as keys."
+    },
+    {
+      "term": "writerow",
+      "meaning": "Writes one row from a list."
+    }
+  ]
+}

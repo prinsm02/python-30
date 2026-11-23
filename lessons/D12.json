@@ -1,0 +1,159 @@
+{
+  "id": "D12",
+  "day": 12,
+  "week": 3,
+  "title": "Loop through a list",
+  "hook": "Do something to every item in a list, then total it and rank it.",
+  "badge": "List Looper",
+  "warmup": [
+    {
+      "q": "`shots = [\"a\", \"b\", \"c\"]`. What does `shots[1]` give?",
+      "options": [
+        "a",
+        "b",
+        "c"
+      ],
+      "answer": 1,
+      "explain": "Spots count from 0. Spot 0 is a, spot 1 is b."
+    },
+    {
+      "q": "`range(1, 4)` gives which numbers?",
+      "options": [
+        "1, 2, 3",
+        "1, 2, 3, 4",
+        "0, 1, 2, 3"
+      ],
+      "answer": 0,
+      "explain": "range starts at the first number and stops just before the last. 1, 2, 3."
+    },
+    {
+      "q": "`age = input(\"Age? \")`. What type of thing is `age`?",
+      "options": [
+        "A whole number",
+        "A decimal",
+        "Text"
+      ],
+      "answer": 2,
+      "explain": "input always gives text, even if you type digits. That is why we use int() to convert."
+    }
+  ],
+  "why": [
+    {
+      "heading": "A list is made for looping",
+      "text": "A shot list is not for staring at. You go down it, one shot at a time. A Python list works the same way, and you already know the tool that repeats things: **for**."
+    },
+    {
+      "heading": "for item in list",
+      "text": "`for shot in shots:`\n\nThis means: take the items one at a time, call the current one `shot`, and run the indented lines. You pick the name `shot`. Make it a singular word for the list name: `crew` and `person`, `rates` and `rate`."
+    },
+    {
+      "heading": "Maths on a whole list",
+      "text": "Python has ready-made tools for number lists:\n\n`sum(rates)` adds them all up.\n`max(rates)` finds the biggest.\n`min(rates)` finds the smallest.\n\nNo running total needed. One line each."
+    },
+    {
+      "heading": "Sort a copy",
+      "text": "`sorted(rates)` gives a new list in order, smallest first. Words go A to Z. Your original list stays as it was, so nothing is lost."
+    },
+    {
+      "heading": "Numbered lists",
+      "text": "Want 1, 2, 3 next to each item? Use `enumerate`:\n\n`for n, shot in enumerate(shots, 1):`\n\nIt hands you a number `n` and the item together. The `1` says start counting at 1. Copy this shape and it just works."
+    }
+  ],
+  "watch": {
+    "intro": "Tap Run. A list of day rates in rand, looped, totalled and ranked.",
+    "code": "rates = [850, 1200, 950]\nfor r in rates:\n    print(\"Rate:\", r)\nprint(\"Total\", sum(rates))\nprint(\"Top\", max(rates))\nfor n, r in enumerate(sorted(rates), 1):\n    print(n, r)",
+    "explain": [
+      "The first `for` prints every rate, in list order.",
+      "`sum` and `max` do the whole list in one go.",
+      "`sorted` puts the rates smallest first, and `enumerate` numbers them from 1.",
+      "The indented lines belong to the loop. The unindented lines run once, after it."
+    ],
+    "break_it": "Break it on purpose: remove the 4 spaces in front of the first `print(\"Rate:\", r)` line and tap Run. The error says `IndentationError: expected an indented block`. A loop needs its lines indented. Put the spaces back."
+  },
+  "tasks": [
+    {
+      "title": "Roll call",
+      "task": "Say hi to everyone on the crew with a loop. It must show:\n\n`Hi, Sam`\n`Hi, Thandi`\n`Hi, Lebo`",
+      "starter": "crew = [\"Sam\", \"Thandi\", \"Lebo\"]\n# loop through crew and say hi\n",
+      "solution": "crew = [\"Sam\", \"Thandi\", \"Lebo\"]\nfor name in crew:\n    print(\"Hi,\", name)\n",
+      "hints": [
+        "Start with: for name in crew:",
+        "Indent the next line by 4 spaces and print the greeting using name.",
+        "print(\"Hi,\", name) shows Hi, then the name with a space between."
+      ],
+      "tests": [
+        {
+          "expect": "Hi, Sam\nHi, Thandi\nHi, Lebo"
+        }
+      ],
+      "code_has": [
+        "for "
+      ]
+    },
+    {
+      "title": "Day rate totals",
+      "task": "These are four crew day rates in rand. Print the total, the highest and the lowest:\n\n`Total: R4450`\n`Highest: R1500`\n`Lowest: R800`",
+      "starter": "rates = [1200, 950, 1500, 800]\n# print the total, highest and lowest\n",
+      "solution": "rates = [1200, 950, 1500, 800]\nprint(f\"Total: R{sum(rates)}\")\nprint(f\"Highest: R{max(rates)}\")\nprint(f\"Lowest: R{min(rates)}\")\n",
+      "hints": [
+        "Python already has sum(), max() and min() for this. No loop needed.",
+        "Put them inside an f-string, like f\"Total: R{sum(rates)}\"",
+        "Do the same for max(rates) and min(rates), one print line each."
+      ],
+      "tests": [
+        {
+          "expect": "Total: R4450\nHighest: R1500\nLowest: R800"
+        }
+      ],
+      "code_has": [
+        "sum(",
+        "max(",
+        "min("
+      ]
+    },
+    {
+      "title": "Ranked run paces",
+      "task": "These are pace times for four runs, in minutes per km. Print them fastest (smallest) first, numbered from 1:\n\n`1. 5.2 min/km`\n`2. 5.4 min/km`\n`3. 5.8 min/km`\n`4. 6.1 min/km`",
+      "starter": "paces = [6.1, 5.4, 5.8, 5.2]\n# sorted + enumerate + for\n",
+      "solution": "paces = [6.1, 5.4, 5.8, 5.2]\nfor n, p in enumerate(sorted(paces), 1):\n    print(f\"{n}. {p} min/km\")\n",
+      "hints": [
+        "You need sorted(paces) to order them, and enumerate(..., 1) to number them.",
+        "The shape is: for n, p in enumerate(sorted(paces), 1):",
+        "Inside the loop: print(f\"{n}. {p} min/km\")"
+      ],
+      "tests": [
+        {
+          "expect": "1. 5.2 min/km\n2. 5.4 min/km\n3. 5.8 min/km\n4. 6.1 min/km"
+        }
+      ],
+      "code_has": [
+        "enumerate",
+        "sorted"
+      ]
+    }
+  ],
+  "recap": [
+    "`for item in mylist:` runs the indented lines once per item.",
+    "`sum`, `min`, `max` do maths on a whole number list.",
+    "`sorted(mylist)` gives an ordered copy.",
+    "`enumerate(mylist, 1)` gives numbers and items together."
+  ],
+  "words": [
+    {
+      "term": "loop variable",
+      "meaning": "The name that holds the current item, like shot in for shot in shots."
+    },
+    {
+      "term": "sum",
+      "meaning": "Adds up all the numbers in a list."
+    },
+    {
+      "term": "sorted",
+      "meaning": "Gives a new list in order. The original stays."
+    },
+    {
+      "term": "enumerate",
+      "meaning": "Pairs each item with a counting number."
+    }
+  ]
+}

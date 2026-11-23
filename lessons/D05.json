@@ -1,0 +1,195 @@
+{
+  "id": "D05",
+  "day": 5,
+  "week": 1,
+  "title": "Boss build: Mad Libs",
+  "hook": "Build a silly story game that uses everything from week 1.",
+  "badge": "Story Maker",
+  "warmup": [
+    {
+      "q": "Someone types 6 into an `input`. What kind of value do you get?",
+      "options": [
+        "The whole number 6",
+        "The text \"6\"",
+        "A decimal 6.0"
+      ],
+      "answer": 1,
+      "explain": "`input` always gives text. Use `int()` or `float()` to convert."
+    },
+    {
+      "q": "`city = \"Cape Town\"`. What does `print(f\"Shoot in {city}\")` show?",
+      "options": [
+        "Shoot in Cape Town",
+        "Shoot in city",
+        "Shoot in {city}"
+      ],
+      "answer": 0,
+      "explain": "The curly brackets are swapped for the stored value."
+    },
+    {
+      "q": "Python shows an error. What is the first thing to do?",
+      "options": [
+        "Delete the whole program",
+        "Read which line it names",
+        "Restart the computer"
+      ],
+      "answer": 1,
+      "explain": "The error names the line. Look there first."
+    }
+  ],
+  "why": [
+    {
+      "heading": "Boss day",
+      "text": "Every Friday you build a small game or tool out of the week's pieces. Today: **Mad Libs**. The program asks for words without telling you the story, then drops your words into a silly story.\n\nYou already know everything needed: `input`, variables, `int`, f-strings."
+    },
+    {
+      "heading": "Plan before typing",
+      "text": "Good programmers plan first. For today:\n\n1. Ask for the words.\n2. Convert any numbers.\n3. Print the story.\n\nAsk first, tell last. Your three tasks add one piece each, and task 3 is the finished game."
+    },
+    {
+      "heading": "Comments",
+      "text": "A line starting with `#` is a **comment**. Python ignores it completely. It is a note for the human reading the code, including you next week.\n\n`# ask for the words`\n\nYou can also put one at the end of a line: `print(x)  # shows x`."
+    },
+    {
+      "heading": "Why comments help",
+      "text": "By Friday, code you wrote on Monday looks like a stranger wrote it. Comments say what a step is for.\n\nThey also switch lines off while testing: put `#` in front of a line and Python skips it. Take the `#` off to bring it back."
+    },
+    {
+      "heading": "Build in small steps",
+      "text": "Run after every small step. If step 1 works and step 2 breaks, you know the bug is in step 2. This is how real programs get built: small, working, then a bit more."
+    }
+  ],
+  "watch": {
+    "intro": "Tap Run. A tiny Mad Libs with a comment above it. The answer (mango) is typed for you.",
+    "code": "# Ask for a fruit, then use it\nword = input(\"A fruit? \")\nprint(f\"I love {word}!\")  # this comment is at the end of a line",
+    "inputs": [
+      "mango"
+    ],
+    "explain": [
+      "The first line is a comment. Python skips it.",
+      "The comment at the end of the last line is skipped too.",
+      "Only the two real lines do any work."
+    ],
+    "break_it": "Break it on purpose: delete the `#` at the start of line 1 so it reads `Ask for a fruit, then use it` and tap Run. You get `SyntaxError: invalid syntax`. Without the `#`, Python tries to read your note as code. Put the `#` back."
+  },
+  "tasks": [
+    {
+      "title": "Step 1: the opening",
+      "task": "Add a comment line (starting with `#`) that says what the program is. Then ask for an animal and a place and print the first line of the story. For `lion` and `Cape Town`:\n\n`Animal? lion`\n`Place? Cape Town`\n`The lion ran to Cape Town.`",
+      "starter": "animal = input(\"Animal? \")\n",
+      "solution": "# Mad Libs step 1\nanimal = input(\"Animal? \")\nplace = input(\"Place? \")\nprint(f\"The {animal} ran to {place}.\")\n",
+      "hints": [
+        "Ask for the place the same way as the animal. The question is Place? with a space after it.",
+        "Add a line such as # Mad Libs step 1 at the top, and print with an f-string.",
+        "print(f\"The {animal} ran to {place}.\")"
+      ],
+      "tests": [
+        {
+          "inputs": [
+            "lion",
+            "Cape Town"
+          ],
+          "expect": "Animal? lion\nPlace? Cape Town\nThe lion ran to Cape Town."
+        },
+        {
+          "inputs": [
+            "gecko",
+            "Durban"
+          ],
+          "expect": "Animal? gecko\nPlace? Durban\nThe gecko ran to Durban."
+        }
+      ],
+      "code_has": [
+        "#"
+      ]
+    },
+    {
+      "title": "Step 2: add a number",
+      "task": "Two more questions: `Adjective?` and then `Number?` (a whole number). The story gets an adjective and a second line that doubles the number. For `lion`, `Cape Town`, `tiny`, `3`:\n\n`The tiny lion ran to Cape Town.`\n`It did 3 laps, then 6 more.`",
+      "starter": "# Step 2\nanimal = input(\"Animal? \")\nplace = input(\"Place? \")\n# ask Adjective? and Number? (convert the number)\n# print the two story lines\n",
+      "solution": "# Step 2\nanimal = input(\"Animal? \")\nplace = input(\"Place? \")\nadj = input(\"Adjective? \")\nn = int(input(\"Number? \"))\nprint(f\"The {adj} {animal} ran to {place}.\")\nprint(f\"It did {n} laps, then {n * 2} more.\")\n",
+      "hints": [
+        "Ask for the adjective, then the number, in that order, after the place.",
+        "The number must be an int, so you can do n * 2.",
+        "print(f\"It did {n} laps, then {n * 2} more.\")"
+      ],
+      "tests": [
+        {
+          "inputs": [
+            "lion",
+            "Cape Town",
+            "tiny",
+            "3"
+          ],
+          "expect": "Animal? lion\nPlace? Cape Town\nAdjective? tiny\nNumber? 3\nThe tiny lion ran to Cape Town.\nIt did 3 laps, then 6 more."
+        },
+        {
+          "inputs": [
+            "gecko",
+            "Durban",
+            "angry",
+            "10"
+          ],
+          "expect": "Animal? gecko\nPlace? Durban\nAdjective? angry\nNumber? 10\nThe angry gecko ran to Durban.\nIt did 10 laps, then 20 more."
+        }
+      ],
+      "code_has": [
+        "int("
+      ]
+    },
+    {
+      "title": "Step 3: Set Mad Libs",
+      "task": "The finished game, film set edition. Print the banner first, ask four questions (`Name?`, `Job?`, `Item?`, `Takes?` where takes is a whole number), then print a three line story. Overtime is R500 per take. For `Zola`, `gaffer`, `lamp`, `4`:\n\n`=== SET MAD LIBS ===`\n`Name? Zola`\n`Job? gaffer`\n`Item? lamp`\n`Takes? 4`\n`Zola the gaffer arrived with a giant lamp.`\n`It took 4 takes to get the shot.`\n`Overtime cost R2000. Wrap!`",
+      "starter": "# Set Mad Libs: the finished game\n# 1. print the banner\n# 2. ask the four questions\n# 3. print the story\n",
+      "solution": "# Set Mad Libs\nprint(\"=== SET MAD LIBS ===\")\nname = input(\"Name? \")\njob = input(\"Job? \")\nitem = input(\"Item? \")\ntakes = int(input(\"Takes? \"))\nprint(f\"{name} the {job} arrived with a giant {item}.\")\nprint(f\"It took {takes} takes to get the shot.\")\nprint(f\"Overtime cost R{takes * 500}. Wrap!\")\n",
+      "hints": [
+        "Start with print(\"=== SET MAD LIBS ===\"), then four input lines. Convert only Takes.",
+        "takes = int(input(\"Takes? \")) lets you do takes * 500 later.",
+        "The last line is print(f\"Overtime cost R{takes * 500}. Wrap!\")"
+      ],
+      "tests": [
+        {
+          "inputs": [
+            "Zola",
+            "gaffer",
+            "lamp",
+            "4"
+          ],
+          "expect": "=== SET MAD LIBS ===\nName? Zola\nJob? gaffer\nItem? lamp\nTakes? 4\nZola the gaffer arrived with a giant lamp.\nIt took 4 takes to get the shot.\nOvertime cost R2000. Wrap!"
+        },
+        {
+          "inputs": [
+            "Ayanda",
+            "boom op",
+            "fish",
+            "7"
+          ],
+          "expect": "=== SET MAD LIBS ===\nName? Ayanda\nJob? boom op\nItem? fish\nTakes? 7\nAyanda the boom op arrived with a giant fish.\nIt took 7 takes to get the shot.\nOvertime cost R3500. Wrap!"
+        }
+      ],
+      "code_has": [
+        "int("
+      ]
+    }
+  ],
+  "recap": [
+    "Plan first: ask, convert, tell.",
+    "A `#` comment is a note for humans. Python ignores it.",
+    "Build in small steps and run after each one.",
+    "You can now make a program that talks, asks, calculates and tells a story. That is week 1 done."
+  ],
+  "words": [
+    {
+      "term": "comment",
+      "meaning": "A note starting with # that Python ignores."
+    },
+    {
+      "term": "SyntaxError",
+      "meaning": "Python cannot read the line as code at all."
+    },
+    {
+      "term": "boss build",
+      "meaning": "A Friday project that uses the whole week."
+    }
+  ]
+}

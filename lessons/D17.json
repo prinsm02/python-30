@@ -1,0 +1,158 @@
+{
+  "id": "D17",
+  "day": 17,
+  "week": 4,
+  "title": "Print is not return",
+  "hook": "Make functions that hand back an answer you can use again.",
+  "badge": "Answer Back",
+  "warmup": [
+    {
+      "q": "In `def greet(name):`, what is `name` called?",
+      "options": [
+        "A loop",
+        "A string, always",
+        "A parameter: a blank filled when you call"
+      ],
+      "answer": 2,
+      "explain": "A parameter is a blank in the def line. The value you put in when you call is the argument."
+    },
+    {
+      "q": "What does `print(\" boom \".strip().upper())` show?",
+      "options": [
+        "BOOM",
+        " BOOM ",
+        "boom"
+      ],
+      "answer": 0,
+      "explain": "strip() removes the spaces at both ends, then upper() makes capitals. The result is BOOM."
+    },
+    {
+      "q": "What does `for n in range(1, 4): print(n)` show?",
+      "options": [
+        "0 1 2 3",
+        "1 2 3",
+        "1 2 3 4"
+      ],
+      "answer": 1,
+      "explain": "range(1, 4) starts at 1 and stops before 4. So you get 1, 2, 3."
+    }
+  ],
+  "why": [
+    {
+      "heading": "Two different jobs",
+      "text": "A function can do two different things with its result. **print** shows it on screen. **return** hands it back to the code that called it. Picture the costume lead. If she shouts \"12 jackets left!\" across set, everyone hears it, but you cannot put a shout in your pocket. If she hands you a note, you can add to it, check it, pass it on. Shouting is print. The note is return."
+    },
+    {
+      "heading": "return hands it back",
+      "text": "`def double(n):`\n`    return n * 2`\n\n`x = double(5)`\n\nThe call `double(5)` is replaced by the answer, so `x` now holds 10. You can use it again: `x + 1` is 11. One more thing: `return` ends the function straight away, so lines after it never run."
+    },
+    {
+      "heading": "No return means None",
+      "text": "A function with no `return` hands back **None**, Python's word for nothing. If your function only prints, then `x = f()` makes `x` equal to None, and `x + 1` crashes with a TypeError. When a tool works on screen but breaks when you try to use its answer, you almost always wrote print where you needed return."
+    },
+    {
+      "heading": "Default values",
+      "text": "You can pre-fill a blank:\n\n`def day_total(hours, rate=150):`\n\n`rate=150` is a **default**. If you leave it out, 150 is used. `day_total(8)` uses 150. `day_total(8, 200)` replaces it with 200. Blanks with defaults go last."
+    },
+    {
+      "heading": "Functions that use functions",
+      "text": "Because return gives a value back, one function can call another and use the answer straight away. Say `vat(amount)` works out the tax and `with_vat(amount)` calls `vat` and adds the result. Each tool does one small job. Big programs are built exactly like this: small tools, stacked."
+    }
+  ],
+  "watch": {
+    "intro": "Two tools do the same maths. One returns, one prints. Watch what each gives back.",
+    "code": "def day_pay(hours):\n    return hours * 150\n\ndef show_pay(hours):\n    print(hours * 150)\n\na = day_pay(8)\nb = show_pay(8)\nprint(\"a is\", a)\nprint(\"b is\", b)\nprint(a + 100)",
+    "explain": [
+      "`show_pay(8)` printed 1200 straight away, while it was running. That was the shout.",
+      "But it handed back nothing, so `b` is `None`.",
+      "`day_pay(8)` printed nothing by itself. It handed 1200 to `a`, and we printed `a` ourselves.",
+      "Because `a` really holds 1200, `a + 100` works. That is the power of return."
+    ],
+    "break_it": "Now break it: change the last line to `print(b + 100)` and tap Run. The error says `TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'`. That means: b is None, and you cannot add to nothing. Put `a` back."
+  },
+  "tasks": [
+    {
+      "title": "Hand it back",
+      "task": "The function shows 42 but hands back nothing. Change it so it **returns** the answer. The program must show only:\n\n`Answer: 42`",
+      "starter": "def double(n):\n    print(n * 2)\n\nx = double(21)\nprint(\"Answer:\", x)\n",
+      "solution": "def double(n):\n    return n * 2\n\nx = double(21)\nprint(\"Answer:\", x)\n",
+      "hints": [
+        "Look at the line inside the function. It shouts the answer. It needs to hand it back.",
+        "Change the word print to return.",
+        "The line becomes: return n * 2 (no brackets needed)."
+      ],
+      "code_has": [
+        "return"
+      ],
+      "tests": [
+        {
+          "expect": "Answer: 42"
+        }
+      ]
+    },
+    {
+      "title": "Week total with a default",
+      "task": "Write `day_total(hours, rate=150)` that returns hours times rate. The program lines below it are already written. It must show:\n\n`Week: R3200`",
+      "starter": "# write day_total here\n\nweek = day_total(8) + day_total(10, 200)\nprint(f\"Week: R{week}\")\n",
+      "solution": "def day_total(hours, rate=150):\n    return hours * rate\n\nweek = day_total(8) + day_total(10, 200)\nprint(f\"Week: R{week}\")\n",
+      "hints": [
+        "It is a def with two blanks. The second blank has a default value written as rate=150.",
+        "The first line is def day_total(hours, rate=150): and the body needs a return.",
+        "Body: return hours * rate. Check: 8 x 150 is 1200, 10 x 200 is 2000, total 3200."
+      ],
+      "code_has": [
+        "rate=150",
+        "return"
+      ],
+      "tests": [
+        {
+          "expect": "Week: R3200"
+        }
+      ]
+    },
+    {
+      "title": "Add the VAT",
+      "task": "`vat` is finished. Finish `with_vat` so it uses `vat` and returns the amount plus its VAT. The program must show:\n\n`R1150.00`\n`R2300.00`",
+      "starter": "def vat(amount):\n    return round(amount * 0.15, 2)\n\ndef with_vat(amount):\n    total = amount\n    # add vat(amount) to total, then give it back\n\nprint(f\"R{with_vat(1000):.2f}\")\nprint(f\"R{with_vat(2000):.2f}\")\n",
+      "solution": "def vat(amount):\n    return round(amount * 0.15, 2)\n\ndef with_vat(amount):\n    total = amount + vat(amount)\n    return total\n\nprint(f\"R{with_vat(1000):.2f}\")\nprint(f\"R{with_vat(2000):.2f}\")\n",
+      "hints": [
+        "Inside with_vat you can call vat like any function. Its answer comes back to you.",
+        "Make total equal amount plus vat(amount). Then add a return line.",
+        "total = amount + vat(amount) and then return total. The starter crashes because with_vat gives back None."
+      ],
+      "code_has": [
+        "return",
+        "vat(amount)"
+      ],
+      "tests": [
+        {
+          "expect": "R1150.00\nR2300.00"
+        }
+      ]
+    }
+  ],
+  "recap": [
+    "`print` shows an answer on screen. `return` hands it back so you can use it.",
+    "A function with no `return` gives back `None`.",
+    "A default like `rate=150` is used when you leave that value out.",
+    "A function can call another function and use its returned answer."
+  ],
+  "words": [
+    {
+      "term": "return",
+      "meaning": "Hands a result back to the code that called the function."
+    },
+    {
+      "term": "None",
+      "meaning": "Python's word for nothing. What a function gives back with no return."
+    },
+    {
+      "term": "default",
+      "meaning": "A pre-filled value for a parameter, used if you leave it out."
+    },
+    {
+      "term": "TypeError",
+      "meaning": "You used a value the wrong way, like adding to None."
+    }
+  ]
+}

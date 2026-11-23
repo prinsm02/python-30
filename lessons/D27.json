@@ -1,0 +1,206 @@
+{
+  "id": "D27",
+  "day": 27,
+  "week": 6,
+  "title": "Ask the internet for data",
+  "hook": "Read data that another computer sends you.",
+  "badge": "API Reader",
+  "warmup": [
+    {
+      "q": "Yesterday: what does `pip install requests` do?",
+      "options": [
+        "Writes a program called requests",
+        "Downloads the requests module onto your PC",
+        "Opens a website"
+      ],
+      "answer": 1,
+      "explain": "pip fetches other people's modules. After it finishes you can write `import requests`."
+    },
+    {
+      "q": "`json.loads(text)` turns JSON text into...",
+      "options": [
+        "A file on disk",
+        "Python lists, dictionaries and numbers",
+        "A picture"
+      ],
+      "answer": 1,
+      "explain": "JSON is just text in a special shape. `json.loads` turns it into real Python data you can loop over and look up."
+    },
+    {
+      "q": "`d.get(\"x\")` on a dictionary without the key \"x\" gives you...",
+      "options": [
+        "A KeyError crash",
+        "None, quietly",
+        "The number 0"
+      ],
+      "answer": 1,
+      "explain": "`d[\"x\"]` crashes with KeyError when the key is missing. `.get` returns None instead, so your program keeps going."
+    }
+  ],
+  "why": [
+    {
+      "heading": "Websites are for people",
+      "text": "When you open a weather site, it sends you a pretty page with pictures and ads. A program does not want that. It wants just the numbers. So many services also offer a plain data door for programs. That door is an **API**."
+    },
+    {
+      "heading": "Ask, then get an answer",
+      "text": "Your program sends a **request** to an address (a URL). The other computer sends back a **response**. It is like ordering at a counter: you ask for something specific, you get a tray back. The tray holds data."
+    },
+    {
+      "heading": "The answer is JSON",
+      "text": "Most APIs send back **JSON**, the same text format you read on Day 24. So everything you know already works: `json.loads`, dictionaries, lists, loops. An API is just a JSON file that lives on someone else's computer."
+    },
+    {
+      "heading": "Status codes say how it went",
+      "text": "Every response starts with a number. **200** means all good. **404** means that address does not exist. **500** means their computer broke. **429** means you asked too often, slow down. Always check the number before you trust the data."
+    },
+    {
+      "heading": "Today's plan",
+      "text": "The browser cannot make real internet requests, so the lesson gives you a saved response in a file called `weather.json`. You read it exactly like a live one. At the PC you make the real request with `requests.get`."
+    }
+  ],
+  "watch": {
+    "intro": "This is a saved response from a weather service: a status number and some data. Tap Run and watch the program pick it apart.",
+    "code": "import json\n\nwith open(\"weather.json\") as f:\n    resp = json.load(f)\n\nprint(\"Status:\", resp[\"status\"])\ndata = resp[\"data\"]\nprint(\"City:\", data[\"city\"])\nprint(\"Days in forecast:\", len(data[\"forecast\"]))",
+    "files": {
+      "weather.json": "{\n  \"status\": 200,\n  \"data\": {\n    \"city\": \"Johannesburg\",\n    \"temp_c\": 24.5,\n    \"forecast\": [\n      {\n        \"day\": \"Mon\",\n        \"rain_mm\": 0.0\n      },\n      {\n        \"day\": \"Tue\",\n        \"rain_mm\": 12.5\n      },\n      {\n        \"day\": \"Wed\",\n        \"rain_mm\": 3.0\n      },\n      {\n        \"day\": \"Thu\",\n        \"rain_mm\": 8.0\n      }\n    ]\n  }\n}"
+    },
+    "explain": [
+      "`json.load(f)` reads the file and gives you a dictionary.",
+      "`resp[\"status\"]` is the 200: the all-good number.",
+      "`resp[\"data\"]` is a dictionary inside the dictionary, and `forecast` inside that is a list of dictionaries."
+    ],
+    "break_it": "Change `data[\"city\"]` to `data[\"town\"]` and tap Run. You get KeyError: 'town'. The name must match the data exactly. Change it back."
+  },
+  "tasks": [
+    {
+      "title": "Read the response",
+      "task": "`weather.json` holds a saved response. Print the city and temperature from the data, like this:\n\n`Johannesburg: 24.5 C`",
+      "starter": "import json\n\nwith open(\"weather.json\") as f:\n    resp = json.load(f)\n\ndata = resp[\"data\"]\n# print the city and temperature\n",
+      "solution": "import json\n\nwith open(\"weather.json\") as f:\n    resp = json.load(f)\n\ndata = resp[\"data\"]\nprint(f\"{data['city']}: {data['temp_c']} C\")\n",
+      "hints": [
+        "The values are inside data. You need data[\"city\"] and data[\"temp_c\"].",
+        "Use an f-string. Inside it, use single quotes for the keys: {data['city']}.",
+        "print(f\"{data['city']}: {data['temp_c']} C\")"
+      ],
+      "tests": [
+        {
+          "files": {
+            "weather.json": "{\n  \"status\": 200,\n  \"data\": {\n    \"city\": \"Johannesburg\",\n    \"temp_c\": 24.5,\n    \"forecast\": [\n      {\n        \"day\": \"Mon\",\n        \"rain_mm\": 0.0\n      },\n      {\n        \"day\": \"Tue\",\n        \"rain_mm\": 12.5\n      },\n      {\n        \"day\": \"Wed\",\n        \"rain_mm\": 3.0\n      },\n      {\n        \"day\": \"Thu\",\n        \"rain_mm\": 8.0\n      }\n    ]\n  }\n}"
+          },
+          "expect": "Johannesburg: 24.5 C"
+        },
+        {
+          "files": {
+            "weather.json": "{\n  \"status\": 200,\n  \"data\": {\n    \"city\": \"Cape Town\",\n    \"temp_c\": 18.0,\n    \"forecast\": [\n      {\n        \"day\": \"Fri\",\n        \"rain_mm\": 0.0\n      },\n      {\n        \"day\": \"Sat\",\n        \"rain_mm\": 1.5\n      },\n      {\n        \"day\": \"Sun\",\n        \"rain_mm\": 0.5\n      }\n    ]\n  }\n}"
+          },
+          "expect": "Cape Town: 18.0 C"
+        }
+      ]
+    },
+    {
+      "title": "Check the status first",
+      "task": "Never trust data before checking the status. If the status is 200, print `OK:` and the city. Otherwise print `Error` and the status number.\n\nGood response: `OK: Johannesburg`\nBad response: `Error 404`",
+      "starter": "import json\n\nwith open(\"weather.json\") as f:\n    resp = json.load(f)\n\n# if status is 200 print OK: and the city\n# else print Error and the status\n",
+      "solution": "import json\n\nwith open(\"weather.json\") as f:\n    resp = json.load(f)\n\nif resp[\"status\"] == 200:\n    print(\"OK:\", resp[\"data\"][\"city\"])\nelse:\n    print(\"Error\", resp[\"status\"])\n",
+      "hints": [
+        "You need if / else. The test is resp[\"status\"] == 200 (two equals signs).",
+        "In the if branch: print(\"OK:\", resp[\"data\"][\"city\"]). In the else branch: print(\"Error\", resp[\"status\"]).",
+        "Remember the colon after if and after else, and indent the print lines by 4 spaces."
+      ],
+      "tests": [
+        {
+          "files": {
+            "weather.json": "{\n  \"status\": 200,\n  \"data\": {\n    \"city\": \"Johannesburg\",\n    \"temp_c\": 24.5,\n    \"forecast\": [\n      {\n        \"day\": \"Mon\",\n        \"rain_mm\": 0.0\n      },\n      {\n        \"day\": \"Tue\",\n        \"rain_mm\": 12.5\n      },\n      {\n        \"day\": \"Wed\",\n        \"rain_mm\": 3.0\n      },\n      {\n        \"day\": \"Thu\",\n        \"rain_mm\": 8.0\n      }\n    ]\n  }\n}"
+          },
+          "expect": "OK: Johannesburg"
+        },
+        {
+          "files": {
+            "weather.json": "{\n  \"status\": 404,\n  \"data\": {}\n}"
+          },
+          "expect": "Error 404"
+        },
+        {
+          "files": {
+            "weather.json": "{\n  \"status\": 500,\n  \"data\": {}\n}"
+          },
+          "expect": "Error 500"
+        }
+      ],
+      "code_has": [
+        "if "
+      ]
+    },
+    {
+      "title": "Rain on the shoot?",
+      "task": "The data has a `forecast`: a list of days, each with `day` and `rain_mm`. For every day with MORE than 5 mm of rain, print `Rain risk:` and the day. At the end print how many days. Example:\n\n`Rain risk: Tue`\n`Rain risk: Thu`\n`Rain days: 2`",
+      "starter": "import json\n\nwith open(\"weather.json\") as f:\n    resp = json.load(f)\n\ndays = resp[\"data\"][\"forecast\"]\ncount = 0\n# loop over days, print the risky ones, add 1 to count\nprint(\"Rain days:\", count)\n",
+      "solution": "import json\n\nwith open(\"weather.json\") as f:\n    resp = json.load(f)\n\ndays = resp[\"data\"][\"forecast\"]\ncount = 0\nfor d in days:\n    if d[\"rain_mm\"] > 5:\n        print(\"Rain risk:\", d[\"day\"])\n        count += 1\nprint(\"Rain days:\", count)\n",
+      "hints": [
+        "Use for d in days:. Each d is one dictionary, so d[\"rain_mm\"] is its rain.",
+        "Inside the loop: if d[\"rain_mm\"] > 5: then print and count += 1.",
+        "print(\"Rain risk:\", d[\"day\"]) then count += 1, both indented under the if."
+      ],
+      "tests": [
+        {
+          "files": {
+            "weather.json": "{\n  \"status\": 200,\n  \"data\": {\n    \"city\": \"Johannesburg\",\n    \"temp_c\": 24.5,\n    \"forecast\": [\n      {\n        \"day\": \"Mon\",\n        \"rain_mm\": 0.0\n      },\n      {\n        \"day\": \"Tue\",\n        \"rain_mm\": 12.5\n      },\n      {\n        \"day\": \"Wed\",\n        \"rain_mm\": 3.0\n      },\n      {\n        \"day\": \"Thu\",\n        \"rain_mm\": 8.0\n      }\n    ]\n  }\n}"
+          },
+          "expect": "Rain risk: Tue\nRain risk: Thu\nRain days: 2"
+        },
+        {
+          "files": {
+            "weather.json": "{\n  \"status\": 200,\n  \"data\": {\n    \"city\": \"Cape Town\",\n    \"temp_c\": 18.0,\n    \"forecast\": [\n      {\n        \"day\": \"Fri\",\n        \"rain_mm\": 0.0\n      },\n      {\n        \"day\": \"Sat\",\n        \"rain_mm\": 1.5\n      },\n      {\n        \"day\": \"Sun\",\n        \"rain_mm\": 0.5\n      }\n    ]\n  }\n}"
+          },
+          "expect": "Rain days: 0"
+        }
+      ],
+      "code_has": [
+        "for "
+      ]
+    }
+  ],
+  "recap": [
+    "An API is a data door for programs. You send a request and get a response.",
+    "Most responses are JSON, so `json.loads` and dictionaries do the work.",
+    "Check the status code first: 200 is good, 404 is not found, 500 is their problem.",
+    "At the PC, `requests.get(url)` makes the real request."
+  ],
+  "words": [
+    {
+      "term": "API",
+      "meaning": "A way for programs to ask another computer for data."
+    },
+    {
+      "term": "request",
+      "meaning": "Your program asking for something from an address."
+    },
+    {
+      "term": "response",
+      "meaning": "What comes back: a status number and some data."
+    },
+    {
+      "term": "status code",
+      "meaning": "A number saying how the request went, like 200 or 404."
+    },
+    {
+      "term": "URL",
+      "meaning": "The web address you send the request to."
+    }
+  ],
+  "pc": {
+    "title": "Make a real request",
+    "why": "You will ask a real computer for the real weather and print one number. This is the same program you wrote today, but live.",
+    "steps": [
+      "Open VS Code. If Python 30 Work is not showing, click File, Open Recent, and pick it. Open the terminal with Terminal, then New Terminal.",
+      "Check the venv is on: the line should start with `(.venv)`. If not, type `.venv\\Scripts\\Activate.ps1` and press Enter. (If scripts are blocked, use `.venv\\Scripts\\python.exe` instead of `python` below.)",
+      "Make the file: click the New File icon at the top of the left panel (a page with a plus), type `api_test.py`, and press Enter.",
+      "Type this into the file (one URL line, no breaks):\n\nimport requests\n\nurl = \"https://api.open-meteo.com/v1/forecast?latitude=-26.2&longitude=28.04&current_weather=true\"\nr = requests.get(url, timeout=10)\nprint(\"Status:\", r.status_code)\ndata = r.json()\nprint(\"Temp in Johannesburg now:\", data[\"current_weather\"][\"temperature\"])",
+      "Press Ctrl+S to save. In the terminal type `python api_test.py` and press Enter.",
+      "You should see `Status: 200` and a temperature like 24.1. That number came from a computer far away, just now.",
+      "If you see ModuleNotFoundError: the venv is not on, go back to step 2. If you see a ConnectionError: check your Wi-Fi and run it again. If Status is not 200, read the number with the table from today's lesson.",
+      "Try it: change `latitude=-26.2&longitude=28.04` to Cape Town (`latitude=-33.9&longitude=18.42`), save, run again. Different place, different number."
+    ]
+  }
+}

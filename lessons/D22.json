@@ -1,0 +1,217 @@
+{
+  "id": "D22",
+  "day": 22,
+  "week": 5,
+  "title": "Folders and file names",
+  "hook": "List a card dump, count clips by type and rename them all in one go.",
+  "badge": "Folder Boss",
+  "warmup": [
+    {
+      "q": "A file already has text in it. You open it with mode `\"w\"` and write one line. What is left?",
+      "options": [
+        "The old text plus your line",
+        "Only your line",
+        "An error"
+      ],
+      "answer": 1,
+      "explain": "`\"w\"` erases first, then writes. To keep the old text and add to it, use `\"a\"`."
+    },
+    {
+      "q": "What does `import` do?",
+      "options": [
+        "Brings in a ready-made toolbox of code",
+        "Downloads a movie",
+        "Saves your file"
+      ],
+      "answer": 0,
+      "explain": "A module is code someone else wrote. `import` lets you use it, like `random` or `math`."
+    },
+    {
+      "q": "What does `\"A001_C003\".split(\"_\")` give?",
+      "options": [
+        "\"A001C003\"",
+        "[\"A\", \"001\", \"_C003\"]",
+        "[\"A001\", \"C003\"]"
+      ],
+      "answer": 2,
+      "explain": "`split` cuts the text at every `_` and gives a list of the pieces."
+    }
+  ],
+  "why": [
+    {
+      "heading": "Why folders",
+      "text": "A card dump is 200 files named like `A001_C003.mp4`. Renaming by hand takes an hour and you will slip. Python can list a folder, pick out the video files and rename every one in a blink. The tool for it is **pathlib**."
+    },
+    {
+      "heading": "A Path is an address",
+      "text": "`from pathlib import Path` brings in one tool from the module. Then `Path(\"clips\")` is a folder address and `Path(\"clips/A001_C003.mp4\")` is a file address. It is only an address, nothing is opened yet."
+    },
+    {
+      "heading": "Parts of a name",
+      "text": "An address knows its pieces. For `p = Path(\"clips/A001_C003.mp4\")`:\n\n`p.name` is `A001_C003.mp4`\n`p.stem` is `A001_C003`\n`p.suffix` is `.mp4`\n\nThe **suffix** is the file type. The **stem** is the name without it."
+    },
+    {
+      "heading": "Join and look",
+      "text": "Join with `/`: `Path(\"clips\") / \"notes.txt\"`. Ask `.exists()` for True or False. `folder.glob(\"*.mp4\")` finds every match, where `*` means anything. Wrap it as `sorted(folder.glob(\"*.mp4\"))` so the order is always the same. `folder.iterdir()` lists everything."
+    },
+    {
+      "heading": "Rename",
+      "text": "`p.rename(new_path)` renames the file on disk. It is real and there is no undo, so practise on copies. Build the new address from the folder: `p.rename(folder / \"new.mp4\")`. Never rename while you are mid-way through a loop over the live folder: make the list first with `sorted(...)`."
+    }
+  ],
+  "watch": {
+    "intro": "Tap Run. A small fake folder called clips holds two videos and a text file. Python lists only the videos.",
+    "code": "from pathlib import Path\nfolder = Path(\"clips\")\nfor p in sorted(folder.glob(\"*.mp4\")):\n    print(p.name, p.stem, p.suffix)\nprint(folder.exists(), (folder / \"missing.txt\").exists())",
+    "files": {
+      "clips/A001_C001.mp4": "x",
+      "clips/A001_C002.mp4": "x",
+      "clips/notes.txt": "hello"
+    },
+    "explain": [
+      "`glob(\"*.mp4\")` matches only names ending in .mp4, so notes.txt is skipped.",
+      "`sorted(...)` puts them in the same order every time.",
+      "For each clip we print its name, its stem (no type) and its suffix (the type).",
+      "The last line asks if the folder exists (True) and if missing.txt exists (False)."
+    ],
+    "break_it": "Change `\"*.mp4\"` to `\"*.mov\"` and tap Run. There is no error, the loop just finds nothing, so only `True False` shows. A glob that matches nothing is silent. Put it back."
+  },
+  "tasks": [
+    {
+      "title": "List the clips",
+      "task": "The folder `day1` has some video files and a log. Show only the file names of the `.mp4` files, one per line. The result for the first test is:\n\n`A001_C001.mp4`\n`A001_C002.mp4`",
+      "starter": "from pathlib import Path\nfolder = Path(\"day1\")\nfor p in sorted(folder.glob(\"*.mp4\")):\n    print(p)\n",
+      "solution": "from pathlib import Path\nfolder = Path(\"day1\")\nfor p in sorted(folder.glob(\"*.mp4\")):\n    print(p.name)\n",
+      "hints": [
+        "Printing `p` shows the whole address, with the folder. You only want one part of it.",
+        "The part with the name and type together is `p.name`.",
+        "Change print(p) to print(p.name)"
+      ],
+      "tests": [
+        {
+          "files": {
+            "day1/A001_C001.mp4": "x",
+            "day1/A001_C002.mp4": "x",
+            "day1/log.txt": "ok"
+          },
+          "expect": "A001_C001.mp4\nA001_C002.mp4"
+        },
+        {
+          "files": {
+            "day1/B002_C005.mp4": "x",
+            "day1/S001.wav": "x",
+            "day1/B002_C004.mp4": "x"
+          },
+          "expect": "B002_C004.mp4\nB002_C005.mp4"
+        }
+      ],
+      "code_has": [
+        ".name"
+      ]
+    },
+    {
+      "title": "Count by type",
+      "task": "The folder `card` has video and sound files. Count them by type and show:\n\n`MP4: 3`\n`WAV: 1`\n\n(for the first test files). Use `.suffix` to tell them apart.",
+      "starter": "from pathlib import Path\nmp4 = 0\nwav = 0\nfor p in sorted(Path(\"card\").iterdir()):\n    # count by p.suffix here\n    pass\nprint(\"MP4:\", mp4)\nprint(\"WAV:\", wav)\n",
+      "solution": "from pathlib import Path\nmp4 = 0\nwav = 0\nfor p in sorted(Path(\"card\").iterdir()):\n    if p.suffix == \".mp4\":\n        mp4 += 1\n    elif p.suffix == \".wav\":\n        wav += 1\nprint(\"MP4:\", mp4)\nprint(\"WAV:\", wav)\n",
+      "hints": [
+        "Inside the loop, `p.suffix` is a string like `.mp4`. Compare it with `==`.",
+        "Use if p.suffix == \".mp4\": then add 1 to mp4. Use elif for the .wav files.",
+        "if p.suffix == \".mp4\":  then  mp4 += 1   and   elif p.suffix == \".wav\":  then  wav += 1"
+      ],
+      "tests": [
+        {
+          "files": {
+            "card/A001_C001.mp4": "x",
+            "card/A001_C002.mp4": "x",
+            "card/S001.wav": "x",
+            "card/A001_C003.mp4": "x"
+          },
+          "expect": "MP4: 3\nWAV: 1"
+        },
+        {
+          "files": {
+            "card/S001.wav": "x",
+            "card/S002.wav": "x",
+            "card/B001_C001.mp4": "x",
+            "card/readme.txt": "x"
+          },
+          "expect": "MP4: 1\nWAV: 2"
+        }
+      ],
+      "code_has": [
+        ".suffix",
+        "iterdir"
+      ]
+    },
+    {
+      "title": "Add a prefix to every clip",
+      "task": "The folder `raw` has some `.mp4` clips. Rename each one by adding `ICL_` at the front, so `A001.mp4` becomes `ICL_A001.mp4`. At the end show how many you renamed, like:\n\n`Renamed 2`",
+      "starter": "from pathlib import Path\nfolder = Path(\"raw\")\nn = 0\nfor p in sorted(folder.glob(\"*.mp4\")):\n    # rename p here\n    n += 1\nprint(\"Renamed\", n)\n",
+      "solution": "from pathlib import Path\nfolder = Path(\"raw\")\nn = 0\nfor p in sorted(folder.glob(\"*.mp4\")):\n    p.rename(folder / (\"ICL_\" + p.name))\n    n += 1\nprint(\"Renamed\", n)\n",
+      "hints": [
+        "`p.rename(...)` needs the new address inside the brackets.",
+        "The new address is the folder, joined with / to the new name. The new name is \"ICL_\" plus p.name.",
+        "Type: p.rename(folder / (\"ICL_\" + p.name))"
+      ],
+      "tests": [
+        {
+          "files": {
+            "raw/A001.mp4": "a",
+            "raw/A002.mp4": "b"
+          },
+          "expect": "Renamed 2",
+          "expect_files": {
+            "raw/ICL_A001.mp4": "a",
+            "raw/ICL_A002.mp4": "b"
+          }
+        },
+        {
+          "files": {
+            "raw/B001.mp4": "x",
+            "raw/B002.mp4": "y",
+            "raw/B003.mp4": "z",
+            "raw/notes.txt": "n"
+          },
+          "expect": "Renamed 3",
+          "expect_files": {
+            "raw/ICL_B001.mp4": "x",
+            "raw/ICL_B003.mp4": "z",
+            "raw/notes.txt": "n"
+          }
+        }
+      ],
+      "code_has": [
+        ".rename("
+      ]
+    }
+  ],
+  "recap": [
+    "`from pathlib import Path` gives you addresses: `Path(\"clips\")`.",
+    "`.name` is the full file name, `.stem` is without the type, `.suffix` is the type.",
+    "`/` joins a folder and a name. `.exists()` is True or False.",
+    "`sorted(folder.glob(\"*.mp4\"))` lists matching files in a steady order.",
+    "`p.rename(new)` is real. Practise on copies."
+  ],
+  "words": [
+    {
+      "term": "pathlib",
+      "meaning": "The module for working with folders and file names."
+    },
+    {
+      "term": "Path",
+      "meaning": "An address of a file or folder. It is not opened until you ask."
+    },
+    {
+      "term": "stem",
+      "meaning": "The file name without its type: A001_C003."
+    },
+    {
+      "term": "suffix",
+      "meaning": "The file type at the end, with the dot: .mp4"
+    },
+    {
+      "term": "glob",
+      "meaning": "Find files by a pattern. `*` stands for anything."
+    }
+  ]
+}

@@ -1,0 +1,157 @@
+{
+  "id": "D02",
+  "day": 2,
+  "week": 1,
+  "title": "Give things a name",
+  "hook": "Store a value once, then use it anywhere in your program.",
+  "badge": "Name Giver",
+  "warmup": [
+    {
+      "q": "What does `print(\"Camera\")` show on the screen?",
+      "options": [
+        "\"Camera\" with the quotes",
+        "print(\"Camera\")",
+        "Camera"
+      ],
+      "answer": 2,
+      "explain": "The quotes only tell Python where the text starts and ends. They are not shown."
+    },
+    {
+      "q": "A file has three print lines. Which one does Python run first?",
+      "options": [
+        "The last one",
+        "The top one",
+        "The longest one"
+      ],
+      "answer": 1,
+      "explain": "Python reads top to bottom, one line at a time. The order of your lines is the order on screen."
+    },
+    {
+      "q": "You forget the closing bracket on a print line. What happens?",
+      "options": [
+        "Python quietly fixes it",
+        "Python skips that line",
+        "Python shows an error that names the line"
+      ],
+      "answer": 2,
+      "explain": "An error is a note, not a failure. It tells you which line to look at."
+    }
+  ],
+  "why": [
+    {
+      "heading": "A name for a value",
+      "text": "A **variable** is a name stuck on a value, like a label on a flight case. Write `crew = \"Thabo\"` and from then on the name `crew` means Thabo.\n\nThe `=` does not mean equals like in maths. It means: store this value under this name."
+    },
+    {
+      "heading": "Why bother?",
+      "text": "Say the call time appears in 20 places in your program, and it moves to 07:30. Without variables you fix 20 lines.\n\nWith a variable you write it once:\n\n`call = \"07:30\"`\n\nChange that one line and every use of it updates. Variables let you say things once."
+    },
+    {
+      "heading": "Use it, change it",
+      "text": "To use a stored value, write the name with no quotes: `print(call)`. With quotes you would just print the word call.\n\nStore something new under the same name and the old value is gone:\n\n`call = \"08:00\"`\n\nPython runs top to bottom, so lines below see the newest value."
+    },
+    {
+      "heading": "Naming rules",
+      "text": "Use letters, numbers and underscores. No spaces, and never start with a number. `crew_call` is good. `crew call` and `2nd_ad` are not.\n\nCapitals matter: `Call` and `call` are two different names. Pick names that explain themselves, like `day_rate`, not `x`."
+    },
+    {
+      "heading": "Names inside text",
+      "text": "To put a variable inside text, add an `f` before the first quote and wrap the name in curly brackets:\n\n`print(f\"Hello {name}\")`\n\nPython swaps `{name}` for the stored value. This is an **f-string**. If you use a name you never stored, Python shows a NameError: it does not know that name."
+    }
+  ],
+  "watch": {
+    "intro": "Tap Run. One name, three different values over time.",
+    "code": "film = \"Imvana\"\nprint(film)\nfilm = \"Chasing the Bag\"\nprint(film)\nprint(f\"Now editing {film}\")",
+    "explain": [
+      "Line 1 stores the text `Imvana` under the name `film`.",
+      "Line 3 stores a new value in the same name. The old one is gone.",
+      "The last line uses an f-string: `{film}` is swapped for the current value."
+    ],
+    "break_it": "Break it on purpose: in the last line change `{film}` to `{flim}` and tap Run. The error says `NameError: name 'flim' is not defined`. Python is telling you it never met that name. Fix the spelling and run again."
+  },
+  "tasks": [
+    {
+      "title": "Print a stored value",
+      "task": "The variable `role` already holds a job. Print it so the screen shows exactly: `Gaffer`\n\nPrint the name `role` with no quotes.",
+      "starter": "role = \"Gaffer\"\n# now print the variable role (no quotes)\n",
+      "solution": "role = \"Gaffer\"\nprint(role)\n",
+      "hints": [
+        "You want print, then brackets, then the name role inside.",
+        "No quotes around role, or you will print the word role.",
+        "Type exactly: print(role)"
+      ],
+      "tests": [
+        {
+          "expect": "Gaffer"
+        }
+      ],
+      "code_has": [
+        "print(role)"
+      ]
+    },
+    {
+      "title": "The call time moved",
+      "task": "The crew call moved to 07:30. Change the stored value so the program shows exactly: `Crew call: 07:30`\n\nChange the variable, not the print line.",
+      "starter": "call = \"06:00\"\nprint(f\"Crew call: {call}\")\n",
+      "solution": "call = \"07:30\"\nprint(f\"Crew call: {call}\")\n",
+      "hints": [
+        "Only line 1 needs to change. The print line already uses the variable.",
+        "Change the text between the quotes on line 1.",
+        "Line 1 should be: call = \"07:30\""
+      ],
+      "tests": [
+        {
+          "expect": "Crew call: 07:30"
+        }
+      ],
+      "code_not": [
+        "Crew call: 07:30"
+      ]
+    },
+    {
+      "title": "Slate it",
+      "task": "The director wants another take. Change `take` to `\"2\"` (keep the quotes for now), then print the slate with one f-string so it shows exactly:\n\n`Scene 12, Take 2`",
+      "starter": "scene = \"12\"\ntake = \"1\"\n# change take, then print the slate with an f-string\n",
+      "solution": "scene = \"12\"\ntake = \"1\"\ntake = \"2\"\nprint(f\"Scene {scene}, Take {take}\")\n",
+      "hints": [
+        "Store a new value in take on its own line, below the old one: take = \"2\"",
+        "Start the print with f before the opening quote. Put {scene} and {take} where the values go.",
+        "print(f\"Scene {scene}, Take {take}\")"
+      ],
+      "tests": [
+        {
+          "expect": "Scene 12, Take 2"
+        }
+      ],
+      "code_has": [
+        "{scene}",
+        "{take}"
+      ]
+    }
+  ],
+  "recap": [
+    "`name = value` stores a value under a name. The `=` means store.",
+    "Use a variable by writing its name with no quotes. Store again to change it.",
+    "Names: letters, numbers, underscores, no spaces, not starting with a number.",
+    "An f-string `f\"Hi {name}\"` puts stored values inside text.",
+    "NameError means Python does not know that name: check the spelling."
+  ],
+  "words": [
+    {
+      "term": "variable",
+      "meaning": "A name that holds a value."
+    },
+    {
+      "term": "assign",
+      "meaning": "Store a value under a name with `=`."
+    },
+    {
+      "term": "f-string",
+      "meaning": "Text with an f in front that fills in {names}."
+    },
+    {
+      "term": "NameError",
+      "meaning": "Python met a name it was never given."
+    }
+  ]
+}

@@ -1,0 +1,205 @@
+{
+  "id": "D18",
+  "day": 18,
+  "week": 4,
+  "title": "Catch the crash",
+  "hook": "Stop bad input from crashing your program, and ask again until it is right.",
+  "badge": "Crash Proof",
+  "warmup": [
+    {
+      "q": "A function only prints its answer and has no return. What does `x = f()` store in x?",
+      "options": [
+        "What it printed",
+        "None",
+        "0"
+      ],
+      "answer": 1,
+      "explain": "No return means the function hands back None. The printing happened, but nothing was handed back."
+    },
+    {
+      "q": "What does `\"a,b,c\".split(\",\")` give?",
+      "options": [
+        "The list a, b, c",
+        "The text a b c",
+        "An error"
+      ],
+      "answer": 0,
+      "explain": "split cuts text at every comma and gives you a list of the pieces."
+    },
+    {
+      "q": "What type of thing does `input()` always give you?",
+      "options": [
+        "A whole number",
+        "Text",
+        "A decimal number"
+      ],
+      "answer": 1,
+      "explain": "input() always gives text, even if the person types digits. Use int() or float() to convert."
+    }
+  ],
+  "why": [
+    {
+      "heading": "Crashes cost you",
+      "text": "You ask for hours worked. Someone types `eight` instead of `8`. `int(\"eight\")` fails, the program stops dead and shows a red error. Real people type the wrong thing all the time. A good tool does not die. It says \"numbers only\" and carries on, like a crew that fixes a problem without stopping the whole shoot."
+    },
+    {
+      "heading": "try and except",
+      "text": "`try:`\n`    n = int(text)`\n`except ValueError:`\n`    print(\"Numbers only\")`\n\nPython **tries** the indented lines. If a ValueError happens, it jumps to the `except` lines instead of crashing. If nothing goes wrong, the `except` part is skipped."
+    },
+    {
+      "heading": "Name the error you expect",
+      "text": "The word after `except` is the error you are ready for. **ValueError** is the right kind of thing with the wrong content, like `int(\"eight\")`. **ZeroDivisionError** means you divided by zero. Naming the error matters: a different bug will still show up so you can fix it, instead of being hidden."
+    },
+    {
+      "heading": "Ask again until it is right",
+      "text": "Put `try` inside `while True:` and add `break` after the line that worked. The loop runs forever, but `break` is only reached when the conversion worked, so it leaves the loop. If it fails, the `except` runs, the loop goes round, and Python asks again. Like a 1st AD calling \"going again!\" until the take is good."
+    },
+    {
+      "heading": "Stack several excepts",
+      "text": "You can put more than one `except` under one `try`. Python picks the one that matches:\n\n`except ValueError:`\n`    print(\"Numbers only\")`\n`except ZeroDivisionError:`\n`    print(\"Cannot divide by 0\")`\n\nPace is minutes divided by km. If km is 0, it crashes. Nobody can run zero km."
+    }
+  ],
+  "watch": {
+    "intro": "The lesson types `eight` and then `8` for you. Watch the program ask again.",
+    "code": "while True:\n    text = input(\"Hours worked? \")\n    try:\n        hours = int(text)\n        break\n    except ValueError:\n        print(\"Numbers only, please.\")\nprint(\"Pay: R\", hours * 150)",
+    "inputs": [
+      "eight",
+      "8"
+    ],
+    "explain": [
+      "`int(text)` fails on `eight`, so Python jumps to `except ValueError` and prints the message.",
+      "The `break` was skipped, so the loop goes round and asks again.",
+      "On `8` the conversion works, `break` leaves the loop, and the pay is shown."
+    ],
+    "break_it": "Now break it: change `ValueError` to `ZeroDivisionError` and tap Run. The error is now a plain `ValueError: invalid literal for int() with base 10: 'eight'`. That means: your except waited for a different error, so this one got through. The name after except must match. Put it back."
+  },
+  "tasks": [
+    {
+      "title": "Fill in the error name",
+      "task": "The program asks for km. If it is a number it shows `Got 10`. If not it must show `Not a number`. The blank `___` is where the error name goes. Replace it.",
+      "starter": "text = input(\"Km? \")\ntry:\n    km = int(text)\n    print(\"Got\", km)\nexcept ___:\n    print(\"Not a number\")\n",
+      "solution": "text = input(\"Km? \")\ntry:\n    km = int(text)\n    print(\"Got\", km)\nexcept ValueError:\n    print(\"Not a number\")\n",
+      "hints": [
+        "The blank is the name of the error that int(\"ten\") causes.",
+        "That error starts with Value.",
+        "Replace ___ with ValueError."
+      ],
+      "code_has": [
+        "except ValueError"
+      ],
+      "tests": [
+        {
+          "inputs": [
+            "10"
+          ],
+          "expect": "Km? 10\nGot 10"
+        },
+        {
+          "inputs": [
+            "ten"
+          ],
+          "expect": "Km? ten\nNot a number"
+        }
+      ]
+    },
+    {
+      "title": "Ask again until valid",
+      "task": "Ask `Hours? ` until a whole number is typed. For each bad answer show `Try again`. Then show the pay at R150 an hour, like `Pay: R1200` for 8 hours.",
+      "starter": "while True:\n    text = input(\"Hours? \")\n    # try to turn text into a whole number called hours\n    # if it works, break. If it fails, print Try again\n\nprint(f\"Pay: R{hours * 150}\")\n",
+      "solution": "while True:\n    text = input(\"Hours? \")\n    try:\n        hours = int(text)\n        break\n    except ValueError:\n        print(\"Try again\")\n\nprint(f\"Pay: R{hours * 150}\")\n",
+      "hints": [
+        "Inside the loop you need a try, then an except ValueError.",
+        "In the try: hours = int(text) and then break. In the except: print(\"Try again\").",
+        "try: on its own line, then indented hours = int(text) and break. Then except ValueError: and print(\"Try again\"), lined up with try."
+      ],
+      "code_has": [
+        "try:",
+        "except ValueError",
+        "break"
+      ],
+      "tests": [
+        {
+          "inputs": [
+            "abc",
+            "8"
+          ],
+          "expect": "Hours? abc\nTry again\nHours? 8\nPay: R1200"
+        },
+        {
+          "inputs": [
+            "x",
+            "y",
+            "10"
+          ],
+          "expect": "Hours? x\nTry again\nHours? y\nTry again\nHours? 10\nPay: R1500"
+        }
+      ]
+    },
+    {
+      "title": "Safe pace",
+      "task": "The pace program crashes on bad input. Wrap it in one `try`. Show `Numbers only` for a ValueError and `Km cannot be 0` for a ZeroDivisionError. Good input still shows the pace, like `6.00 min per km`.",
+      "starter": "minutes = int(input(\"Minutes? \"))\nkm = int(input(\"Km? \"))\nprint(f\"{minutes / km:.2f} min per km\")\n",
+      "solution": "try:\n    minutes = int(input(\"Minutes? \"))\n    km = int(input(\"Km? \"))\n    print(f\"{minutes / km:.2f} min per km\")\nexcept ValueError:\n    print(\"Numbers only\")\nexcept ZeroDivisionError:\n    print(\"Km cannot be 0\")\n",
+      "hints": [
+        "Put the three lines inside a try, indented by 4 spaces. Then add two except blocks.",
+        "except ValueError: prints Numbers only. except ZeroDivisionError: prints Km cannot be 0.",
+        "The two except lines are lined up with the word try, not indented."
+      ],
+      "code_has": [
+        "except ValueError",
+        "except ZeroDivisionError"
+      ],
+      "tests": [
+        {
+          "inputs": [
+            "30",
+            "5"
+          ],
+          "expect": "Minutes? 30\nKm? 5\n6.00 min per km"
+        },
+        {
+          "inputs": [
+            "30",
+            "0"
+          ],
+          "expect": "Minutes? 30\nKm? 0\nKm cannot be 0"
+        },
+        {
+          "inputs": [
+            "thirty",
+            "5"
+          ],
+          "expect": "Minutes? thirty\nNumbers only"
+        }
+      ]
+    }
+  ],
+  "recap": [
+    "`try:` runs risky lines. `except ErrorName:` runs if that error happens.",
+    "Name the error you expect. ValueError for bad conversions, ZeroDivisionError for dividing by 0.",
+    "`while True` plus `try` plus `break` asks again until the answer is valid.",
+    "You can stack several `except` blocks under one `try`."
+  ],
+  "words": [
+    {
+      "term": "try",
+      "meaning": "Run these lines, and be ready if one fails."
+    },
+    {
+      "term": "except",
+      "meaning": "What to do if the named error happens."
+    },
+    {
+      "term": "ValueError",
+      "meaning": "Right kind of thing, wrong content, like int(\"eight\")."
+    },
+    {
+      "term": "ZeroDivisionError",
+      "meaning": "You tried to divide by zero."
+    },
+    {
+      "term": "break",
+      "meaning": "Leaves the loop straight away."
+    }
+  ]
+}
