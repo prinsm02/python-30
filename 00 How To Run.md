@@ -23,9 +23,9 @@ Nothing to install. Real Python runs inside the page. The first Run of the day t
 - **Weekends:** nothing. The course waits for you.
 
 ## The 5am reminder
-- A phone calendar reminder fires at 05:00, Monday to Friday, with the link.
-- A small Claude task (`python-30-5am`, Haiku, low effort) also emails the link. It only runs while the Claude desktop app is open.
-- **Pause for shoot weeks:** double-click `Pause or Resume.bat` in this folder to stop the email (run it again to restart). Pause the calendar reminder in your calendar app.
+- A small Claude task (`python-30-5am`, Haiku, low effort) emails you the link at about 05:00, Monday to Friday, and sends a notification. It reads nothing and costs almost nothing.
+- It only runs while the Claude desktop app is open on the PC. If the PC was off, it runs when the app next opens. The course itself never needs the PC: the link always works.
+- **Pause for shoot weeks:** double-click `Pause or Resume.bat` in this folder to stop the pings (run it again to restart).
 
 ## For Claude
 - Python: `C:\Users\Matthew Prins\AppData\Local\Programs\Python\Python312\python.exe`
