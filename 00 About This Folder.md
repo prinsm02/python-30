@@ -13,7 +13,7 @@
 
 **Sub-folders**
 - `app`: the player (`engine.js`, `style.css`, icons) and the built data (`lessons.js`, `harness.js`). Built files are never edited by hand.
-- `lessons`: the 30 lesson sources, `D01.json` to `D30.json`. The only place lessons are edited.
+- `lessons`: the 30 lesson sources, `D01.json` to `D30.json`, plus `editor.json` (one VS Code or Cursor tip per day, merged into each lesson by the checker; added 2026-11-23 because Matthew wants the course to slowly teach him VS Code and Cursor, and he has no Cursor plan yet). The only place lessons are edited.
 - `tutor`: one short note per day (key points, hints, answers) for a cheap helper model. Built from the lessons.
 - `tools`: `verify.py` (checks every lesson and builds the app data), `harness.py` (the one code runner used by both the app and the checker), `LESSON SPEC.md` (the rules for writing a lesson).
 

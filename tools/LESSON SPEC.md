@@ -22,6 +22,9 @@ Matthew, a filmmaker (1st AD, gaffer, editor), runner, total Python beginner. He
 - `recap`: 3 to 5 one-line takeaways. `words`: 3 to 6 `{term, meaning}`.
 - Optional `pc`: `{title, why, steps: [...]}` = a short "when you are at the PC" checklist (days 19, 20, 25 to 30). Steps are exact clicks and commands for Windows with VS Code. He ticks them off himself.
 
+## Editor tips (`lessons\editor.json`)
+One entry per day, keyed by day id: `{app, title, text, try}`. `app` is "VS Code", "Cursor" or "VS Code and Cursor". `text` (max 480 chars) says what the thing is and why it helps, tied to that day's Python idea where possible. `try` (max 300 chars) is one 2-minute action at the PC with exact keys (Windows). Go slowly: one skill a day, VS Code for Days 1 to 25, Cursor from Day 26. Matthew has no Cursor plan yet, so never require paid features, and do not state prices (they change).
+
 ## Tests (how a task is marked)
 Each test is `{inputs?, files?, seed?, expect?, contains?, expect_files?}`.
 - The program runs with `inputs` fed to input() in order. **Output includes the prompt and the typed answer, like a real terminal.** Example: `name = input("Name? ")` then `print("Hi", name)` with `"inputs": ["Sam"]` gives output `Name? Sam\nHi Sam`.

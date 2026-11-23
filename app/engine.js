@@ -10,7 +10,7 @@
   var app = document.getElementById('app');
 
   // ---------- saved progress ----------
-  var S = { done: {}, tasks: {}, code: {}, warm: {}, pos: {}, pc: {}, pcTodo: {}, xp: 0, streak: 0, last: null };
+  var S = { done: {}, tasks: {}, code: {}, warm: {}, pos: {}, pc: {}, pcTodo: {}, ed: {}, edOpen: false, xp: 0, streak: 0, last: null };
   try { var raw = localStorage.getItem(KEY); if (raw) { var o = JSON.parse(raw); for (var k in o) S[k] = o[k]; } } catch (e) {}
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 
@@ -217,8 +217,13 @@
 
   // ---------- screens ----------
   var cur = null; // {L, step, i, ...}
-  function stepsFor(L) { return L.pc ? ['warm', 'why', 'watch', 'do', 'pc', 'win'] : ['warm', 'why', 'watch', 'do', 'win']; }
-  var STEP_NAME = { warm: 'Warm-up', why: 'Why', watch: 'Watch', do: 'Do', pc: 'On the PC', win: 'Win' };
+  function stepsFor(L) {
+    var s = ['warm', 'why', 'watch', 'do'];
+    if (L.editor) s.push('tool');
+    if (L.pc) s.push('pc');
+    s.push('win'); return s;
+  }
+  var STEP_NAME = { warm: 'Warm-up', why: 'Why', watch: 'Watch', do: 'Do', tool: 'Editor', pc: 'On the PC', win: 'Win' };
 
   function home() {
     cur = null; window.scrollTo(0, 0);
@@ -230,6 +235,16 @@
     var todo = Object.keys(S.pcTodo || {}).filter(function (id) { return S.pcTodo[id] && lesson(id); });
     if (todo.length) {
       h += '<h3>Waiting for you at the PC</h3><div class="card">' + todo.map(function (id) { var L = lesson(id); return '<div class="row" style="margin:6px 0"><span class="grow">Day ' + L.day + ': ' + esc(L.pc.title) + '</span><button class="btn sm" data-pc="' + id + '">Open</button></div>'; }).join('') + '</div>';
+    }
+    var tips = LESSONS.filter(function (L) { return L.editor && (S.done[L.id] || DEV); });
+    if (tips.length) {
+      var tried = tips.filter(function (L) { return S.ed[L.id]; }).length;
+      h += '<details class="card skills"' + (S.edOpen ? ' open' : '') + '><summary><strong>Editor skills</strong> <span class="dim">' + tried + ' of ' + tips.length + ' tried at the PC</span></summary>' +
+        '<p class="dim small" style="margin:10px 0 0">One small VS Code or Cursor skill per day. Tick each one after you have done it on the PC.</p>' +
+        tips.map(function (L) {
+          var e = L.editor;
+          return '<label class="check"><input type="checkbox" data-ed="' + L.id + '"' + (S.ed[L.id] ? ' checked' : '') + '><span><strong>Day ' + L.day + ': ' + esc(e.title) + '</strong> <span class="dim small">(' + esc(e.app) + ')</span><br><span class="small">' + md(e.try) + '</span></span></label>';
+        }).join('') + '</details>';
     }
     var WEEKS = ['Talk to the computer', 'Decisions and repeats', 'Holding lots of things', 'Your own tools', 'Real files', 'Work-ready kit'];
     for (var w = 1; w <= 6; w++) {
@@ -257,7 +272,7 @@
     render();
   }
   function go(step) { cur.step = step; cur.i = 0; cur.picked = null; S.pos[cur.L.id] = step; save(); render(); }
-  function nextStep() { var st = stepsFor(cur.L); go(st[st.indexOf(cur.step) + 1]); }
+  function nextStep() { var st = stepsFor(cur.L), n = st[st.indexOf(cur.step) + 1]; if (n === 'win') return finishDay(); go(n); }
 
   function render() {
     var L = cur.L, steps = stepsFor(L), at = steps.indexOf(cur.step), h = '';
@@ -305,6 +320,13 @@
         '<div class="row" style="margin-top:12px"><button class="btn sm" data-act="hint">Hint</button><button class="btn sm" data-act="tutor">Ask the tutor</button><button class="btn sm ghost" data-act="resettask">Start again</button></div></div>';
       if (all) h += '<button class="btn good full" data-act="next">All three done. Continue</button>';
       return h;
+    },
+    tool: function (L) {
+      var e = L.editor;
+      return '<div class="kicker">' + esc(e.app) + ' minute</div><div class="card"><h2>' + esc(e.title) + '</h2><p>' + md(e.text) + '</p>' +
+        '<div class="note"><strong>Next time you are at the PC (2 minutes).</strong> ' + md(e.try) + '</div>' +
+        '<p class="dim small" style="margin:0">It is saved under Editor skills on the home screen. Tick it there once you have tried it.</p></div>' +
+        '<button class="btn primary full" data-act="next">Got it</button>';
     },
     pc: function (L) {
       var p = L.pc, ticks = S.pc[L.id] || [], all = p.steps.every(function (_, i) { return ticks[i]; });
@@ -369,7 +391,7 @@
     if (a === 'warmnext') { if (cur.i < 2) { cur.i++; cur.picked = null; return render(); } return nextStep(); }
     if (a === 'whynext') { if (cur.i < L.why.length - 1) { cur.i++; return render(); } return nextStep(); }
     if (a === 'whyback') { cur.i--; return render(); }
-    if (a === 'next') { if (cur.step === 'do' && !L.pc) return finishDay(); return nextStep(); }
+    if (a === 'next') return nextStep();
     if (a === 'runwatch') return void runLive(document.getElementById('code').value, L.watch.files, document.getElementById('out'), document.getElementById('in'));
     if (a === 'resetwatch') { document.getElementById('code').value = L.watch.code; return; }
     n = cur.task; t = L && L.tasks[n];
@@ -399,7 +421,9 @@
     if (a === 'pclater') { S.pcTodo[L.id] = true; save(); return finishDay(); }
   });
   app.addEventListener('change', function (ev) {
-    var el = ev.target; if (!el.hasAttribute || !el.hasAttribute('data-tick')) return;
+    var el = ev.target; if (!el.hasAttribute) return;
+    if (el.hasAttribute('data-ed')) { S.ed[el.getAttribute('data-ed')] = el.checked; S.edOpen = true; save(); return home(); }
+    if (!el.hasAttribute('data-tick')) return;
     var arr = S.pc[cur.L.id] || (S.pc[cur.L.id] = []); arr[+el.getAttribute('data-tick')] = el.checked; save();
     var all = cur.L.pc.steps.every(function (_, i) { return arr[i]; });
     app.querySelector('[data-act="pcdone"]').disabled = !all;

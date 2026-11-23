@@ -8,6 +8,9 @@
 
 Nothing to install. Real Python runs inside the page. The first Run of the day takes a few seconds while Python loads.
 
+## VS Code and Cursor, one small step a day
+After the three tasks, every day ends with an **Editor minute**: one VS Code skill (Days 1 to 25), then Cursor (Days 26 to 30). It explains what the thing is and why, and gives a 2-minute "try it at the PC". Each one is saved under **Editor skills** on the home screen: tick it off when you have done it on the PC. Cursor is VS Code with AI added, so everything you learn in VS Code works there too. You do not need a Cursor plan: the lessons use the free download.
+
 ## Put it on your phone's Home Screen
 - **iPhone:** open the link in Safari, tap Share, then **Add to Home Screen**.
 - **Android:** open the link in Chrome, tap the three dots, then **Add to Home screen**.

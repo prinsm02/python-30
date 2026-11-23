@@ -13,6 +13,8 @@ ROOT = Path(__file__).resolve().parent.parent
 LESSONS = ROOT / 'lessons'
 HARNESS = ROOT / 'tools' / 'harness.py'
 TIMEOUT = 10
+# One editor tip per day (VS Code first, Cursor from Day 26). Merged into each lesson as L['editor'].
+EDITOR = json.loads((LESSONS / 'editor.json').read_text(encoding='utf-8'))
 
 RUNNER = r'''
 import sys, json
@@ -119,6 +121,15 @@ def verify_lesson(path):
         L = json.loads(path.read_text(encoding='utf-8'))
     except Exception as e:
         return None, ['not valid JSON: %s' % e]
+    ed = EDITOR.get(path.stem)
+    if not ed:
+        errs.append('no editor tip for this day in lessons\\editor.json')
+    else:
+        L['editor'] = ed
+        if not all(ed.get(k) for k in ('app', 'title', 'text', 'try')):
+            errs.append('editor tip needs app, title, text, try')
+        if len(ed.get('text', '')) > 480 or len(ed.get('try', '')) > 300:
+            errs.append('editor tip too long (text max 480, try max 300)')
     errs += shape(L, path.stem)
     if errs:
         return L, errs
@@ -143,6 +154,9 @@ def tutor_md(L):
         o += ['', '## Task %d: %s' % (n, t['title']), t['task'], '', 'Hints, in order:']
         o += ['%d. %s' % (i, h) for i, h in enumerate(t['hints'], 1)]
         o += ['', 'Answer:', '```python', t['solution'].rstrip(), '```']
+    if 'editor' in L:
+        e = L['editor']
+        o += ['', '## Editor tip (%s): %s' % (e['app'], e['title']), e['text'], '', 'Try at the PC: ' + e['try']]
     if 'pc' in L:
         o += ['', '## On the PC: ' + L['pc']['title'], L['pc']['why'], '']
         o += ['%d. %s' % (i, s) for i, s in enumerate(L['pc']['steps'], 1)]
